@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Bootstrap 5 -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+  <!-- Syntax Highlighting with prism.js -->
+  <link href="../css/prism.css" rel="stylesheet"/>
+
+  <!-- Preserve page scroll on refresh. -->
+  <script src="../js/scroll.js"></script>
+
+  <!-- My CSS -->
+  <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+
+  <!-- Page Title -->
+  <title>Blog - Jordan Ford</title>
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../assets/favicon/site.webmanifest">
+</head>
+
+<body>
+  <!-- Syntax Highlighting with prism.js -->
+  <script src="../js/prism.js"></script>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand navbar-light">
+    <div class="container-fluid mx-md-2">
+      <a class="navbar-brand" href="../index.html">JrdnFrd</a>
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarColor01" style="">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="../index.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../blog.html">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../projects.html">Projects</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Container -->
+  <div class="container">
+    <!-- Row -->
+    <div class="row justify-content-center">
+
+      <!-- Center Column -->
+      <div class="col-lg-8 px-3 mt-4">
+        <h5 class="text-muted my-0 font-weight-light">June 29, 2021</h5><br>
+        <h1><i>A Recipe for Dubins Paths</i></h1>
+        <div class="m-0 p-0 text-muted" style="font-size: 1.2em;">Six paths diverged in a yellow wood, and I&mdash; / I took the one least length implied, / And that has made all the difference.</div>
+        <hr>
+
+        <h2>Intro</h2>
+        <p>
+        Dubins' paths are a useful tool for robot path planning, in part because they're so simple. They're the shortest paths for a robot with a minimum turning radius (like your car), with the added constraint that the robot can only move forward. This article presents geometry and <a href="https://github.com/jsford/jsf/blob/master/jsf_dubins.h">code</a> to construct Dubins paths between two robot poses in 2d.
+        </p>
+
+        <img class="img-fluid w-75 mx-auto d-block my-0" src="../assets/dubins/dubins-name.svg"/>
+
+        <p>
+        Dubins paths solve the following problem:
+        Given the (x,y,&theta;) state of your robot, an (x,y,&theta;) goal state, and your robot's minimum turning radius R, construct the shortest driveable path from start to goal. Assume your robot can only move forward at constant speed.
+        </p>
+
+        <img class="img-fluid w-50 mx-auto d-block my-2" src="../assets/dubins/dubins_problem_1.svg"/>
+
+        <p>
+        In 1957, Lester Eli Dubins proved the solutions to this problem can be constructed using only two types of geometric primitives: (1) circles with minimum turning radius and (2) straight lines.
+        <p>
+
+        <img class="img-fluid w-50 mx-auto d-block my-2" src="../assets/dubins/dubins_problem_2.svg"/>
+
+        <p>
+        Depending on the start pose, the goal pose, and the turning radius, the shortest path will always take one of six forms. The six types of Dubins path are named <span style="color:blue">L</span><span style="color:red">R</span><span style="color:blue">L</span>, LSL, LSR, RLR, RSR, and RSL, where <span style="color:red">R</span> stands for "right turn", <span style="color:blue">L</span> stands for "left turn", and <span style="color:green">S</span> stands for "straight line".
+        </p>
+
+        <img class="img-fluid w-100 mx-auto d-block my-2" src="../assets/dubins/dubins-menagerie.svg"/>
+
+        <p>
+        In the diagrams above, black arrows indicate start and goal poses. Red arcs indicate right turns, blue arcs indicate left turns, and green lines indicate straight segments.
+        </p>
+
+        <p>
+        LSL, LSR, RSL, and RSR paths are composed of two circular arcs connected by a shared tangent line segment. Collectively, they are referred to as CSC paths&mdash;Circle, Straight, Circle. The remaining two path types, LRL and RLR, are grouped under the label CCC&mdash;Circle, Circle, Circle (duh!).
+        </p>
+
+        <p>
+        One of the six paths will always be the shortest possible, but which one? To keep things simple, I'll show you how to generate all six paths and their lengths. Then, you can pick the shortest option. <a href="../assets/dubins/optimal_trajectories_for_nonholonomic_mobile_robots.pdf">Soueres and Boissonnat</a> derive rules to analytically select the shortest path type without generating all six paths, but on modern computers the potential speedup (probably) isn't worth the added complexity.
+        </p>
+
+        <blockquote class="blockquote w-75 mx-auto my-5" style="max-width: 300px;">
+          <p class="mb-0">
+          "Keep moving forward."<br>
+          <div class="text-end">-L. E. Dubins (maybe)</div>
+          </p>
+        </blockquote>
+
+        <h2>Dubins Path Ingredients</h2>
+        <p>
+        Dubins paths are constructed from state vectors, tangent circles, and tangent lines.
+        </p>
+        <img class="img-fluid w-75 mx-auto d-block my-2" src="../assets/dubins/dubins-ingredients.svg"/>
+
+        <h3>Dubins State</h3>
+        <p>
+        The dubins car is a rigid body that rotates and translates in the euclidean plane. Its state is an (x,&nbsp;y,&nbsp;h) coordinate triple containing its heading and 2D position.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <pre class="mb-3"><code class="d-block language-cpp">
+              typedef struct DubinsState {
+                double x;    // X coordinate
+                double y;    // Y coordinate
+                double h;    // Robot heading (radians)
+              } DubinsState;
+            </code></pre>
+          </div>
+
+          <div class="col-sm-6">
+            <img class="img-fluid mx-auto d-block my-2" src="../assets/dubins/dubins_state.svg"/>
+          </div>
+        </div>
+
+        <p>
+        The input to the dubins path generator is an initial and a final state. The goal of the path generator is to generate a dubins curve connecting the initial state to the final state.
+        </p>
+
+        <h3>State Tangent Circles</h3>
+        <p>
+        Dubins paths begin and end with arc segments lying tangent to the rover's initial and final state. The radius of the state tangent circles is equal to the car's minimum turning radius, or the inverse of its maximum curvature.
+        </p>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <img class="img-fluid mx-auto d-block my-2" src="../assets/dubins/dubins_state_tangent.svg"/>
+          </div>
+
+          <div class="col-sm-6">
+            <pre class="mb-3"><code class="d-block language-cpp">
+              typedef struct DubinsCircle {
+                double x;
+                double y;
+                double r;
+                DubinsDirection direction;
+              } DubinsCircle;
+            </code></pre>
+          </div>
+        </div>
+
+        <p>
+        To find the center of the state tangent circles, construct a unit vector pointing in the direction of the car's heading. Scale the vector by the minimum turning radius, and rotate it 90 degrees to either the left or the right.
+        </p>
+
+        <pre class="mb-3"><code class="d-block language-cpp">
+          static void jsf__state_tangent_circle(const DubinsState *state, double radius,
+            const DubinsDirection direction, DubinsCircle *tangent_circle) {
+            // Rotate CCW for the LEFT tangent circle, CW for the right tangent circle.
+            double alpha = (direction == DUBINS_LEFT) ? M_PI / 2.0 : -M_PI / 2.0;
+            tangent_circle->x = state->x + radius * cos(alpha + state->h);
+            tangent_circle->y = state->y + radius * sin(alpha + state->h);
+            tangent_circle->r = radius;
+            tangent_circle->direction = direction;
+          }
+        </code></pre>
+
+        <p>
+        It is helpful to record the turning direction of each tangent circle. Later on, it will be important to know which circles represent a left turn and which circles represent a right turn.
+        </p>
+
+        <h3>Tangent Lines</h3>
+        <p>
+        The LSL, LSR, RSL, and RSR path types connect the state tangent circles with tangent line segments. Here, we represent those line segments as a pair of (x,&nbsp;y) coordinates.
+        </p>
+
+        <pre class="mb-3"><code class="d-block language-cpp">
+          typedef struct DubinsLine {
+            double x0, y0;
+            double x1, y1;
+          } DubinsLine;
+        </code></pre>
+
+        <p>
+        There are two types of tangent lines connecting any pair of non-overlapping circles, interior and exterior. Interior tangent lines cross between the circles; exterior tangent lines do not.
+        </p>
+
+        <p>
+        <span style="font-weight: bold;">Warning:</span> The tangent-finding routines presented here are only appropriate for connecting two circles with equal radius. In the Dubins case, this is guaranteed, but other use-cases will likely require a more general approach.
+        </p>
+
+        <h3>Exterior Tangent Lines</h3>
+
+        <img class="img-fluid w-75 mx-auto d-block my-2" src="../assets/dubins/exterior_tangent_line.svg"/>
+
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <pre class="mb-3"><code class="d-block language-cpp">
+          static bool jsf__tangent_line(DubinsCircle *c0, DubinsCircle *c1,
+                                        DubinsLine *tangent_line) {
+            // This method requires both circles to have the same radius.
+            if (fabs(c0->r - c1->r) > DUBINS_EPSILON) {
+              return false;
+            }
+
+            // Compute the distance from c0 to c1.
+            double c0c1_x = c1->x - c0->x;
+            double c0c1_y = c1->y - c0->y;
+            double D = jsf__norm(c0c1_x, c0c1_y);
+
+            // Normalize the vector from the center of c0 to c1.
+            double c0c1_hat_x = c0c1_x / D;
+            double c0c1_hat_y = c0c1_y / D;
+
+            if (c0->direction == c1->direction) {
+              // Construct an exterior tangent line.
+
+              // If the circles are identical, there is no unique tangent line.
+              if (fabs(D) < DUBINS_EPSILON) {
+                return false;
+              }
+
+              // Connect two LEFT circles by rotating clockwise 90 degrees.
+              // Connect two RIGHT circles by rotating counter-clockwise 90 degrees.
+              double rot_x, rot_y;
+              if (c0->direction == DUBINS_LEFT) {
+                rot_x =  c0c1_hat_y;
+                rot_y = -c0c1_hat_x;
+              } else {
+                rot_x = -c0c1_hat_y;
+                rot_y =  c0c1_hat_x;
+              }
+
+              // Find the tangent points on c0 and c1 that create the tangent line.
+              tangent_line->x0 = c0->x + c0->r * rot_x;
+              tangent_line->y0 = c0->y + c0->r * rot_y;
+              tangent_line->x1 = tangent_line->x0 + c0c1_x;
+              tangent_line->y1 = tangent_line->y0 + c0c1_y;
+            } else {
+              // Construct an interior tangent line... (see below)
+            }
+            return true;
+          }
+        </code></pre>
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <h3>Interior Tangent Lines</h3>
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <img class="img-fluid w-75 mx-auto d-block my-4" src="../assets/dubins/interior_tangent_line_1.svg"/>
+
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <img class="img-fluid w-75 mx-auto d-block my-4" src="../assets/dubins/interior_tangent_line_2.svg"/>
+
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <pre class="mb-3"><code class="d-block language-cpp">
+          static bool jsf__tangent_line(DubinsCircle *c0, DubinsCircle *c1,
+                                        DubinsLine *tangent_line) {
+            // This method requires both circles to have the same radius.
+            if (fabs(c0->r - c1->r) > DUBINS_EPSILON) {
+              return false;
+            }
+
+            // Compute the distance from c0 to c1.
+            double c0c1_x = c1->x - c0->x;
+            double c0c1_y = c1->y - c0->y;
+            double D = jsf__norm(c0c1_x, c0c1_y);
+
+            // Normalize the vector from the center of c0 to c1.
+            double c0c1_hat_x = c0c1_x / D;
+            double c0c1_hat_y = c0c1_y / D;
+
+            if (c0->direction == c1->direction) {
+              // Construct an exterior tangent line... (see above)
+            } else {
+              // Construct an interior tangent line.
+
+              // If the circles overlap, there is no interior tangent line.
+              if (fabs(D) < 2 * c0->r) {
+                return false;
+              }
+
+              // Compute alpha, the angle between the c0c1 vector and the tangent points.
+              double alpha = acos(c0->r / (0.5 * D));
+
+              // Rotate by alpha. CW for LEFT to RIGHT and CCW for RIGHT to LEFT.
+              double rot_x, rot_y;
+              double c = cos(alpha);
+              double s = sin(alpha);
+              if (c0->direction == DUBINS_LEFT) {
+                rot_x =  c * c0c1_hat_x + s * c0c1_hat_y;
+                rot_y = -s * c0c1_hat_x + c * c0c1_hat_y;
+              } else {
+                rot_x = c * c0c1_hat_x - s * c0c1_hat_y;
+                rot_y = s * c0c1_hat_x + c * c0c1_hat_y;
+              }
+
+              tangent_line->x0 = c0->x + c0->r * rot_x;
+              tangent_line->y0 = c0->y + c0->r * rot_y;
+
+              tangent_line->x1 = c1->x - c1->r * rot_x;
+              tangent_line->y1 = c1->y - c1->r * rot_y;
+            }
+            return true;
+          }
+        </code></pre>
+
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <h3>Circle-Connecting Circles</h3>
+        <img class="img-fluid w-75 px-5 mx-auto d-block my-4" src="../assets/dubins/ccc.svg"/>
+
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <pre class="mb-3"><code class="d-block language-cpp">
+          static bool jsf__circle_tangent_circle(const DubinsCircle *c0,
+                                                 const DubinsCircle *c1,
+                                                 DubinsCircle *tangent_circle) {
+            // Input circle radii must match.
+            if (fabs(c0->r - c1->r) > DUBINS_EPSILON) {
+              return false;
+            }
+
+            // Input circle directions must match.
+            if (c0->direction != c1->direction) {
+              return false;
+            }
+
+            // Compute the distance from c0 to c1.
+            double c0c1_x = c1->x - c0->x;
+            double c0c1_y = c1->y - c0->y;
+            double D = jsf__norm(c0c1_x, c0c1_y);
+
+            // No tangent circle (with same radius as c0 and c1)
+            // is possible because c0 and c1 are too far apart.
+            if (D > 4 * c0->r) {
+              return false;
+            }
+
+            // Normalize the vector from the center of c0 to c1.
+            double c0c1_hat_x = c0c1_x / D;
+            double c0c1_hat_y = c0c1_y / D;
+
+            // Compute the angle by which to rotate.
+            double alpha = acos(D / 4 * (c0->r));
+            alpha *= (c0->direction == DUBINS_RIGHT) ? -1.0 : 1.0;
+
+            // Rotate c0c1_hat by alpha.
+            double c = cos(alpha);
+            double s = sin(alpha);
+            double rot_x = c * c0c1_hat_x - s * c0c1_hat_y;
+            double rot_y = s * c0c1_hat_x + c * c0c1_hat_y;
+
+            // Compute the center of the tangent circle.
+            tangent_circle->x = c0->x + 2 * c0->r * rot_x;
+            tangent_circle->y = c0->y + 2 * c0->r * rot_y;
+
+            // Fill in everything else.
+            if (c0->direction == DUBINS_RIGHT) {
+              tangent_circle->direction = DUBINS_LEFT;
+            } else {
+              tangent_circle->direction = DUBINS_RIGHT;
+            }
+            tangent_circle->r = c0->r;
+
+            return true;
+          }
+        </code></pre>
+
+        <h2>Path Construction</h2>
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+        <pre class="mb-3"><code class="d-block language-cpp">
+          typedef struct DubinsPath {
+            double curvatures[3];
+            double arclengths[3];
+            DubinsPathType type;
+          } DubinsPath;
+        </code></pre>
+        <p>
+                Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+        <pre class="mb-3"><code class="d-block language-cpp">
+          static double jsf__angle_between(double x0, double y0, double x1, double y1,
+                                           DubinsDirection direction) {
+            double n0 = jsf__norm(x0, y0);
+            double n1 = jsf__norm(x1, y1);
+
+            double arg = (x0 * x1 + y0 * y1) / (n0 * n1);
+
+            // Clamp to [-1, +1] to avoid domain errors caused by rounding.
+            arg = fmin(fmax(arg, -1.0), 1.0);
+
+            double angle = acos(arg);
+
+            // The sign of this determinant gives the
+            // direction of rotation from (x0,y0) to (x1, y1).
+            double cross2d = x0 * y1 - x1 * y0;
+            if (direction == DUBINS_LEFT && cross2d < 0) {
+              angle = 2 * M_PI - angle;
+            }
+            if (direction == DUBINS_RIGHT && cross2d > 0) {
+              angle = 2 * M_PI - angle;
+            }
+            // Round anything close to 2pi to 0.
+            // Otherwise, paths will do full circles when they shouldn't.
+            if (fabs(angle - 2 * M_PI) < DUBINS_EPSILON) {
+              angle = 0.0;
+            }
+            return angle;
+          }
+        </code></pre>
+
+        <h3>Circle Straight Circle (CSC)</h3>
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+        <pre class="mb-3"><code class="d-block language-cpp">
+          static void jsf__construct_csc(const DubinsState *s0, const DubinsState *s1,
+                                         const DubinsCircle *c0, const DubinsLine *line,
+                                         const DubinsCircle *c1, DubinsPath *path) {
+
+            // Arc from s0, around c0, to line0
+            {
+              double v0x =    s0->x - c0->x; double v0y =    s0->y - c0->y;
+              double v1x = line->x0 - c0->x; double v1y = line->y0 - c0->y;
+              path->arclengths[0] =
+                  jsf__angle_between(v0x, v0y, v1x, v1y, c0->direction) * c0->r;
+              path->curvatures[0] =
+                  (c0->direction == DUBINS_LEFT) ? 1.0 / c0->r : -1.0 / c0->r;
+            }
+
+            // Straight line from line0 to line1
+            {
+              path->arclengths[1] = jsf__norm(line->x1 - line->x0, line->y1 - line->y0);
+              path->curvatures[1] = 0.0;
+            }
+
+            // Arc from line1, around c1, to s1
+            {
+              double v0x = line->x1 - c1->x; double v0y = line->y1 - c1->y;
+              double v1x =    s1->x - c1->x; double v1y =    s1->y - c1->y;
+              path->arclengths[2] =
+                  jsf__angle_between(v0x, v0y, v1x, v1y, c1->direction) * c1->r;
+              path->curvatures[2] =
+                  (c1->direction == DUBINS_LEFT) ? 1.0 / c1->r : -1.0 / c1->r;
+            }
+          }
+        </code></pre>
+
+        <h3>Circle Circle Circle (CCC)</h3>
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+        <pre class="mb-3"><code class="d-block language-cpp">
+          static void jsf__construct_ccc(const DubinsState *s0, const DubinsState *s1,
+                                         const DubinsCircle *c0, const DubinsCircle *c1,
+                                         const DubinsCircle *c2, DubinsPath *path) {
+            // Tangent point 0 is the average of the centers of c0 and c1.
+            double tp0x = 0.5 * (c0->x + c1->x);
+            double tp0y = 0.5 * (c0->y + c1->y);
+
+            // Tangent point 1 is the average of the centers of c1 and c2.
+            double tp1x = 0.5 * (c1->x + c2->x);
+            double tp1y = 0.5 * (c1->y + c2->y);
+
+            // Arc from s0, around c0, to tp0
+            {
+              double v0x = s0->x - c0->x; double v0y = s0->y - c0->y;
+              double v1x =  tp0x - c0->x; double v1y =  tp0y - c0->y;
+              path->arclengths[0] =
+                  jsf__angle_between(v0x, v0y, v1x, v1y, c0->direction) * c0->r;
+              path->curvatures[0] =
+                  (c0->direction == DUBINS_LEFT) ? 1.0 / c0->r : -1.0 / c0->r;
+            }
+
+            // Arc from tp0, around c1, to tp1
+            {
+              double v0x = tp0x - c1->x; double v0y = tp0y - c1->y;
+              double v1x = tp1x - c1->x; double v1y = tp1y - c1->y;
+              path->arclengths[1] =
+                  jsf__angle_between(v0x, v0y, v1x, v1y, c1->direction) * c1->r;
+              path->curvatures[1] =
+                  (c1->direction == DUBINS_LEFT) ? 1.0 / c1->r : -1.0 / c1->r;
+            }
+
+            // Arc from tp1, around c2, to s1
+            {
+              double v0x =  tp1x - c2->x; double v0y =  tp1y - c2->y;
+              double v1x = s1->x - c2->x; double v1y = s1->y - c2->y;
+              path->arclengths[2] =
+                  jsf__angle_between(v0x, v0y, v1x, v1y, c2->direction) * c2->r;
+              path->curvatures[2] =
+                  (c2->direction == DUBINS_LEFT) ? 1.0 / c2->r : -1.0 / c2->r;
+            }
+          }
+        </code></pre>
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <h2>Path Selection</h2>
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <video autoplay loop muted playsinline class="d-block w-100 mx-auto my-4">
+          <source src="../assets/dubins/dubins-space-with-slider.mp4" type="video/mp4"/>
+        </video>
+
+        <p>
+        Etiam non dignissim mauris, vitae euismod tortor. Praesent in felis enim. Morbi mollis faucibus scelerisque. Suspendisse at finibus diam. Cras sodales, magna ac iaculis efficitur, neque nunc pharetra justo, et blandit elit massa ac erat. Curabitur vestibulum neque in sem mollis convallis nec id neque. Proin rhoncus sapien urna, in tempus tortor maximus sit amet. Duis sed consectetur lectus.
+        </p>
+
+        <h2>Path Sampling</h2>
+
+        <img class="img-fluid w-50 mx-auto d-block my-0" src="../assets/dubins/dubins-samples.svg"/>
+
+        <p>
+        You can find the state of a Dubins car at a given distance along a Dubins path by forward simulation. 
+        </p>
+
+        <pre class="mb-3"><code class="d-block language-cpp">
+          DubinsState jsf_dubins_path_sample(const DubinsState *initial_state,
+                                             const DubinsPath *path,
+                                             const double arclength) {
+
+            const int num_arcs = sizeof(path->arclengths) / sizeof(path->arclengths[0]);
+
+            // Record the index of the sample-containing arc.
+            int arc_idx = 0;                // Record the index of the sample-containing arc.
+            double arc_prefix_length = 0.0; // Record the length of the path before the start of the sample-containing arc.
+
+            // Seek forward to find the arc that contains this sample.
+            while (arc_idx < num_arcs &&
+                   arc_prefix_length + path->arclengths[arc_idx] < arclength) {
+              arc_prefix_length += path->arclengths[arc_idx];
+              arc_idx++;
+            }
+
+            // Find the state at the start of the arc containing the sample.
+            DubinsState state = *initial_state;
+            for (int i = 0; i < num_arcs && i <= arc_idx; ++i) {
+              double k = path->curvatures[i];
+              double s = path->arclengths[i];
+
+              // If this arc contains the sample,
+              // only travel partially along it to find the sample state.
+              if (i == arc_idx) {
+                s = arclength - arc_prefix_length;
+              }
+
+              // Don't try to sample before the beginning of the path.
+              s = fmax(0.0, s);
+
+              // Arc is a straight line.
+              if (k == 0.0) {
+                state.x += s * cos(state.h);
+                state.y += s * sin(state.h);
+              } else {
+                // Compute the radius of this arc.
+                double r = 1.0 / k;
+
+                // Find the tangent circle to the current state in the direction of this arc.
+                DubinsCircle circle;
+                {
+                  DubinsDirection dir = (k > 0.0) ? DUBINS_LEFT : DUBINS_RIGHT;
+                  jsf__state_tangent_circle(&state, fabs(r), dir, &circle);
+                }
+
+                double dh = s * k;
+                state.x = circle.x + r * cos(state.h - M_PI / 2.0 + dh);
+                state.y = circle.y + r * sin(state.h - M_PI / 2.0 + dh);
+                state.h += dh;
+              }
+            }
+            return state;
+          }
+        </code></pre>
+
+        <h2>Wait, back up.</h2>
+
+        <img class="img-fluid w-50 mx-auto d-block my-0" src="../assets/dubins/reeds-shepp.svg"/>
+
+        <p>
+        Dubins paths are great, but what if your robot can drive backwards? In that case, the shortest paths are known as Reeds-Shepp paths.
+        Reeds-Shepp paths are constructed using the same circle and line primitives, but because the robot can change direction, there are 46 path types instead of 6. Reeds-Shepp is a lot more complicated&mdash;a topic for another post!
+        </p>
+
+        <blockquote class="blockquote w-75 d-block mx-auto my-5" style="max-width: 500px;">
+          <p class="mb-0">
+          "Take two steps forward, one step back."<br>
+          <div class="text-end">-J.A. Reeds &amp; L.A. Shepp</div>
+          </p>
+        </blockquote>
+
+        <h2>More Resources</h2>
+        <p>
+          <a href="http://planning.cs.uiuc.edu/node821.html">Planning Algorithms</a>, by Steven M. Lavalle<br>
+          <a href="https://gieseanw.wordpress.com/2012/10/21/a-comprehensive-step-by-step-tutorial-to-computing-dubins-paths/">A Step-by-Step Tutorial to Computing Dubin's Paths</a>, by Andy G. (gieseanw)<br>
+          <a href="https://demonstrations.wolfram.com/IsochronsForADubinsCar/">Isochrons for a Dubins Car</a>, from the Wolfram Demonstrations Project<br>
+          <a href="https://demonstrations.wolfram.com/ShortestPathForTheDubinsCar/">Shortest Path for the Dubins Car</a>, from the Wolfram Demonstrations Project<br>
+        </p>
+
+      </div> <!-- Center Column -->
+    </div> <!-- Row -->
+  </div> <!-- Container -->
+</body>
+</html>
+
+<script>
+  /* LRL */
+  document.body.innerHTML = document.body.innerHTML.replace(/LRL/g,'<span style="color: blue">L</span><span style="color: red">R</span><span style="color: blue">L</span>')
+  /* RLR */
+  document.body.innerHTML = document.body.innerHTML.replace(/RLR/g,'<span style="color: red">R</span><span style="color: blue">L</span><span style="color: red">R</span>')
+  /* LSR */
+  document.body.innerHTML = document.body.innerHTML.replace(/LSR/g,'<span style="color: blue">L</span><span style="color: green">S</span><span style="color: red">R</span>')
+  /* RSL */
+  document.body.innerHTML = document.body.innerHTML.replace(/RSL/g,'<span style="color: red">R</span><span style="color: green">S</span><span style="color: blue">L</span>')
+  /* LSL */
+  document.body.innerHTML = document.body.innerHTML.replace(/LSL/g,'<span style="color: blue">L</span><span style="color: green">S</span><span style="color: blue">L</span>')
+  /* RSR */
+  document.body.innerHTML = document.body.innerHTML.replace(/RSR/g,'<span style="color: red">R</span><span style="color: green">S</span><span style="color: red">R</span>')
+</script>
