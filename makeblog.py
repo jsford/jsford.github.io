@@ -66,7 +66,7 @@ def main():
 
         templatesDir = osp.join(getProjectRoot(), 'templates')
         postDict = wc2html(src, dst, templatesDir)
-        post_info = [postDict['title'], postDict['date'], dst, postDict['abstract']]
+        post_info = [postDict['title'], postDict['date'], name, postDict['abstract']]
         posts.append(post_info)
     posts.sort(key=lambda p: p[1], reverse=True)
 
