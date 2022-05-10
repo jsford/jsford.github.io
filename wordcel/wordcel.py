@@ -12,31 +12,37 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
+# Initialize colorama.
 init(autoreset=True)
 
-gFigureNumber = 1
 
 def usage():
     print(Fore.GREEN + "./wordcel.py test.wc > test.html")
 
+
 def warn(msg):
     print(Fore.YELLOW + "Warning: " + msg)
 
+
 def error(msg):
     print(Fore.RED + "Error: " + msg)
+
 
 def readFile(path):
     with open(path, 'r') as f:
         contents = f.read()
     return contents
 
+
 def writeFile(path, contents):
     with open(path, 'w') as f:
         f.write(contents)
 
+
 def prettify(html):
     soup = bs(str(html), features='lxml')
     return soup.prettify()
+
 
 def splitHeader(doc):
     try:
@@ -46,8 +52,10 @@ def splitHeader(doc):
         return None, doc.strip()
     return header.strip(), body.strip()
 
+
 def parseHeader(header):
-    required_keys = ['title', 'subtitle', 'abstract', 'author', 'date', 'template']
+    required_keys = ['title', 'subtitle',
+                     'abstract', 'author', 'date', 'template']
 
     hDict = yaml.safe_load(header)
     for k in required_keys:
@@ -56,8 +64,10 @@ def parseHeader(header):
             return None
     return hDict
 
+
 def splitBlocks(s):
     return re.split('[\n]{2,}', s)
+
 
 def splitParse(s, start, stop, on, off):
     html = ''
@@ -65,15 +75,17 @@ def splitParse(s, start, stop, on, off):
     # it will still apply on() to the rest of the line.
     # Try this: '## Hello, Jor*dan'
     # You'll get italics that you shouldn't get.
-    for i,match in enumerate(re.split(f'{start}|{stop}', s)):
-        if i%2 == 1:
+    for i, match in enumerate(re.split(f'{start}|{stop}', s)):
+        if i % 2 == 1:
             html += on(match)
         else:
             html += off(match)
     return html
 
+
 def parseNormal(s):
     return s.strip()
+
 
 def parseLatex(s):
     from io import BytesIO
@@ -112,8 +124,8 @@ def parseLatex(s):
     svgStr = re.sub('width[\s]*=\"[^"]+\"', 'width="auto"', svgStr)
     return '<span id="inline-svg">'+svgStr+'</span>'
 
+
 def parseImage(s):
-    global gFigureNumber
 
     re_caption = '\!\[.*\]'
     caption = re.search(re_caption, s).group()
@@ -125,16 +137,15 @@ def parseImage(s):
 
     filename, width = meta.split(':')
     html = '<img src={} alt="{}" style="width:{}; height:auto;">'.format(
-            filename.strip(), caption.strip(), width.strip())
+        filename.strip(), caption.strip(), width.strip())
     if caption.strip() != '':
-        html += '\n<span class="caption"><strong>Figure {}.</strong> {}</span>'.format(gFigureNumber, caption.strip())
-        gFigureNumber += 1
+        html += '\n<span class="caption"><i>{}</i></span>'.format(
+            caption.strip())
 
     return html
 
-def parseVideo(s):
-    global gFigureNumber
 
+def parseVideo(s):
     re_caption = '\?\[.*\]'
     caption = re.search(re_caption, s).group()
     caption = caption.strip('?[]')
@@ -145,12 +156,13 @@ def parseVideo(s):
 
     filename, width = meta.split(':')
     html = '<video autoplay muted loop title="{}" style="width: {}; height: auto;"><source src="{}" type="video/mp4">'.format(
-            caption.strip(), width.strip(), filename.strip())
+        caption.strip(), width.strip(), filename.strip())
     if caption.strip() != '':
-        html += '\n<span class="caption"><strong>Figure {}.</strong> {}</span>'.format(gFigureNumber, caption.strip())
-        gFigureNumber += 1
+        html += '\n<span class="caption"><i>{}</i></span>'.format(
+            caption.strip())
 
     return html
+
 
 def parseLink(s):
     re_caption = '\[.*\]'
@@ -162,8 +174,9 @@ def parseLink(s):
     contents = meta.strip('()')
 
     html = '<a href="{}">{}</a>'.format(
-            contents.strip(), caption.strip())
+        contents.strip(), caption.strip())
     return html
+
 
 def parseItalic(s):
     reItalic = r'(^|[^\*])\*[^\*]+\*[^\*]'
@@ -173,12 +186,14 @@ def parseItalic(s):
         s = re.sub(reItalic, html, s, 1)
     return s
 
+
 def parseStrong(s):
     reStrong = r'(^|[^\*]?)\*\*[^\*]+\*\*[^\*]'
     while re.search(reStrong, s):
         contents = re.search(reStrong, s).group().strip('*')
         html = '<strong>'+contents+'</strong>'
     return s
+
 
 def parseInlineMath(s):
     reMath = r'(^|[^\*]?)\$\$[^\*]+\$\$[^\*]'
@@ -188,6 +203,7 @@ def parseInlineMath(s):
         s = re.sub(reMath, html, s, 1)
     return s
 
+
 def parseImages(s):
     reImage = r'\!\[[^\]]*\]\([^\)]*\)'
     while re.search(reImage, s):
@@ -195,6 +211,7 @@ def parseImages(s):
         html = parseImage(contents)
         s = re.sub(reImage, html, s, 1)
     return s
+
 
 def parseVideos(s):
     reVideo = r'\?\[[^\]]*\]\([^\)]*\)'
@@ -204,6 +221,7 @@ def parseVideos(s):
         s = re.sub(reVideo, html, s, 1)
     return s
 
+
 def parseLinks(s):
     reLink = r'\[[^\]]*\]\([^\)]*\)'
     while re.search(reLink, s):
@@ -211,6 +229,7 @@ def parseLinks(s):
         html = parseLink(contents)
         s = re.sub(reLink, html, s, 1)
     return s
+
 
 def parseText(s):
     #s = parseItalic(s)
@@ -222,6 +241,7 @@ def parseText(s):
 
     s = re.sub('---', '&mdash;', s)
     return s
+
 
 def parseTextBlock(block):
     html = ''
@@ -239,6 +259,7 @@ def parseTextBlock(block):
     html = html.strip()
     return '<section>'+html+'</section>'
 
+
 def parseCodeBlock(block):
     # Get the language name from the first line.
     lexerName, block = block.split('\n', 1)
@@ -248,11 +269,14 @@ def parseCodeBlock(block):
     block = highlight(block, lexer, HtmlFormatter())
     return '<section><code>'+block+'</code></section>'
 
+
 def parseAsideBlock(block):
     return '<aside>'+parseTextBlock(block)+'</aside>'
 
+
 def parseBlockquote(block):
     return '<blockquote>'+parseTextBlock(block)+'</blockquote>'
+
 
 def parseBlock(block):
     block = block.strip()
@@ -270,16 +294,15 @@ def parseBlock(block):
     else:
         return parseTextBlock(block)
 
+
 def parseBody(body):
     blocks = splitBlocks(body)
     html = ''.join([parseBlock(b) for b in blocks])
     return html
 
-def parseDocument(doc):
-    global gFigureNumber
-    gFigureNumber = 1
 
-    doc.replace('\r','')
+def parseDocument(doc):
+    doc = doc.replace('\r', '')
 
     header, body = splitHeader(doc)
 
@@ -290,6 +313,7 @@ def parseDocument(doc):
     bodyHTML = parseBody(body)
 
     return headerDict, bodyHTML
+
 
 def replaceExtension(path, newExtension):
     return os.path.splitext(path)[0] + newExtension
@@ -303,8 +327,8 @@ def wc2html(inFile, outFile, templatesDir):
     templatePath = os.path.join(templatesDir, hDict['template'])
 
     template = Template(readFile(templatePath))
-    docHTML = template.render(title = hDict['title'],
-                              subtitle = hDict['subtitle'],
+    docHTML = template.render(title=hDict['title'],
+                              subtitle=hDict['subtitle'],
                               body=bodyHTML)
     #docHTML = prettify(docHTML)
 
@@ -312,7 +336,7 @@ def wc2html(inFile, outFile, templatesDir):
     return hDict
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     if len(sys.argv) < 2:
         usage()
         exit()
