@@ -66,7 +66,7 @@ This is a serious problem if you want to answer exact geometric questions like "
 
 ![](floating-point-problem.svg:80%)
 
-From our macro perspective, it's easy to say "of course it's on the line!", but your computer will zoom in to the 20th decimal place and say "nope!"
+From our macro perspective, it's easy to say "of course it's on the line!", but your computer will zoom in to the 20th decimal place and say `"nope"`.
 
 The standard way to resolve these issues is to change the question. Instead of asking the computer "Is this point _exactly_ on that line?", you ask: "Is this point _extremely close_ to that line?" Sometimes, you might have trouble defining what you mean by _extremely close_, but usually this hack works just fine.
 

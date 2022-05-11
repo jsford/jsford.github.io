@@ -34,6 +34,12 @@ def getImages():
     images.extend(rootImages)
     return images
 
+def getMisc():
+    miscExtensions = ['.py','.c','.cpp','.h','.hpp']
+    rootDir = getProjectRoot()
+
+    postsDir = osp.join(rootDir, 'posts')
+    return glob(postsDir, miscExtensions)
 
 def getCSS():
     rootDir = getProjectRoot()
@@ -57,6 +63,7 @@ def main():
     imageFiles = getImages()
     cssFiles   = getCSS()
     fontFiles  = getFonts()
+    miscFiles  = getMisc()
 
     buildDir = createBuildDir()
     posts = []
@@ -78,6 +85,7 @@ def main():
     copyFiles(imageFiles, buildDir)
     copyFiles(cssFiles, buildDir)
     copyFiles(fontFiles, buildDir)
+    copyFiles(miscFiles, buildDir)
 
     # Render index.html and copy it to the build directory.
     indexTemplate = jinja2.Template( readFile(osp.join(templatesDir, 'index.html')) )

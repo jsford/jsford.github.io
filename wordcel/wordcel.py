@@ -76,40 +76,6 @@ def splitParse(s, delim, yes, no):
     ])
 
 
-def parseVideo(s):
-    re_caption = '\?\[.*\]'
-    caption = re.search(re_caption, s).group()
-    caption = caption.strip('?[]')
-
-    re_meta = '\(.*\)'
-    meta = re.search(re_meta, s).group()
-    meta = meta.strip('()')
-
-    filename, width = meta.split(':')
-    html = '<video autoplay muted loop title="{}" style="width: {}; height: auto;"><source src="{}" type="video/mp4">'.format(
-        caption.strip(), width.strip(), filename.strip())
-    if caption.strip() != '':
-        html += '\n<span class="caption"><i>{}</i></span>'.format(
-            caption.strip())
-
-    return html
-
-
-def parseLink(s):
-    re_caption = '\[.*\]'
-    caption = re.search(re_caption, s).group()
-    caption = caption.strip('[]')
-
-    re_meta = '\(.*\)'
-    meta = re.search(re_meta, s).group()
-    contents = meta.strip('()')
-
-    html = '<a href="{}">{}</a>'.format(
-        contents.strip(), caption.strip())
-    return html
-
-
-
 #######################
 # Span-level parsing #
 #######################
@@ -117,8 +83,10 @@ def parseLink(s):
 def parseParagraph(s):
     return '<p>'+parseCodeOrSpan(s)+'</p>'
 
+
 def parseCodeOrSpan(s):
     return splitParse(s, r'`', parseCode, parseMathOrSpan)
+
 
 def parseCode(s):
     s = s.strip('` ')
@@ -128,8 +96,10 @@ def parseCode(s):
     s = highlight(s, lexer, HtmlFormatter(nowrap=True))
     return '<span class="highlight" style="display: inline-block; padding-left: .3em; padding-right: .3em;">'+s+'</span>'
 
+
 def parseMathOrSpan(s):
     return splitParse(s, r'\$', parseMath, parseImageOrSpan)
+
 
 def parseMath(s, height="1.5em"):
     # matplotlib: force computer modern font set
@@ -158,8 +128,10 @@ def parseMath(s, height="1.5em"):
     svgStr = re.sub('width[\s]*=\"[^"]+\"', 'width="auto"', svgStr)
     return '<span id="inline-svg">'+svgStr+'</span>'
 
+
 def parseImageOrSpan(s):
     return splitParse(s, r'(\!\[.*\]\(.*\))', parseImage, parseLinkOrSpan)
+
 
 def parseImage(s):
     match = re.search(r'\!\[(.*)\]\((.*)\)', s)
@@ -173,20 +145,24 @@ def parseImage(s):
         width = '100%'
 
     extension = os.path.splitext(filename)[1].lower()
-    if extension in ['.jpg','.png','.svg','.bmp','.gif','.tif']:
+    if extension in ['.jpg', '.png', '.svg', '.bmp', '.gif', '.tif']:
         html = '<img src={} alt="{}" style="width:{}; height:auto;">'.format(
             filename.strip(), alt.strip(), width.strip())
         if alt.strip() != '':
-            html += '\n<span class="caption"><i>{}</i></span>'.format(alt.strip())
-    elif extension in ['.mp4','.mov','.avi', '.mkv', '.wmv', '.webm']:
+            html += '\n<span class="caption"><i>{}</i></span>'.format(
+                alt.strip())
+    elif extension in ['.mp4', '.mov', '.avi', '.mkv', '.wmv', '.webm']:
         html = '<video autoplay muted loop title="{}" style="width: {}; height: auto;"><source src="{}" type="video/{}">'.format(
             alt.strip(), width.strip(), filename.strip(), extension.strip('.'))
         if alt.strip() != '':
-            html += '\n<span class="caption"><i>{}</i></span>'.format(alt.strip())
+            html += '\n<span class="caption"><i>{}</i></span>'.format(
+                alt.strip())
     return html
+
 
 def parseLinkOrSpan(s):
     return splitParse(s, r'(\[.*\]\(.*\))', parseLink, parseEmOrSpan)
+
 
 def parseLink(s):
     match = re.search(r'\[(.*)\]\((.*)\)', s)
@@ -198,17 +174,22 @@ def parseLink(s):
         warn('Failed to parse link: {}' % s)
         return s
 
+
 def parseEmOrSpan(s):
     return splitParse(s, r'_', parseEm, parseStrongOrSpan)
+
 
 def parseEm(s):
     return f'<em>{s}</em>'
 
+
 def parseStrongOrSpan(s):
     return splitParse(s, r'\*', parseStrong, parseText)
 
+
 def parseStrong(s):
     return f'<strong>{s}</strong>'
+
 
 def parseText(s):
     return s
@@ -221,11 +202,14 @@ def parseText(s):
 def parseHtmlBlock(s):
     return s
 
+
 def parseWordcelBlock(s):
     return splitParse(s, "\n```", parseCodeBlock, parseTextBlocks)
 
+
 def parseHTML(s):
     return splitParse(s, '\n\\?\\?\\?\n', parseHtmlBlock, parseWordcelBlock)
+
 
 def parseCodeBlock(s):
     # Get the language name from the first line.
@@ -236,8 +220,10 @@ def parseCodeBlock(s):
     s = highlight(s, lexer, HtmlFormatter())
     return '<section>'+s+'</section>'
 
+
 def parseTextBlocks(s):
     return ''.join((parseTextBlock(ss.strip()) for ss in s.split('\n\n')))
+
 
 def parseTextBlock(s):
     if len(s.split()) == 0:
@@ -255,13 +241,16 @@ def parseTextBlock(s):
 
     if s[:3] == '$$$' and s[-3:] == '$$$':
         s = s.strip('$')
-        equations = ''.join(('<div class="eqn">'+parseMath(ss, height='1.8em')+'</div>' for ss in s.split('\n') if ss != ''))
+        equations = ''.join(('<div class="eqn">'+parseMath(ss,
+                            height='1.8em')+'</div>' for ss in s.split('\n') if ss != ''))
         return '<div class="eqns">'+equations+'</div>'
 
     return parseParagraph(s)
 
+
 def parseBody(s):
     return parseHTML(s)
+
 
 def parseDocument(doc):
     doc = doc.replace('\r', '')
