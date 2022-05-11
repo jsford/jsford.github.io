@@ -45,7 +45,12 @@ img {
   margin: 10px auto;
   display: block;
 }
-.caption {
+
+.eqns {
+  text-align: center;
+}
+.eqn {
+  padding: 10px;
 }
 
 #inline-svg {
@@ -105,11 +110,11 @@ a {
   color: #aaaaaa;
 }
 
-code {
+.highlight {
   font: normal 14px "SourceCodePro", Menlo;
-  margin: auto;
 }
-code pre {
+.highlight pre {
+  margin: 0px;
   padding: 10px;
 }
 

@@ -22,6 +22,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 
 # The Search for Solutions
+
 1. Show a two piece puzzle.
 2. Draw the search tree.
 3. Explain recursive DFS idea.
@@ -58,30 +59,31 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 # Floating-Point Precision Problems
 
 Floating point precision is the \#1 reason tangram solving is hard.
-Under the hood, computers represent non-integer numbers like 1.2 or 5.123 using a representation standardized under the name IEEE-754. IEEE-754 floats are great at representing small numbers like 6.626e-34 or huge numbers like 6.022e+23, but they can't represent *every* number *exactly*.
+Under the hood, computers represent non-integer numbers like 1.2 or 5.123 using a representation standardized under the name IEEE-754. IEEE-754 floats are great at representing small numbers like 6.626e-34 or huge numbers like 6.022e+23, but they can't represent _every_ number _exactly_.
 
 For example, if we try printing the IEEE-754 double precision representation of 1/3, we get 0.3333333333333333148296162...
-This is a serious problem if you want to answer exact geometric questions like "is this point *exactly* on that line?".
+This is a serious problem if you want to answer exact geometric questions like "is this point _exactly_ on that line?".
 
 ![](floating-point-problem.svg:80%)
 
 From our macro perspective, it's easy to say "of course it's on the line!", but your computer will zoom in to the 20th decimal place and say "nope!"
 
-The standard way to resolve these issues is to change the question. Instead of asking the computer "Is this point *exactly* on that line?", you ask: "Is this point *extremely close* to that line?" Sometimes, you might have trouble defining what you mean by *extremely close*, but usually this hack works just fine.
+The standard way to resolve these issues is to change the question. Instead of asking the computer "Is this point _exactly_ on that line?", you ask: "Is this point _extremely close_ to that line?" Sometimes, you might have trouble defining what you mean by _extremely close_, but usually this hack works just fine.
 
-With tangrams though, we *really do* need exact answers to questions like
+With tangrams though, we _really do_ need exact answers to questions like
 "Is this point inside that polygon? Or just on its edge?"
 
 We can try asking approximate questions instead like
 "Is this point within 1e-16 units of that line?". Things will even appear to work. But once you add few pieces to your puzzle, those errors in the nth decimal place start to add up.
 
-Eventually, something will exceed your 1e-16 threshold when it shouldn't. Or by coincidence, something else will come in below your threshold when *it* shouldn't.
+Eventually, something will exceed your 1e-16 threshold when it shouldn't. Or by coincidence, something else will come in below your threshold when _it_ shouldn't.
 
 My first attempt at tangram solving ran into these problems immediately, and no amount of fiddling with tolerances could fix these nasty bugs.
 
 
 # Squintegers
-Squintegers ( *square-root-integers* ) are a new number system I invented to solve tangrams using exact math.
+
+Squintegers ( square-root-integers ) are a new number system I invented to solve tangrams using exact math.
 I noticed that all edge lengths and coordinates in a tangram puzzle can be represented as (a + bs), where a and b are integer values and s is the square root of two.
 
 ```cpp
@@ -94,25 +96,25 @@ struct Squint {
 };
 ```
 
-**Equality** of Squintegers is much simpler than equality between floats. To compare two squintegers, it's sufficient to compare their a and b components. Two Squints are identical if and only if their a and b components are equal.
-$$ (a+bs) \stackrel{?}{=} (c+ds) \iff (a \stackrel{?}{=} c) \land (b \stackrel{?}{=} d) $$
+*Equality* of Squintegers is much simpler than equality between floats. To compare two squintegers, it's sufficient to compare their a and b components. Two Squints are identical if and only if their a and b components are equal.
+$ (a+bs) \stackrel{?}{=} (c+ds) \iff (a \stackrel{?}{=} c) \land (b \stackrel{?}{=} d) $
 
-**Addition and Subtraction** of Squintegers is also straightforward. The components of the result are equal to the sum or difference of the components of the original values.
-$$ (a+bs) + (c+ds) = (a+c) + (b+d)s $$
-$$ (a+bs) - (c+ds) = (a-c) + (b-d)s $$
+*Addition and Subtraction* of Squintegers is also straightforward. The components of the result are equal to the sum or difference of the components of the original values.
+$ (a+bs) + (c+ds) = (a+c) + (b+d)s $
+$ (a+bs) - (c+ds) = (a-c) + (b-d)s $
 
-**Multiplication** is interesting! Multiplying two Squintegers is very similar to multiplying complex numbers.
+*Multiplication* is interesting! Multiplying two Squintegers is very similar to multiplying complex numbers.
 Importantly, the result of multiplying two Squintegers is also a Squinteger.
-$$ (a+bs)(c+ds) = ac + ads + bcs + bds^2 = (ac+2bd) + (ad+bc)s $$
+$ (a+bs)(c+ds) = ac + ads + bcs + bds^2 = (ac+2bd) + (ad+bc)s $
 
-**Division** is a problem. What is the solution to (1+0s)/(2+0s)? The result, 1/2 cannot be represented as a Squinteger!
-$$ \frac{(a+bs)}{(c+ds)} = \; ??? $$
+*Division* is a problem. What is the solution to (1+0s)/(2+0s)? The result, 1/2 cannot be represented as a Squinteger!
+$ \frac{(a+bs)}{(c+ds)} = \; ??? $
 
 Squinteger coordinates solve the exact comparison problems we ran into with floating point coordinates, but they don't allow us to do all of the math we need to solve interesting geometry problems using them.
 
 # Sqratios
 
-Sqratios ( *squinteger-ratios, pronounced: skray-shee-owz* ) are my solution to the division of Squintegers. Instead of representing coordinates as single Squintegers, we'll represent coordinates as fractions *composed* of Squintegers.
+Sqratios ( _squinteger-ratios, pronounced: skray-shee-owz_ ) are my solution to the division of Squintegers. Instead of representing coordinates as single Squintegers, we'll represent coordinates as fractions _composed_ of Squintegers.
 
 ```cpp
 struct Sqratio {
@@ -123,31 +125,31 @@ struct Sqratio {
 
 Similar rational datatypes arise frequently in computational geometry when solving similar (but more important) problems to tangrams. The rules for manipulating Sqratios are the same rules you learned in grade school for manipulating fractions.
 
-**Equality**
-$$ \frac{a_{num}}{a_{den}} \stackrel{?}{=} \frac{b_{num}}{b_{den}} \iff a_{num}b_{den} \stackrel{?}{=} a_{den}b_{num} $$
+*Equality*
+$\frac{a_{num}}{a_{den}} \stackrel{?}{=} \frac{b_{num}}{b_{den}} \iff a_{num}b_{den} \stackrel{?}{=} a_{den}b_{num}$
 
-**Comparisons**
-$$ \frac{a_{num}}{a_{den}} \stackrel{?}{<} \frac{b_{num}}{b_{den}} \iff a_{num}b_{den} \stackrel{?}{<} a_{den}b_{num} $$
+*Comparisons*
+$\frac{a_{num}}{a_{den}} \stackrel{?}{<} \frac{b_{num}}{b_{den}} \iff a_{num}b_{den} \stackrel{?}{<} a_{den}b_{num}$
 
-**Addition**
-$$ \frac{a_{num}}{a_{den}} + \frac{b_{num}}{b_{den}} = \frac{ a_{num} b_{den} + a_{den} b_{num} }{ a_{den} b_{den} }$$
+*Addition*
+$\frac{a_{num}}{a_{den}} + \frac{b_{num}}{b_{den}} = \frac{ a_{num} b_{den} + a_{den} b_{num} }{ a_{den} b_{den} }$
 
-**Subtraction**
-$$ \frac{a_{num}}{a_{den}} - \frac{b_{num}}{b_{den}} = \frac{ a_{num} b_{den} - a_{den} b_{num} }{ a_{den} b_{den} }$$
+*Subtraction*
+$ \frac{a_{num}}{a_{den}} - \frac{b_{num}}{b_{den}} = \frac{ a_{num} b_{den} - a_{den} b_{num} }{ a_{den} b_{den} }$
 
-**Multiplication**
-$$ \frac{a_{num}}{a_{den}} \cdot \frac{b_{num}}{b_{den}} = \frac{ a_{num} b_{num} }{ a_{den} b_{den} }$$
+*Multiplication*
+$ \frac{a_{num}}{a_{den}} \cdot \frac{b_{num}}{b_{den}} = \frac{ a_{num} b_{num} }{ a_{den} b_{den} }$
 
-**Division**
-$$ \frac{a}{b} = a \cdot \frac{1}{b} = \frac{a_{num}}{a_{den}} \cdot \frac{b_{den}}{b_{num}} $$
+*Division*
+$ \frac{a}{b} = a \cdot \frac{1}{b} = \frac{a_{num}}{a_{den}} \cdot \frac{b_{den}}{b_{num}} $
 
-**Simplification**
-$$ \frac{a}{b} = \frac{ \frac{a}{\text{gcd}(a,b)} }{ \frac{b}{\text{gcd}(a,b)} } = \frac{a'}{b'} $$
+*Simplification*
+$ \frac{a}{b} = \frac{ \frac{a}{\mathrm{gcd}(a,b)} }{ \frac{b}{\mathrm{gcd}(a,b)} } = \frac{a'}{b'} $
 
 Simplifying Sqratios is similar to simplifying fractions. Calculate the greatest-common-divisor of the numerator and denominator, and divide it out of the numerator and the denominator. Sqratios are simplified after every addition, subtraction, multiplication, or division to prevent overflowing the underlying Squintegers.
 
-**Sign Normalization**
-$$ \frac{-a}{-b} \rightarrow \frac{ a }{ b } \qquad \frac{a}{-b} \rightarrow \frac{ -a }{ b } $$
+*Sign Normalization*
+$ \frac{-a}{-b} \rightarrow \frac{ a }{ b } \qquad \frac{a}{-b} \rightarrow \frac{ -a }{ b } $
 
 Sign normalization is an important implementation detail. For cross-multiplication to work correctly, it is necessary to hold the sign of a Sqratio in the numerator. Sign normalization flips the sign of the numerator and denominator if the denominator is negative. Sqratios are normalized after every addition, subtraction, multiplication, or division to prevent incorrect comparisons.
 
@@ -174,7 +176,7 @@ struct Poly {
 ```
 
 ~~~
-**Implementation Note:**
+*Implementation Note:*
 Even though I said "Polygons are lists of Points", polygons are stored using std::vectors, not linked-lists for efficient O(1) access to vertices in the middle of a polygon.
 ~~~
 
@@ -215,10 +217,10 @@ Poly rotate_ccw_45deg( const Poly& poly, int n )
     cos[5] = Sqratio( -s, 2 );    sin[5] = Sqratio( -s, 2 );
     cos[6] = Sqratio(  0, 1 );    sin[6] = Sqratio( -1, 1 );
     cos[7] = Sqratio(  s, 2 );    sin[7] = Sqratio( -s, 2 );
-//
+
     const Sqratio& c = cos[n%8]; 
     const Sqratio& s = sin[n%8]; 
-//
+
     Poly newPoly = poly;
     for( auto& v : newPoly ) {
       Sqratio x = c*v.x - s*v.y;
@@ -265,8 +267,7 @@ This implementation uses the 2D determinant formula to calculate (twice) the sig
 These values are summed together, divided by two, and returned.
 
 ~~~
-Wikipedia refers to this algorithm as the triangular form of the [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula#Triangle_form,_determinant_form).
-  <img src="kermit.png" style="width: 100%; max-width: 200px; padding-top: 10px;">
+Wikipedia refers to this algorithm as the triangular form of the [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula#Triangle_form,_determinant_form). ![](kermit.png)
 ~~~
 
 ```cpp
@@ -274,7 +275,7 @@ Sqratio polygon_area( const Poly& poly )
 {
     Sqratio a(0);
     const auto n = poly.size();
-//
+
     for(int i=0; i<n; ++i) {
       const Point& vc = poly[i];           // current vertex
       const Point& vn = poly[(i+1)%n];     // next vertex
@@ -289,24 +290,27 @@ Normally I wouldn't worry about it, but since we are computing polygon areas in 
 
 
 # Subtracting Polygons
+
 1. Polygon subtraction is surprisingly hard! Literal edge cases.
 2. Here's the basic strategy.
 3. Unit testing needed!
 4. Creating self-intersecting polygons. Yuck!
 
-<img src="self-intersection.svg" style="width: 50%;"/>
+![](self-intersection.svg:50%)
 
 # Resolving Self-Intersections
+
 1. The fast pointer, slow pointer algorithm.
 2. Find first intersection, start walking.
 3. Finally! All of the pieces of the solver are working
 
 # Solving Tangrams
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi non arcu risus quis varius quam quisque id diam. 
 
-<aside>
-<p>Don't talk to me about cyclomatic complexity! By my count, this routine involves at least six nested loops.</p>
-</aside>
+~~~
+Don't talk to me about cyclomatic complexity! By my count, this routine involves at least six nested loops.
+~~~
 
 ```cpp
 PieceVector solve(puzzle, in_pieces, out_pieces)
@@ -315,16 +319,16 @@ PieceVector solve(puzzle, in_pieces, out_pieces)
   if( out_pieces.empty() and puzzle.area() == 0 ) {
     return in_pieces;
   }
-//
+
   // Sort pieces by area from largest to smallest.
   out_pieces.sort_by_area();
-//
+
   // Pick the largest piece to insert next.
   next_piece = out_pieces[0];
-//
+
   // Keep track of the remaining pieces.
   next_out_pieces = out_pieces[1:];
-//
+
   // For each polygon in the puzzle...
   for( Poly& puzzle_part : puzzle ) {
   {
@@ -343,28 +347,28 @@ PieceVector solve(puzzle, in_pieces, out_pieces)
             // Flip, rotate, and translate the next_piece to place it
             // in the puzzle in the next orientation with its piece_vert
             // on top of the chosen puzzle_vert.
-//
+
             Point t = puzzle_vert - piece_vert;
             Piece placed_piece = transform_piece(next_piece, f, r, t);
-//               
+               
             // Remove placed_piece from all puzzle parts.
             next_puzzle = remove_piece_from_puzzle(puzzle, placed_piece);
-//
+
             // If removing the piece did not reduce the puzzle area by
             // exactly the area of the piece, it didn't fit in the puzzle.
             if( puzzle.area() != next_puzzle.area() + placed_piece.area() ) {
                 continue;
             }
-//
+
             // Otherwise, we found a place where next_piece fits.
             // Let's remove it from the puzzle and recurse.
             subpuzzle_solution = solve(next_puzzle,
               next_in_pieces, next_out_pieces);
-//
+
             // If the subpuzzle was unsolvable, forget this
             // piece placement and go on to the next one.
             if( !subpuzzle_solution.valid ) { continue; }
-//
+
             // Otherwise, add placed_piece to
             // the subpuzzle solution and return it!
             subpuzzle_solution.push_back( placed_piece );
@@ -378,6 +382,7 @@ PieceVector solve(puzzle, in_pieces, out_pieces)
 ```
 
 # Results
+
 1. The solver can handle standard tangrams nooo problem.
 2. How long does it take to solve?
 3. What is the effect of placing small pieces first?
@@ -386,15 +391,14 @@ PieceVector solve(puzzle, in_pieces, out_pieces)
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi non arcu risus quis varius quam quisque id diam. 
 
-<!-- Play on click. Pause on click. -->
-?[](classic_square.mp4:40%)
+![](classic_square.mp4:40%)
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi non arcu risus quis varius quam quisque id diam. 
 
-<!-- Play on click. Pause on click. -->
-?[](sitting_fox.mp4:30%)
+![](sitting_fox.mp4:30%)
 
 # Optimization
+
 The solver works, but can we make it faster? Of course we can! I'd love to hook up a profiler and optimize every instruction, but it's Sunday night, and I'm supposed to be writing a dissertation. Instead, let's pick some low-hanging fruit.
 
 Right now we're using polygon subtraction to decide if a piece fits into the puzzle. Polygon subtraction is fairly involved, and we're doing it in the inner loop of the solver. Let's see if we can cut down the number of polygon subtractions we do.

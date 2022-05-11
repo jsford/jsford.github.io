@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from wordcel.wordcel import wc2html, replaceExtension, readFile, writeFile
+from wordcel.wordcel import *
 import os
 import os.path as osp
 import shutil
@@ -22,7 +22,7 @@ def getFonts():
     return glob(postsDir, ['.ttf','.otf','.woff'])
 
 def getImages():
-    imgExtensions = ['.jpg','.png','.svg','.mp4','.bmp','.tif']
+    imgExtensions = ['.jpg','.png','.gif','.svg','.mp4','.bmp','.tif']
     rootDir = getProjectRoot()
 
     postsDir = osp.join(rootDir, 'posts')
@@ -65,7 +65,12 @@ def main():
         dst = osp.join(buildDir, name)
 
         templatesDir = osp.join(getProjectRoot(), 'templates')
-        postDict = wc2html(src, dst, templatesDir)
+        try:
+            postDict = wc2html(src, dst, templatesDir)
+        except Exception as e:
+            warn(f'Failed to compile file: {src}\n{e}')
+
+            continue
         post_info = [postDict['title'], postDict['date'], name, postDict['abstract']]
         posts.append(post_info)
     posts.sort(key=lambda p: p[1], reverse=True)

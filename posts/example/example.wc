@@ -15,7 +15,7 @@ Lorem _ipsum_ dolor *sit* amet, **consectetur** adipiscing elit. Nunc ac purus p
 <h1>Verbatim HTML</h1>
 ???
 
-## Hello H2
+## _Hello_ *H2*
 
 Pell cond `int main() { return 0; }` velit eget metus condimentum, quis suscipit nibh semper. Mauris luctus, magna ac placerat lobortis, odio sapien volutpat nisi, sed interdum elit risus id nibh. Phasellus magna eros, facilisis et consectetur sit amet, malesuada eget nisi. Vivamus ut eros egestas, cursus libero a, pretium erat. Sed tincidunt mauris ac leo posuere, quis suscipit eros tristique. Maecenas elementum quam ut bibendum elementum. Quisque mauris leo, scelerisque eu rutrum eget, malesuada vitae ante. Cras iaculis odio id dignissim mollis. Nulla in libero vehicula, rhoncus massa eget, varius turpis. Duis suscipit quam odio, et posuere quam dictum sit amet. Donec vel ante sodales, dignissim nisl sed, sagittis ligula. Donec ipsum arcu, pellentesque eget maximus nec, eleifend nec ligula. Nulla facilisi. Etiam semper viverra eros, et euismod odio consequat vitae.
 
@@ -34,7 +34,7 @@ $$$
 Fusce molestie neque id venenatis luctus. Suspendisse in urna orci. Donec ut ex leo. Sed quis tempor mi. Donec viverra bibendum risus vel viverra. Phasellus finibus est quis enim dapibus, vitae lobortis metus tempus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus eu semper lacus, eget laoreet magna. Maecenas efficitur leo in tortor accumsan, et varius tellus scelerisque. Curabitur quis tellus sit amet nibh viverra egestas sit amet a tortor. Quisque scelerisque faucibus ex, quis rhoncus libero venenatis in. Aenean iaculis felis tristique erat venenatis, eget euismod purus vulputate. Aenean sodales odio vitae sapien iaculis, sit amet facilisis arcu feugiat. Nam purus risus, fringilla in nibh id, consequat fermentum leo. Integer lectus lectus, laoreet nec feugiat ac, laoreet et justo.
 
 ~~~
-Mary had a little lamb, little lamb, little lamb. Mary had a little lamb whose fleece was white as snow.
+Mary had a _little lamb_, _little lamb_, _little lamb_. *Mary* had a little lamb whose fleece was white as snow.
 ~~~
 
 """
@@ -50,10 +50,9 @@ Fusce molestie neque id venenatis luctus. Suspendisse in urna orci. Donec ut ex 
 ![This famous picture is a cropped subset of a playboy centerfold. The woman in the picture, Lenna, has asked that her picture no longer be used for demonstrating image processing algorithms.](lena.png: 50%)
 
 
-
 ## Block Three
 
 Aliquam quis feugiat leo. Morbi felis elit, ultrices sed tincidunt in, vestibulum et ante. Nam in magna bibendum, efficitur tortor ac, scelerisque sapien. Suspendisse in leo et orci vulputate aliquet sed vel nibh. Duis non dapibus justo. Sed ipsum erat, condimentum at facilisis id, aliquet vitae enim. Suspendisse pharetra in leo non fermentum. Nunc vel convallis orci. Aenean pharetra mi in nisi fermentum, eu tempus mauris vulputate. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer quis lobortis felis. Sed eu magna sed erat scelerisque tincidunt. In tempus hendrerit egestas. Curabitur vel arcu interdum, ultricies ipsum at, pellentesque eros.
 
-[abc](https://google.com)
+[google.com](https://google.com)
 Sed volutpat odio consequat sem tempor, at scelerisque justo dignissim. Nunc ultrices mi quis ante vestibulum, a vulputate velit posuere. Praesent tincidunt eros eu est efficitur, a hendrerit leo maximus. Quisque eleifend consectetur rhoncus. Fusce a diam ligula. In magna neque, lobortis id luctus eu, pharetra sed nibh. Etiam sit amet nibh imperdiet, vestibulum augue hendrerit, accumsan sapien. In tempus ac sapien nec rutrum. Suspendisse sit amet molestie tortor, suscipit faucibus ligula. Donec dignissim erat in varius faucibus. Proin massa neque, malesuada non feugiat nec, porttitor ut purus. Pellentesque maximus lectus a risus aliquet porttitor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin quis lorem sed dolor gravida pretium. Duis massa magna, mattis quis suscipit eu, ultricies eget quam. Mauris in tempor dolor.
