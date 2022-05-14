@@ -11,6 +11,9 @@ def getProjectRoot():
 def glob(directory, extensions):
     return [osp.join(dp, f) for dp, dn, filenames in os.walk(directory) for f in filenames if osp.splitext(f)[1].lower() in extensions]
 
+def globEverything(directory):
+    return [osp.join(dp, f) for dp, dn, filenames in os.walk(directory) for f in filenames]
+
 def getPosts():
     rootDir = getProjectRoot()
     postsDir = osp.join(rootDir, 'posts')
@@ -39,7 +42,13 @@ def getMisc():
     rootDir = getProjectRoot()
 
     postsDir = osp.join(rootDir, 'posts')
-    return glob(postsDir, miscExtensions)
+    postsFiles = glob(postsDir, miscExtensions)
+
+    filesDir = osp.join(rootDir, 'files')
+    files = globEverything(filesDir)
+
+    files.extend(postsFiles)
+    return files
 
 def getCSS():
     rootDir = getProjectRoot()
