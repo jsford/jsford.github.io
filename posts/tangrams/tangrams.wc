@@ -2,7 +2,7 @@ title: I wrote a tangram solver.
 subtitle: It's harder than you think.
 author: Jordan Ford
 date: 2022-02-13
-abstract: I wrote a program to solve tangrams, and it was waaay harder than I expected!
+abstract: Boring people solve tangram puzzles for fun. <i>Extremely</i> boring people invent a new way to represent numbers, build a library of exact geometric predicates, and write a program to brute force tangram solutions instead!
 template: post.html
 ---
 
