@@ -1,0 +1,238 @@
+@font-face {
+  font-family: OldStandardTT;
+  src: url(OldStandardTT-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: OldStandardTT;
+  font-weight: bold;
+  src: url(OldStandardTT-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: OldStandardTT;
+  font-style: italic;
+  src: url(OldStandardTT-Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url(CrimsonPro-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: SourceCodePro;
+  src: url(SourceCodePro-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: SourceSansPro;
+  src: url(SourceSansPro-Regular.ttf) format('truetype') font-weight-normal,
+       url(SourceSansPro-Light.ttf) format('truetype') font-weight-light,
+       url(SourceSansPro-Bold.ttf) format('truetype') font-weight-bold;
+}
+
+html {
+  height: 100vh;
+  overflow-x: hidden;
+  color: #222222;
+}
+body {
+  margin: 0px;
+  padding: 0px;
+  min-height: 100vh;
+  font: normal 19px/29px "CrimsonPro", Georgia, serif;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  margin: 10px auto;
+  display: block;
+}
+
+.eqns {
+  text-align: center;
+}
+.eqn {
+  padding: 10px;
+}
+
+#inline-svg {
+  height: 1em;
+  vertical-align: middle;
+  margin-top: -.5em;
+  margin-left: .25em;
+  margin-right: .25em;
+  display: inline-block;
+}
+
+video {
+  display: block;
+  max-width: 100%;
+  margin-left:  auto;
+  margin-right: auto;
+}
+
+.title {
+  font: 64px CrimsonPro, Georgia, serif;
+}
+
+.subtitle {
+  font: 30px CrimsonPro, Georgia, serif;
+  font-weight: light;
+}
+
+h1 {
+  font: 36px CrimsonPro, Georgia, serif;
+  margin-bottom: 0px;
+}
+h2 {
+  font: 30px CrimsonPro, Georgia, serif;
+  margin-bottom: 0px;
+}
+h3 {
+  font: 24px CrimsonPro, Georgia, serif;
+  margin-bottom: 0px;
+}
+
+p {
+  text-align: justify;
+}
+
+a {
+  text-decoration: none;
+  color: #1481b8;
+}
+
+.breadcrumb a {
+  color: #aaaaaa;
+}
+.breadcrumb a:hover {
+  color: #1481b8;
+}
+.breadcrumb span {
+  color: #aaaaaa;
+}
+
+.highlight {
+  font: normal 14px "SourceCodePro", Menlo;
+}
+.highlight pre {
+  margin: 0px;
+  padding: 10px;
+}
+
+.post-content {
+  display: block;
+  margin: 0px auto;
+  min-height: 100vh;
+}
+
+aside {
+  position: absolute;
+  font: normal 12px/15px "Crimson", Georgia, serif;
+  border-top: solid 2px #dee9ed;
+  border-bottom: solid 2px #dee9ed;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  text-align: justify;
+}
+aside p {
+  margin: 4px 0;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+  text-align: justify;
+}
+
+.nav-link {
+  flex: 1 1 auto;
+  margin-left:  0.25em;
+  margin-right: 0.25em;
+  color: white;
+}
+.nav-link:link {
+  color: white;
+}
+.nav-link:hover {
+  color: #1481b8;
+}
+.nav-name {
+  color: white;
+}
+.nav-name:hover {
+  color: #1481b8;
+}
+
+#me-and-my-bio {
+  display: block;
+}
+#my-face {
+  display: block;
+  width: 80%;
+  max-width: 300px;
+  height: auto;
+  padding: 0px;
+  border-radius: 50%;
+}
+#about-me {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .post-content { width: 90%; }
+  .nav-content { width: 90%; }
+  aside {
+    display: block;
+    position: relative;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .post-content { width: 90%; }
+  .nav-content { width: 90%; }
+  aside {
+    display: block;
+    position: relative;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .post-content { width: 90%; }
+  .nav-content { width: 90%; }
+  aside {
+    display: block;
+    position: relative;
+  }
+  #me-and-my-bio {
+    display: flex;
+    align-items: center;
+  }
+  #my-face {
+    display: flex;
+    width: 20%;
+    height: auto;
+    padding: 20px;
+    border-radius: 50%;
+  }
+  #about-me {
+    display: flex;
+    width: 70%;
+    height: auto;
+  }
+}
+
+/* Large devices (laptops/desktops, 1050px and up) */
+@media only screen and (min-width: 1050px) {
+  .post-content { width: 700px; }
+  .nav-content { width: 700px; }
+  aside { position: absolute; width: 150px; left: calc(50vw + 380px); border-bottom: none; }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1300px) {
+  .post-content { width: 850px; }
+  .nav-content { width: 850px; }
+
+  aside { position: absolute; width: 200px; left: calc(50vw + 440px); border-bottom: none; }
+}
