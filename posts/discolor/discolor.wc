@@ -1,6 +1,6 @@
 title: discolor.py
 subtitle: What is discolor? Ooooh it's dat color.
-abstract: I wrote a simple script to convert colors between hex, float, and integer representations without leaving the command line.
+abstract: I wrote a simple script to convert RGB colors between hex, float, and integer representations without leaving the command line. It's nice to have when you're generating plots, editing images, and drawing diagrams for your thesis.
 author: Jordan Ford
 date: 2022-03-29
 template: post.html

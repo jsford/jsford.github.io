@@ -125,7 +125,7 @@ def parseMath(s, height="1.5em"):
     # Replace height="123.4323" with height="1.5em".
     svgStr = re.sub('height[\s]*=\"[^"]+\"', f'height="{height}"', svgStr)
     # Replace width="123.4323" with width="auto".
-    svgStr = re.sub('width[\s]*=\"[^"]+\"', 'width="auto"', svgStr)
+    svgStr = re.sub('width[\s]*=\"[^"]+\"', 'width="100%"', svgStr)
     return '<span id="inline-svg">'+svgStr+'</span>'
 
 

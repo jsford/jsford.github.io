@@ -8,12 +8,13 @@
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Architect's Daughter -->
+    <link href="http://fonts.cdnfonts.com/css/architects-daughter" rel="stylesheet">
   </head>
 
 
@@ -31,17 +32,11 @@
 
     <div class="post-content" style="padding-top: 80px; padding-bottom: 50px;">
         <section>
-          <h1>I'm Jordan Ford.</h1>
-          <p>
-          This blog is my public engineering notebook. It's where I keep a log of the things I build, the problems I solve, and the ideas I have. I'm interested in robots, puzzles, programming, industrial design, math, art, and engineering.
-        </section>
-
-        <section>
-          <div style="width: 100%;">
-            <img style="display: float; height: 150px; max-width: 10%; float: left; padding: 15px 30px 20px 0px;" src="lego-robotman.svg" style="width: 10%;"/>
-            <div style="display: float; height: 150px; max-width: 78%; float: left; padding-top: 0px;">
-              <h1>Contact</h1>
+          <div id='me-and-my-bio'>
+            <img id='my-face' src="me.jpg" alt="A portrait of Jordan Ford"/>
+            <div id='about-me'>
               <p>
+                This blog is my public engineering notebook. It's where I keep a log of the things I build, the problems I solve, and the ideas I have. I'm interested in robots, puzzles, programming, industrial design, math, art, and engineering.
                 Read a longer bio <a href="about.html">here</a>,
                 email me <a href="mailto:jsford94@gmail.com">here</a>,
                 or check out my <a href="https://twitter.com/jrdnfrd">twitter</a>,
@@ -52,19 +47,20 @@
           </div>
         </section>
 
-        <section style="clear: both;">
-          <h1>Blog Archive</h1>
+        <section style="clear: both; padding-top: 0px;">
             {% for title, date, path, abstract in posts %}
-            <div class="blog-listing" style="margin-top: 1em;">
-              <span style="color: #a8a8a8; font-size: 0.9em;">{{date}}</span>&nbsp;
-              <h3 style="display: inline;"><a href="{{path}}">{{title}}</a></h3>
+            <div class="blog-listing" style="margin-top: 1.25em;">
+              <a href="{{path}}" style="text-decoration: none; color: #222222;">
+              <div style="color: #a8a8a8; font-size: 0.9em;">{{date}}</div>
+              <h2 style="display: inline; color: #1481b8;">{{title}}</h2>
               <p  style="margin-top: 0px;">{{abstract}}</p>
+              </a>
             </div>
             {% endfor %}
         </section>
 
 
-        <hr style="padding-bottom: 0px; clear: both;"/>
+        <hr style="margin-top: 10%; padding-bottom: 0px; clear: both;"/>
         <div style="text-align: center; font-size: 80%; color: #5a5e67; padding-top: 10px; padding-bottom: 10px;">
           Handcrafted by Jordan Ford &mdash; <span style="position: relative; top: 1px;">&copy;</span> 2022
         </div>

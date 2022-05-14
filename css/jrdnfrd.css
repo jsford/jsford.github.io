@@ -36,7 +36,7 @@ body {
   margin: 0px;
   padding: 0px;
   min-height: 100vh;
-  font: normal 18px/26px "CrimsonPro", Georgia, serif;
+  font: normal 19px/29px "CrimsonPro", Georgia, serif;
   overflow-x: hidden;
 }
 
@@ -124,10 +124,6 @@ a {
   min-height: 100vh;
 }
 
-.katex {
-  font-size: 18px !important;
-}
-
 aside {
   position: absolute;
   font: normal 12px/15px "Crimson", Georgia, serif;
@@ -163,6 +159,23 @@ aside p {
   color: #1481b8;
 }
 
+#me-and-my-bio {
+  display: block;
+}
+#my-face {
+  display: block;
+  width: 80%;
+  max-width: 300px;
+  height: auto;
+  padding: 0px;
+  border-radius: 50%;
+}
+#about-me {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .post-content { width: 90%; }
@@ -190,6 +203,22 @@ aside p {
   aside {
     display: block;
     position: relative;
+  }
+  #me-and-my-bio {
+    display: flex;
+    align-items: center;
+  }
+  #my-face {
+    display: flex;
+    width: 20%;
+    height: auto;
+    padding: 20px;
+    border-radius: 50%;
+  }
+  #about-me {
+    display: flex;
+    width: 70%;
+    height: auto;
   }
 }
 
