@@ -1,21 +1,92 @@
 @font-face {
-  font-family: OldStandardTT;
-  src: url(OldStandardTT-Regular.ttf) format('truetype');
-}
-@font-face {
-  font-family: OldStandardTT;
-  font-weight: bold;
-  src: url(OldStandardTT-Bold.ttf) format('truetype');
-}
-@font-face {
-  font-family: OldStandardTT;
-  font-style: italic;
-  src: url(OldStandardTT-Italic.ttf) format('truetype');
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-Black.ttf");
+  font-weight: 900;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url(CrimsonPro-VariableFont_wght.ttf);
+  src: url("CrimsonPro-BlackItalic.ttf");
+  font-style: italic;
+  font-weight: 900;
 }
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-Bold.ttf");
+  font-weight: 700;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-BoldItalic.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-ExtraBold.ttf");
+  font-weight: 800;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-ExtraBoldItalic.ttf");
+  font-weight: 800;
+  font-style: italic;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-ExtraLight.ttf");
+  font-weight: 200;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-ExtraLightItalic.ttf");
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-Italic.ttf");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-Light.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-LightItalic.ttf");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-Medium.ttf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-MediumItalic.ttf");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-Regular.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-SemiBold.ttf");
+  font-weight: 600;
+}
+@font-face {
+  font-family: CrimsonPro;
+  src: url("CrimsonPro-SemiBoldItalic.ttf");
+  font-weight: 600;
+  font-style: italic;
+}
+
 @font-face {
   font-family: SourceCodePro;
   src: url(SourceCodePro-VariableFont_wght.ttf);
