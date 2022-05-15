@@ -140,6 +140,10 @@ video {
   margin-right: auto;
 }
 
+.code {
+  overflow-x: scroll;
+}
+
 .title {
   font: 64px CrimsonPro, Georgia, serif;
 }
