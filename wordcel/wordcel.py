@@ -146,7 +146,7 @@ def parseImage(s):
 
     extension = os.path.splitext(filename)[1].lower()
     if extension in ['.jpg', '.png', '.svg', '.bmp', '.gif', '.tif']:
-        html = '<img src={} alt="{}" style="width:{}; height:auto;">'.format(
+        html = '<img class="post-img" src={} alt="{}" style="width:{}; height:auto;">'.format(
             filename.strip(), alt.strip(), width.strip())
         if alt.strip() != '':
             html += '\n<span class="caption"><i>{}</i></span>'.format(
