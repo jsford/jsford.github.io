@@ -288,7 +288,7 @@ aside p {
     display: flex;
     width: 30%;
     max-width: 300px;
-    margin: 2% 2% 2% 4%;
+    margin: 2% 2% 2% 0%;
     height: auto;
     border-radius: 50%;
   }
@@ -296,7 +296,7 @@ aside p {
     display: flex;
     height: auto;
     width: 70%;
-    margin: 0% 4% 0px 2%;
+    margin: 0% 0% 0px 2%;
   }
 }
 
