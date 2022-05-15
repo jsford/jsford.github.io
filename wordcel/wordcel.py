@@ -218,7 +218,7 @@ def parseCodeBlock(s):
     lexer = get_lexer_by_name(lexerName, stripall=True)
     # Highlight the code.
     s = highlight(s, lexer, HtmlFormatter())
-    return '<section>'+s+'</section>'
+    return '<section class="code">'+s+'</section>'
 
 
 def parseTextBlocks(s):
