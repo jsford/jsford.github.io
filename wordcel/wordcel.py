@@ -152,7 +152,7 @@ def parseImage(s):
             html += '\n<span class="caption"><i>{}</i></span>'.format(
                 alt.strip())
     elif extension in ['.mp4', '.mov', '.avi', '.mkv', '.wmv', '.webm']:
-        html = '<video autoplay muted loop title="{}" style="width: {}; height: auto;"><source src="{}" type="video/{}">'.format(
+        html = '<video autoplay playsinline muted loop title="{}" style="width: {}; height: auto;"><source src="{}" type="video/{}">'.format(
             alt.strip(), width.strip(), filename.strip(), extension.strip('.'))
         if alt.strip() != '':
             html += '\n<span class="caption"><i>{}</i></span>'.format(
