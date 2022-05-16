@@ -107,13 +107,13 @@ body {
   margin: 0px;
   padding: 0px;
   min-height: 100vh;
-  font: normal 18px/27px "CrimsonPro", Georgia, serif;
+  font: normal 20px/30px "CrimsonPro", Georgia, serif;
   overflow-x: hidden;
 }
 
 .post-img {
   max-width: 100%;
-  margin: 10px auto;
+  margin: 20px auto;
   display: block;
 }
 
@@ -136,12 +136,12 @@ body {
 video {
   display: block;
   max-width: 100%;
-  margin-left:  auto;
-  margin-right: auto;
+  margin: 20px auto;
 }
 
 .code {
   overflow-x: scroll;
+  margin: 20px auto;
 }
 
 .title {
@@ -167,6 +167,7 @@ h3 {
 }
 
 p {
+  margin: 5px 0px;
   text-align: justify;
 }
 
