@@ -1,101 +1,101 @@
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-Black.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-Black.ttf");
   font-weight: 900;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-BlackItalic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-BlackItalic.ttf");
   font-style: italic;
   font-weight: 900;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-Bold.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-Bold.ttf");
   font-weight: 700;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-BoldItalic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-BoldItalic.ttf");
   font-weight: 700;
   font-style: italic;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-ExtraBold.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-ExtraBold.ttf");
   font-weight: 800;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-ExtraBoldItalic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-ExtraBoldItalic.ttf");
   font-weight: 800;
   font-style: italic;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-ExtraLight.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-ExtraLight.ttf");
   font-weight: 200;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-ExtraLightItalic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-ExtraLightItalic.ttf");
   font-weight: 200;
   font-style: italic;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-Italic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-Italic.ttf");
   font-weight: 400;
   font-style: italic;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-Light.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-Light.ttf");
   font-weight: 300;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-LightItalic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-LightItalic.ttf");
   font-weight: 300;
   font-style: italic;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-Medium.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-Medium.ttf");
   font-weight: 500;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-MediumItalic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-MediumItalic.ttf");
   font-weight: 500;
   font-style: italic;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-Regular.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-Regular.ttf");
   font-weight: 400;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-SemiBold.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-SemiBold.ttf");
   font-weight: 600;
 }
 @font-face {
   font-family: CrimsonPro;
-  src: url("CrimsonPro-SemiBoldItalic.ttf");
+  src: url("Crimson_Pro/static/CrimsonPro-SemiBoldItalic.ttf");
   font-weight: 600;
   font-style: italic;
 }
 
 @font-face {
   font-family: SourceCodePro;
-  src: url(SourceCodePro-VariableFont_wght.ttf);
+  src: url(Source_Code_Pro/SourceCodePro-VariableFont_wght.ttf);
 }
 @font-face {
   font-family: SourceSansPro;
-  src: url(SourceSansPro-Regular.ttf) format('truetype') font-weight-normal,
-       url(SourceSansPro-Light.ttf) format('truetype') font-weight-light,
-       url(SourceSansPro-Bold.ttf) format('truetype') font-weight-bold;
+  src: url(Source_Sans_Pro/SourceSansPro-Regular.ttf) format('truetype') font-weight-normal,
+       url(Source_Sans_Pro/SourceSansPro-Light.ttf) format('truetype') font-weight-light,
+       url(Source_Sans_Pro/SourceSansPro-Bold.ttf) format('truetype') font-weight-bold;
 }
 
 html {
@@ -112,25 +112,8 @@ body {
 }
 
 .post-img {
-  max-width: 100%;
   margin: 20px auto;
   display: block;
-}
-
-.eqns {
-  text-align: center;
-}
-.eqn {
-  padding: 10px;
-}
-
-#inline-svg {
-  height: 1em;
-  vertical-align: middle;
-  margin-top: -.5em;
-  margin-left: .25em;
-  margin-right: .25em;
-  display: inline-block;
 }
 
 video {
@@ -140,7 +123,7 @@ video {
 }
 
 .code {
-  overflow-x: scroll;
+  overflow-x: auto;
   margin: 20px auto;
 }
 
@@ -215,6 +198,10 @@ aside p {
   margin-block-end: 0.5em;
   text-align: justify;
 }
+aside p img {
+  max-width: 300px;
+  width: 100%:
+}
 
 .nav-link {
   flex: 1 1 auto;
@@ -244,7 +231,7 @@ aside p {
   height: auto;
   border-radius: 50%;
   padding: 0px;
-  margin: 0% auto;
+  margin: 20px auto;
 }
 #about-me {
   display: block;
@@ -252,6 +239,8 @@ aside p {
   height: auto;
   margin: 0% auto;
 }
+
+.katex { font-size: 1em !important; }
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {

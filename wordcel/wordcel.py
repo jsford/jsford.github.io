@@ -102,6 +102,8 @@ def parseMathOrSpan(s):
 
 
 def parseMath(s, height="1.5em"):
+    return '$'+s+'$'
+
     # matplotlib: force computer modern font set
     plt.rc('mathtext', fontset='cm')
     import matplotlib as mpl
@@ -142,7 +144,7 @@ def parseImage(s):
         filename, width = meta.split(':')
     else:
         filename = meta
-        width = '100%'
+        width = 'auto'
 
     extension = os.path.splitext(filename)[1].lower()
     if extension in ['.jpg', '.png', '.svg', '.bmp', '.gif', '.tif']:
@@ -241,9 +243,7 @@ def parseTextBlock(s):
 
     if s[:3] == '$$$' and s[-3:] == '$$$':
         s = s.strip('$')
-        equations = ''.join(('<div class="eqn">'+parseMath(ss,
-                            height='1.8em')+'</div>' for ss in s.split('\n') if ss != ''))
-        return '<div class="eqns">'+equations+'</div>'
+        return '$$'+s+'$$'
 
     return parseParagraph(s)
 

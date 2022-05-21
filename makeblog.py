@@ -5,8 +5,15 @@ import os.path as osp
 import shutil
 import jinja2
 
-def getProjectRoot():
-    return osp.dirname(osp.realpath(__file__))
+ROOT_DIR = osp.dirname(osp.realpath(__file__))
+FONTS_DIR = osp.join(ROOT_DIR,     'fonts')
+POSTS_DIR = osp.join(ROOT_DIR,     'posts')
+IMAGES_DIR = osp.join(ROOT_DIR,    'images')
+FILES_DIR = osp.join(ROOT_DIR,     'files')
+CSS_DIR = osp.join(ROOT_DIR,       'css')
+TEMPLATES_DIR = osp.join(ROOT_DIR, 'templates')
+BUILD_DIR = osp.join(ROOT_DIR,     'build')
+
 
 def glob(directory, extensions):
     return [osp.join(dp, f) for dp, dn, filenames in os.walk(directory) for f in filenames if osp.splitext(f)[1].lower() in extensions]
@@ -14,54 +21,17 @@ def glob(directory, extensions):
 def globEverything(directory):
     return [osp.join(dp, f) for dp, dn, filenames in os.walk(directory) for f in filenames]
 
+def copyTree(src, dst):
+    return shutil.copytree(src, dst, dirs_exist_ok=True)
+
 def getPosts():
-    rootDir = getProjectRoot()
-    postsDir = osp.join(rootDir, 'posts')
-    return glob(postsDir, ['.wc'])
-
-def getFonts():
-    rootDir = getProjectRoot()
-    postsDir = osp.join(rootDir, 'fonts')
-    return glob(postsDir, ['.ttf','.otf','.woff'])
-
-def getImages():
-    imgExtensions = ['.jpg','.png','.gif','.svg','.mp4','.bmp','.tif']
-    rootDir = getProjectRoot()
-
-    postsDir = osp.join(rootDir, 'posts')
-    images = glob(postsDir, imgExtensions)
-
-    imagesDir = osp.join(rootDir, 'images')
-    rootImages = glob(imagesDir, imgExtensions)
-
-    images.extend(rootImages)
-    return images
-
-def getMisc():
-    miscExtensions = ['.py','.c','.cpp','.h','.hpp']
-    rootDir = getProjectRoot()
-
-    postsDir = osp.join(rootDir, 'posts')
-    postsFiles = glob(postsDir, miscExtensions)
-
-    filesDir = osp.join(rootDir, 'files')
-    files = globEverything(filesDir)
-
-    files.extend(postsFiles)
-    return files
-
-def getCSS():
-    rootDir = getProjectRoot()
-    postsDir = osp.join(rootDir, 'css')
-    return glob(postsDir, ['.css'])
+    return glob(POSTS_DIR, ['.wc'])
 
 def createBuildDir():
-    rootDir = getProjectRoot()
-    buildDir = osp.join(rootDir, 'build')
-    if osp.exists(buildDir):
-        shutil.rmtree(buildDir)
-    os.mkdir(buildDir)
-    return buildDir
+    if osp.exists(BUILD_DIR):
+        shutil.rmtree(BUILD_DIR)
+    os.mkdir(BUILD_DIR)
+    return BUILD_DIR
 
 def copyFiles(files, dst):
     for f in files:
@@ -69,20 +39,22 @@ def copyFiles(files, dst):
 
 def main():
     postFiles  = getPosts()
-    imageFiles = getImages()
-    cssFiles   = getCSS()
-    fontFiles  = getFonts()
-    miscFiles  = getMisc()
 
-    buildDir = createBuildDir()
+    createBuildDir()
+
+    copyTree(POSTS_DIR, BUILD_DIR)
+    copyTree(IMAGES_DIR, BUILD_DIR)
+    copyTree(CSS_DIR, BUILD_DIR)
+    copyTree(FONTS_DIR, BUILD_DIR)
+    copyTree(FILES_DIR, BUILD_DIR)
+
     posts = []
     for src in postFiles:
         name = replaceExtension(osp.basename(src), '.html')
-        dst = osp.join(buildDir, name)
+        dst = osp.join(BUILD_DIR, name)
 
-        templatesDir = osp.join(getProjectRoot(), 'templates')
         try:
-            postDict = wc2html(src, dst, templatesDir)
+            postDict = wc2html(src, dst, TEMPLATES_DIR)
         except Exception as e:
             warn(f'Failed to compile file: {src}\n{e}')
 
@@ -91,15 +63,10 @@ def main():
         posts.append(post_info)
     posts.sort(key=lambda p: p[1], reverse=True)
 
-    copyFiles(imageFiles, buildDir)
-    copyFiles(cssFiles, buildDir)
-    copyFiles(fontFiles, buildDir)
-    copyFiles(miscFiles, buildDir)
-
     # Render index.html and copy it to the build directory.
-    indexTemplate = jinja2.Template( readFile(osp.join(templatesDir, 'index.html')) )
+    indexTemplate = jinja2.Template( readFile(osp.join(TEMPLATES_DIR, 'index.html')) )
     indexHTML = indexTemplate.render(posts=posts)
-    writeFile(osp.join(buildDir, 'index.html'), indexHTML)
+    writeFile(osp.join(BUILD_DIR, 'index.html'), indexHTML)
 
 if __name__=='__main__':
     main()
