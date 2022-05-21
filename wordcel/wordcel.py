@@ -194,6 +194,7 @@ def parseStrong(s):
 
 
 def parseText(s):
+    s = re.sub(r'---', r'&mdash;', s)
     return s
 
 
