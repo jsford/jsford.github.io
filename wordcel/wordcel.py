@@ -9,9 +9,6 @@ from bs4 import BeautifulSoup as bs
 from colorama import init, Fore
 from jinja2 import Template
 
-from io import BytesIO
-import matplotlib.pyplot as plt
-
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, guess_lexer, get_all_lexers
 from pygments.formatters import HtmlFormatter
@@ -104,32 +101,6 @@ def parseMathOrSpan(s):
 def parseMath(s, height="1.5em"):
     return '$'+s+'$'
 
-    # matplotlib: force computer modern font set
-    plt.rc('mathtext', fontset='cm')
-    import matplotlib as mpl
-    mpl.rcParams['text.usetex'] = True
-    mpl.rcParams['text.latex.preamble'] = [r'\usepackage{stackrel}']
-
-    def tex2svg(formula, fontsize=40, dpi=300):
-        fig = plt.figure(figsize=(1.0, 1.0))
-        fig.text(0, 0, r'${}$'.format(formula), fontsize=fontsize)
-
-        output = BytesIO()
-        fig.savefig(output, dpi=dpi, transparent=True, format='svg',
-                    bbox_inches='tight', pad_inches=0.1)
-        plt.close(fig)
-
-        output.seek(0)
-        return output.read()
-
-    svgStr = tex2svg(s).decode('utf-8')
-
-    # Replace height="123.4323" with height="1.5em".
-    svgStr = re.sub('height[\s]*=\"[^"]+\"', f'height="{height}"', svgStr)
-    # Replace width="123.4323" with width="auto".
-    svgStr = re.sub('width[\s]*=\"[^"]+\"', 'width="100%"', svgStr)
-    return '<span id="inline-svg">'+svgStr+'</span>'
-
 
 def parseImageOrSpan(s):
     return splitParse(s, r'(\!\[.*\]\(.*\))', parseImage, parseLinkOrSpan)
@@ -151,14 +122,15 @@ def parseImage(s):
         html = '<img class="post-img" src={} alt="{}" style="width:{}; height:auto;">'.format(
             filename.strip(), alt.strip(), width.strip())
         if alt.strip() != '':
-            html += '\n<span class="caption"><i>{}</i></span>'.format(
-                alt.strip())
+            html += '\n<span class="caption" style="width:{};">{}</span>'.format(
+                width.strip(), alt.strip())
     elif extension in ['.mp4', '.mov', '.avi', '.mkv', '.wmv', '.webm']:
-        html = '<video autoplay playsinline muted loop title="{}" style="width: {}; height: auto;"><source src="{}" type="video/{}">'.format(
+        html = '<video autoplay playsinline muted loop title="{}" style="width: {}; height: auto;"><source src="{}" type="video/{}" /></video>'.format(
             alt.strip(), width.strip(), filename.strip(), extension.strip('.'))
         if alt.strip() != '':
-            html += '\n<span class="caption"><i>{}</i></span>'.format(
-                alt.strip())
+            html += '\n<span class="caption" style="width:{};">{}</span>'.format(
+                width.strip(), alt.strip())
+            print(html)
     return html
 
 
