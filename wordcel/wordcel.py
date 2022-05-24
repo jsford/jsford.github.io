@@ -247,7 +247,7 @@ def parseTextBlock(s):
             return f'<h{h}><span id=h{h}-label>{hstr}</span>&nbsp;{text}</h{h}>'
 
     if s[:3] == '"""' and s[-3:] == '"""':
-        return '<blockquote>%s</blockquote>' % parseParagraph(s.strip('" '))
+        return '<blockquote>%s</blockquote>' % parseLinkOrSpan('"'+s.strip('" ')+'"')
 
     if s[:3] == '~~~' and s[-3:] == '~~~':
         return '<aside>%s</aside>' % parseParagraph(s.strip('~ '))
