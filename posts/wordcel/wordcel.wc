@@ -2,7 +2,7 @@ title: Don't just write Markdown, <i>write a Markdown</i>.
 subtitle: 
 author: Jordan Ford
 date: 2022-05-05
-abstract: This site is generated using a markdown variant I built myself. Since I wrote the parser and the build system myself, I understand everything. Why borrow someone else's Swiss Army Knife&trade; when you can use a rusty scalpel you built yourself?
+abstract: This site is generated using a markdown variant I built myself. Since I wrote the parser and the build system, I understand everything. Why borrow someone else's Swiss Army Knife&trade; when you can use a rusty scalpel you built yourself?
 template: post.html
 ---
 
