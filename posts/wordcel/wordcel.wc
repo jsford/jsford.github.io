@@ -1,8 +1,8 @@
-title: Wordcel, a blog generator for shape rotators.
+title: Don't just write Markdown, <i>write a Markdown</i>.
 subtitle: 
 author: Jordan Ford
 date: 2022-05-05
-abstract: Wordcel is a markup language I designed to generate this site. I wrote the parser and the build system, so when I want new features, I write them. Why borrow someone else's Swiss Army Knife&trade; when you can use a rusty scalpel you built yourself?
+abstract: This site is generated using a markdown variant I built myself. Since I wrote the parser and the build system myself, I understand everything. Why borrow someone else's Swiss Army Knife&trade; when you can use a rusty scalpel you built yourself?
 template: post.html
 ---
 
