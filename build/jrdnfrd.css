@@ -160,6 +160,25 @@ h3 {
   margin-bottom: 0px;
 }
 
+#h1-label {
+  font-size: 90%;
+}
+#h2-label {
+  font-size: 90%;
+}
+#h3-label {
+  font-size: 90%;
+}
+#h4-label {
+  font-size: 90%;
+}
+#h5-label {
+  font-size: 90%;
+}
+#h6-label {
+  font-size: 90%;
+}
+
 p {
   margin: 5px 0px;
   text-align: justify;

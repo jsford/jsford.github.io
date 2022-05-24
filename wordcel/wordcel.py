@@ -23,12 +23,12 @@ class HeadingManager():
         self._reset_state()
 
     def _reset_state(self):
-        self.state = [-1]*6
+        self.state = [0]*6
 
     def _get_current_level(self):
         N = len(self.state)
         for i in range(0, N):
-            if self.state[i] == -1:
+            if self.state[i] == 0:
                 return max(0, i-1)
         return N-1
 
@@ -38,7 +38,7 @@ class HeadingManager():
 
         if h < l:
             for i in range(h+1, N):
-                self.state[i] = -1
+                self.state[i] = 0 
         self.state[h] += 1
 
     def _get_state_as_string(self):
@@ -50,6 +50,8 @@ class HeadingManager():
     def getHeadingString(self, h):
         self._update_state(h)
         l = self._get_current_level()
+        print()
+        print(h, l, self.state)
         return self._get_state_as_string()
 
 
