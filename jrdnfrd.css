@@ -159,24 +159,42 @@ h3 {
   font: 24px CrimsonPro, Georgia, serif;
   margin-bottom: 0px;
 }
+h4 {
+  font: 22px CrimsonPro, Georgia, serif;
+  margin-bottom: 0px;
+}
+h5 {
+  font: 20px CrimsonPro, Georgia, serif;
+  margin-bottom: 0px;
+}
+h6 {
+  font: 18px CrimsonPro, Georgia, serif;
+  margin-bottom: 0px;
+}
 
 #h1-label {
-  font-size: 90%;
+  font-size: 26px;
+  font-weight: bold;
 }
 #h2-label {
-  font-size: 90%;
+  font-size: 22px;
+  font-weight: bold;
 }
 #h3-label {
-  font-size: 90%;
+  font-size: 20px;
+  font-weight: bold;
 }
 #h4-label {
-  font-size: 90%;
+  font-size: 18px;
+  font-weight: bold;
 }
 #h5-label {
-  font-size: 90%;
+  font-size: 16px;
+  font-weight: bold;
 }
 #h6-label {
-  font-size: 90%;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 p {
