@@ -16,6 +16,42 @@ from pygments.formatters import HtmlFormatter
 # Initialize colorama.
 init(autoreset=True)
 
+global heading_manager
+
+class HeadingManager():
+    def __init__(self):
+        self._reset_state()
+
+    def _reset_state(self):
+        self.state = [-1]*6
+
+    def _get_current_level(self):
+        N = len(self.state)
+        for i in range(0, N):
+            if self.state[i] == -1:
+                return max(0, i-1)
+        return N-1
+
+    def _update_state(self, h):
+        l = self._get_current_level()
+        N = len(self.state)
+
+        if h < l:
+            for i in range(h+1, N):
+                self.state[i] = -1
+        self.state[h] += 1
+
+    def _get_state_as_string(self):
+        l = self._get_current_level()
+        if l == 0:
+            return str(self.state[l]) + '.'
+        return '.'.join([str(x) for x in self.state[0:l+1]])
+
+    def getHeadingNumber(self, h):
+        self._update_state(h)
+        l = self._get_current_level()
+        return self._get_state_as_string()
+
 
 def usage():
     print(Fore.GREEN + "./wordcel.py test.wc > test.html")
@@ -130,7 +166,6 @@ def parseImage(s):
         if alt.strip() != '':
             html += '\n<span class="caption" style="width:{};">{}</span>'.format(
                 width.strip(), alt.strip())
-            print(html)
     return html
 
 
@@ -201,12 +236,15 @@ def parseTextBlocks(s):
 
 
 def parseTextBlock(s):
+    global heading_manager
+
     if len(s.split()) == 0:
         return ''
     for h in range(6, 0, -1):
         if s[:h] == '#'*h:
-            text = parseParagraph(s[h:])
-            return f'<h{h}>{text}</h{h}>'
+            text = parseLinkOrSpan(s[h:])
+            hnum = heading_manager.getHeadingNumber(h-1)
+            return f'<h{h}><span>{hnum}</span>{text}</h{h}>'
 
     if s[:3] == '"""' and s[-3:] == '"""':
         return '<blockquote>%s</blockquote>' % parseParagraph(s.strip('" '))
@@ -233,6 +271,9 @@ def parseDocument(doc):
     headerDict = parseHeader(header)
     if headerDict is None:
         return None
+
+    global heading_manager
+    heading_manager = HeadingManager()
 
     bodyHTML = parseBody(body)
 

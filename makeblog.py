@@ -53,12 +53,16 @@ def main():
         name = replaceExtension(osp.basename(src), '.html')
         dst = osp.join(BUILD_DIR, name)
 
+        print(f'Compiling {osp.basename(src)} ...', end='')
+
         try:
             postDict = wc2html(src, dst, TEMPLATES_DIR)
         except Exception as e:
             warn(f'Failed to compile file: {src}\n{e}')
-
             continue
+
+        print(' done.')
+
         post_info = [postDict['title'], postDict['date'], name, postDict['abstract']]
         posts.append(post_info)
     posts.sort(key=lambda p: p[1], reverse=True)

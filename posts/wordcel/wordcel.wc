@@ -6,13 +6,40 @@ abstract: Wordcel is a markup language I designed to generate this site. I wrote
 template: post.html
 ---
 
+# Intro
+
+# Syntax
+
+## Text Blocks
+
+### Headings
+
+### *Bold* & _Italic_
+
+### Inline Code
+
+### Inline Math
+
+### Images
+
+## Code Blocks
+
+## Math Blocks
+
+## Asides
+
+## Blockquotes
+
+## HTML Blocks
+
+
 
 # Hello H1
 
 Lorem _ipsum_ dolor *sit* amet, **consectetur** adipiscing elit. Nunc ac purus pulvinar, tempus dolor nec, placerat risus. Cras blandit eu leo sed efficitur. Vestibulum feugiat viverra quam, id maximus mauris scelerisque eu. Nulla nibh enim, rutrum at dui id, sollicitudin accumsan ipsum. Sed urna nulla, pellentesque non cursus sed, facilisis egestas dui. In vestibulum lobortis quam eu ultrices. Quisque neque elit, congue ac ullamcorper ut, pellentesque id nisi. Vestibulum pretium pretium mollis. Integer sed ultricies sapien. Cras et orci non eros feugiat facilisis elementum a magna. Suspendisse congue ex quis lectus egestas, a dapibus nisi vestibulum.
 
 ???
-<h1>Verbatim HTML</h1>
+<div style="color: red; font-size: 18px;">Here is some verbatim HTML</div>
 ???
 
 ## _Hello_ *H2*
