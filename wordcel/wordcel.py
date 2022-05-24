@@ -50,8 +50,6 @@ class HeadingManager():
     def getHeadingString(self, h):
         self._update_state(h)
         l = self._get_current_level()
-        print()
-        print(h, l, self.state)
         return self._get_state_as_string()
 
 
