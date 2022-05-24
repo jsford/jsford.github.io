@@ -16,7 +16,7 @@ from pygments.formatters import HtmlFormatter
 # Initialize colorama.
 init(autoreset=True)
 
-global heading_manager
+global hManager
 
 class HeadingManager():
     def __init__(self):
@@ -47,7 +47,7 @@ class HeadingManager():
             return str(self.state[l]) + '.'
         return '.'.join([str(x) for x in self.state[0:l+1]])
 
-    def getHeadingNumber(self, h):
+    def getHeadingString(self, h):
         self._update_state(h)
         l = self._get_current_level()
         return self._get_state_as_string()
@@ -236,15 +236,15 @@ def parseTextBlocks(s):
 
 
 def parseTextBlock(s):
-    global heading_manager
+    global hManager
 
     if len(s.split()) == 0:
         return ''
     for h in range(6, 0, -1):
         if s[:h] == '#'*h:
             text = parseLinkOrSpan(s[h:])
-            hnum = heading_manager.getHeadingNumber(h-1)
-            return f'<h{h}><span>{hnum}</span>{text}</h{h}>'
+            hstr = hManager.getHeadingString(h-1)
+            return f'<h{h}><span id=h{h}-label>{hstr}</span>{text}</h{h}>'
 
     if s[:3] == '"""' and s[-3:] == '"""':
         return '<blockquote>%s</blockquote>' % parseParagraph(s.strip('" '))
@@ -272,8 +272,8 @@ def parseDocument(doc):
     if headerDict is None:
         return None
 
-    global heading_manager
-    heading_manager = HeadingManager()
+    global hManager
+    hManager = HeadingManager()
 
     bodyHTML = parseBody(body)
 
