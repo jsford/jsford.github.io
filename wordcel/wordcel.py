@@ -244,7 +244,7 @@ def parseTextBlock(s):
         if s[:h] == '#'*h:
             text = parseLinkOrSpan(s[h:])
             hstr = hManager.getHeadingString(h-1)
-            return f'<h{h}><span id=h{h}-label>{hstr}</span>{text}</h{h}>'
+            return f'<h{h}><span id=h{h}-label>{hstr}</span>&nbsp;{text}</h{h}>'
 
     if s[:3] == '"""' and s[-3:] == '"""':
         return '<blockquote>%s</blockquote>' % parseParagraph(s.strip('" '))
