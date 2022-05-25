@@ -8,13 +8,13 @@ template: post.html
 
 # Philosophy
 
-Have you ever seen a thousand dollar coffee table in the store and thought: "_I could build that so much better and cheaper_".
+Have you ever seen a thousand dollar coffee table in the store and thought: "_I could build that so much better and cheaper_."?
 Two months later, you've spent three thousand dollars on new tools, you're on prototype seventeen, and the house is full of sawdust.
 
 If you're like me, you know the best excuses to use with your wife, including the classic:
 "Honey, now that we own all these tools, think how much we'll save next time!".
 
-She doesn't buy it, but she tolerates the mess because it's who you are.
+She doesn't buy it, but she tolerates the mess because she gets it.
 If you get it, welcome to prototype seventeen! If you don't, please ignore the sawdust.
 
 ???
@@ -33,7 +33,7 @@ The rest of this post explains the inner workings of the wordcel parser and docu
 
 # Recursive Decent [_sic_] Parsing
 
-The wordcel parser uses an algorithm I invented known as Recursive Decent Parsing and should not be confused with [other similarly named algorithms](https://en.wikipedia.org/wiki/Recursive_descent_parser). The wordcel parser recursively subdivides a wordcel document and does a decent job parsing each piece, ergo it is a recursive decent parser.
+The wordcel parser uses Recursive Decent Parsing, an algorithm I invented that should not be confused with [other similarly named algorithms](https://en.wikipedia.org/wiki/Recursive_descent_parser). The wordcel parser recursively subdivides a wordcel document and does a decent job parsing each piece, ergo it is a recursive decent parser.
 
 The parser begins at the highest level of the recursive parse tree, with a single node representing a wordcel document.
 The document is split into two nodes, a header and a body. The header is a yaml document containing information about the document, like its title, author, and abstract.
