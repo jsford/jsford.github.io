@@ -50,7 +50,7 @@ Using wordcel, I can write blog posts in .wc files, using a convenient syntax I 
 The wordcel build script parses those .wc files and emits the HTML for this site.</p><p>There are hundreds of similar tools for generating static sites, but wordcel has one killer feature: <strong>It's mine.</strong>
 I built it. I own it. I understand it. If I want to add a convenient syntax for obnoxious sarcasm, <strong>I JuSt bUiLd iT MySeLf!</strong></p><p>The rest of this post explains the inner workings of the wordcel parser and documents the wordcel syntax.</p><h1><span id=h1-label>3.</span>&nbsp; Recursive Decent [<em>sic</em>] Parsing</h1><p>The wordcel parser uses Recursive Decent Parsing, an algorithm I invented that should not be confused with <a href="https://en.wikipedia.org/wiki/Recursive_descent_parser" alt="other similarly named algorithms">other similarly named algorithms</a>.
 The wordcel parser recursively subdivides a wordcel document into pieces. 
-Since it does a decent job parsing each piece, I call it a recursive decent parser.</p><p>The wordcel grammar can be represented in ENBF (Extended Nota Bene Flowchart) form.
+Since it does a decent job parsing each piece, I call it a recursive decent parser.</p><p>The wordcel grammar can be represented in BNF (Big Nasty Flowchart) form.
 This is a standard notation I invented to represent complex free grammars (CFG) like wordcel.</p><h1><span id=h1-label>4.</span>&nbsp; Wordcel Syntax</h1><h2><span id=h2-label>4.1</span>&nbsp; Text Blocks</h2><section class="code"><div class="highlight"><pre><span></span>To format text, start writing!
 Text blocks are just paragraphs with no other special attributes.
 </pre></div>

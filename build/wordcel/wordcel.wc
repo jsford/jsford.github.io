@@ -38,7 +38,7 @@ The wordcel parser uses Recursive Decent Parsing, an algorithm I invented that s
 The wordcel parser recursively subdivides a wordcel document into pieces. 
 Since it does a decent job parsing each piece, I call it a recursive decent parser.
 
-The wordcel grammar can be represented in ENBF (Extended Nota Bene Flowchart) form.
+The wordcel grammar can be represented in BNF (Big Nasty Flowchart) form.
 This is a standard notation I invented to represent complex free grammars (CFG) like wordcel.
 
 # Wordcel Syntax
