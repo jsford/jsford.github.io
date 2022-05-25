@@ -41,12 +41,12 @@ Since it does a decent job parsing each piece, I call it a recursive decent pars
 The wordcel grammar can be represented in BNF (Big Nasty Flowchart) form.
 This is a standard notation I invented to represent complexity free grammars (CFG) like wordcel.
 
-![](wordcel/parse_tree.svg)
+![](wordcel/parse_tree.svg:50%)
 
 At this point, the document has been subdivided into blocks. Code blocks, math blocks, aside blocks, and quote blocks can all be parsed without further recursion.
 Text blocks are more complicated because they can include headers, links, images, and text formatting that all need to be broken down and processed.
 
-![](wordcel/parse_tree2.svg)
+![](wordcel/parse_tree2.svg:50%)
 
 # Wordcel Syntax
 
