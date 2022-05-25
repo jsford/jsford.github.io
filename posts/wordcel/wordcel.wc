@@ -111,7 +111,24 @@ Here is an example link: [google.com](https://google.com)
 
 ## Code Blocks
 
+```python
+# This is what a python3 code block looks like after syntax highlighting.
+def hello_python():
+  print("Hello, python!")
+```
+
+```cpp
+// This is what a C++ code block looks like after syntax highlighting.
+void hello_cpp() {
+  std::cout << "Hello, C++!" << std::endl;
+}
+```
+
 ## Math Blocks
+
+$$$
+x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}
+$$$
 
 ## HTML Blocks
 

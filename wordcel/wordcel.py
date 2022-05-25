@@ -184,12 +184,12 @@ def parseCodeBlock(s):
     return '<section class="code">'+s+'</section>'
 
 def parseMathOrBlock(s):
-    return splitParse(s, "\n$$$", parseMathBlock, parseBlockquoteOrBlock)
+    return splitParse(s, r"\n\$\$\$", parseMathBlock, parseBlockquoteOrBlock)
 
 
 def parseMathBlock(s):
-    s = s.strip('$')
-    return '$$'+s+'$$'
+    s = s.strip('$ \n')
+    return '$$' + s + '$$'
 
 
 def parseBlockquoteOrBlock(s):

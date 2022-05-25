@@ -98,9 +98,13 @@ struct Squint {
 
 *Equality* of Squintegers is much simpler than equality between floats. To compare two squintegers, it's sufficient to compare their a and b components. Two Squints are identical if and only if their a and b components are equal.
 
-$$$ (a+bs) \stackrel{?}{=} (c+ds) \iff (a \stackrel{?}{=} c) \land (b \stackrel{?}{=} d) $$$
+$$$
+(a+bs) \stackrel{?}{=} (c+ds) \iff (a \stackrel{?}{=} c) \land (b \stackrel{?}{=} d)
+$$$
+
 
 *Addition and Subtraction* of Squintegers is also straightforward. The components of the result are equal to the sum or difference of the components of the original values.
+
 
 $$$
 (a+bs) + (c+ds) = (a+c) + (b+d)s \\
@@ -117,7 +121,7 @@ $$$
 *Division* is a problem. What is the solution to (1+0s)/(2+0s)? The result, 1/2 cannot be represented as a Squinteger!
 
 $$$
-\frac{(a+bs)}{(c+ds)} = \; ???
+\frac{(a+bs)}{(c+ds)} = \; ??
 $$$
 
 Squinteger coordinates solve the exact comparison problems we ran into with floating point coordinates, but they don't allow us to do all of the math we need to solve interesting geometry problems using them.

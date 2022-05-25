@@ -138,6 +138,10 @@ video {
   margin: 20px auto;
 }
 
+.highlight {
+  line-height: 22px !important;
+}
+
 .title {
   font: 64px CrimsonPro, Georgia, serif;
 }
