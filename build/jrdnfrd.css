@@ -149,27 +149,21 @@ video {
 
 h1 {
   font: 36px CrimsonPro, Georgia, serif;
-  margin-bottom: 0px;
 }
 h2 {
   font: 30px CrimsonPro, Georgia, serif;
-  margin-bottom: 0px;
 }
 h3 {
   font: 24px CrimsonPro, Georgia, serif;
-  margin-bottom: 0px;
 }
 h4 {
   font: 22px CrimsonPro, Georgia, serif;
-  margin-bottom: 0px;
 }
 h5 {
   font: 20px CrimsonPro, Georgia, serif;
-  margin-bottom: 0px;
 }
 h6 {
   font: 18px CrimsonPro, Georgia, serif;
-  margin-bottom: 0px;
 }
 
 #h1-label {
@@ -198,7 +192,6 @@ h6 {
 }
 
 p {
-  margin: 5px 0px;
   text-align: justify;
 }
 
