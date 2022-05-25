@@ -193,12 +193,21 @@ def parseEm(s):
 
 
 def parseStrongOrSpan(s):
-    return splitParse(s, r'\*', parseStrong, parseText)
+    return splitParse(s, r'\*', parseStrong, parseSarcasmOrSpan)
 
 
 def parseStrong(s):
     return f'<strong>{s}</strong>'
 
+
+def parseSarcasmOrSpan(s):
+    return splitParse(s, r'\\s', parseSarcasm, parseText)
+
+def parseSarcasm(s):
+    s = re.sub(r'\\s', r'', s)
+    u = s.upper()
+    l = s.lower()
+    return parseStrong(''.join(c.upper() if i%2==0 else c.lower() for i, c in enumerate(s)))
 
 def parseText(s):
     s = re.sub(r'---', r'&mdash;', s)
