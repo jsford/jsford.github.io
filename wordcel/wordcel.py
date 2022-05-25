@@ -18,6 +18,10 @@ init(autoreset=True)
 
 global hManager
 
+#################
+# Parsing Tools #
+#################
+
 class HeadingManager():
     def __init__(self):
         self._reset_state()
@@ -80,6 +84,9 @@ def prettify(html):
     soup = bs(str(html), features='lxml')
     return soup.prettify()
 
+##########################
+# Document-level parsing #
+##########################
 
 def splitHeader(doc):
     try:
@@ -107,6 +114,116 @@ def splitParse(s, delim, yes, no):
         yes(ss) if i % 2 == 1 else no(ss)
         for (i, ss) in enumerate(re.split('(?<!\\\\)' + delim, s))
     ])
+
+
+def parseBody(s):
+    return parseHTMLOrBlock(s)
+
+
+def parseDocument(doc):
+    doc = doc.replace('\r', '')
+
+    header, body = splitHeader(doc)
+
+    headerDict = parseHeader(header)
+    if headerDict is None:
+        return None
+
+    global hManager
+    hManager = HeadingManager()
+
+    bodyHTML = parseBody(body)
+
+    return headerDict, bodyHTML
+
+
+def replaceExtension(path, newExtension):
+    return os.path.splitext(path)[0] + newExtension
+
+
+def wc2html(inFile, outFile, templatesDir):
+    wcContents = readFile(inFile)
+
+    hDict, bodyHTML = parseDocument(wcContents)
+
+    templatePath = os.path.join(templatesDir, hDict['template'])
+
+    template = Template(readFile(templatePath))
+    docHTML = template.render(title=hDict['title'],
+                              subtitle=hDict['subtitle'],
+                              body=bodyHTML)
+    #docHTML = prettify(docHTML)
+
+    writeFile(outFile, docHTML)
+    return hDict
+
+
+#######################
+# Block-level parsing #
+#######################
+
+def parseHTMLOrBlock(s):
+    return splitParse(s, '\n\\?\\?\\?\n', parseHtmlBlock, parseCodeOrBlock)
+
+
+def parseHtmlBlock(s):
+    return s
+
+
+def parseCodeOrBlock(s):
+    return splitParse(s, "\n```", parseCodeBlock, parseMathOrBlock)
+
+
+def parseCodeBlock(s):
+    # Get the language name from the first line.
+    lexerName, s = s.split('\n', 1)
+    # Lookup the correct lexer.
+    lexer = get_lexer_by_name(lexerName, stripall=True)
+    # Highlight the code.
+    s = highlight(s, lexer, HtmlFormatter())
+    return '<section class="code">'+s+'</section>'
+
+def parseMathOrBlock(s):
+    return splitParse(s, "\n$$$", parseMathBlock, parseBlockquoteOrBlock)
+
+
+def parseMathBlock(s):
+    s = s.strip('$')
+    return '$$'+s+'$$'
+
+
+def parseBlockquoteOrBlock(s):
+    return splitParse(s, r"\n\"\"\"", parseBlockquoteBlock, parseAsideOrBlock)
+
+
+def parseBlockquoteBlock(s):
+    return '<blockquote>%s</blockquote>' % parseLinkOrSpan('"'+s.strip('" ')+'"')
+
+
+def parseAsideOrBlock(s):
+    return splitParse(s, r"\n~~~", parseAsideBlock, parseTextBlocks)
+
+
+def parseAsideBlock(s):
+    return '<aside>%s</aside>' % parseParagraph(s.strip('~ '))
+
+
+def parseTextBlocks(s):
+    return ''.join((parseTextBlock(ss.strip()) for ss in s.split('\n\n')))
+
+
+def parseTextBlock(s):
+    global hManager
+
+    if len(s.split()) == 0:
+        return ''
+    for h in range(6, 0, -1):
+        if s[:h] == '#'*h:
+            text = parseLinkOrSpan(s[h:])
+            hstr = hManager.getHeadingString(h-1)
+            return f'<h{h}><span id=h{h}-label>{hstr}</span>&nbsp;{text}</h{h}>'
+
+    return parseParagraph(s)
 
 
 #######################
@@ -201,113 +318,15 @@ def parseStrong(s):
 
 
 def parseSarcasmOrSpan(s):
-    return splitParse(s, r'\\s', parseSarcasm, parseText)
+    return splitParse(s, r'\\s', parseSarcasm, parseSpan)
 
 def parseSarcasm(s):
     s = re.sub(r'\\s', r'', s)
-    u = s.upper()
-    l = s.lower()
     return parseStrong(''.join(c.upper() if i%2==0 else c.lower() for i, c in enumerate(s)))
 
-def parseText(s):
+def parseSpan(s):
     s = re.sub(r'---', r'&mdash;', s)
     return s
-
-
-#######################
-# Block-level parsing #
-#######################
-
-def parseHtmlBlock(s):
-    return s
-
-
-def parseWordcelBlock(s):
-    return splitParse(s, "\n```", parseCodeBlock, parseTextBlocks)
-
-
-def parseHTML(s):
-    return splitParse(s, '\n\\?\\?\\?\n', parseHtmlBlock, parseWordcelBlock)
-
-
-def parseCodeBlock(s):
-    # Get the language name from the first line.
-    lexerName, s = s.split('\n', 1)
-    # Lookup the correct lexer.
-    lexer = get_lexer_by_name(lexerName, stripall=True)
-    # Highlight the code.
-    s = highlight(s, lexer, HtmlFormatter())
-    return '<section class="code">'+s+'</section>'
-
-
-def parseTextBlocks(s):
-    return ''.join((parseTextBlock(ss.strip()) for ss in s.split('\n\n')))
-
-
-def parseTextBlock(s):
-    global hManager
-
-    if len(s.split()) == 0:
-        return ''
-    for h in range(6, 0, -1):
-        if s[:h] == '#'*h:
-            text = parseLinkOrSpan(s[h:])
-            hstr = hManager.getHeadingString(h-1)
-            return f'<h{h}><span id=h{h}-label>{hstr}</span>&nbsp;{text}</h{h}>'
-
-    if s[:3] == '"""' and s[-3:] == '"""':
-        return '<blockquote>%s</blockquote>' % parseLinkOrSpan('"'+s.strip('" ')+'"')
-
-    if s[:3] == '~~~' and s[-3:] == '~~~':
-        return '<aside>%s</aside>' % parseParagraph(s.strip('~ '))
-
-    if s[:3] == '$$$' and s[-3:] == '$$$':
-        s = s.strip('$')
-        return '$$'+s+'$$'
-
-    return parseParagraph(s)
-
-
-def parseBody(s):
-    return parseHTML(s)
-
-
-def parseDocument(doc):
-    doc = doc.replace('\r', '')
-
-    header, body = splitHeader(doc)
-
-    headerDict = parseHeader(header)
-    if headerDict is None:
-        return None
-
-    global hManager
-    hManager = HeadingManager()
-
-    bodyHTML = parseBody(body)
-
-    return headerDict, bodyHTML
-
-
-def replaceExtension(path, newExtension):
-    return os.path.splitext(path)[0] + newExtension
-
-
-def wc2html(inFile, outFile, templatesDir):
-    wcContents = readFile(inFile)
-
-    hDict, bodyHTML = parseDocument(wcContents)
-
-    templatePath = os.path.join(templatesDir, hDict['template'])
-
-    template = Template(readFile(templatePath))
-    docHTML = template.render(title=hDict['title'],
-                              subtitle=hDict['subtitle'],
-                              body=bodyHTML)
-    #docHTML = prettify(docHTML)
-
-    writeFile(outFile, docHTML)
-    return hDict
 
 
 if __name__ == '__main__':
