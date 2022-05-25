@@ -84,6 +84,14 @@ def prettify(html):
     soup = bs(str(html), features='lxml')
     return soup.prettify()
 
+
+def splitParse(s, delim, yes, no):
+    return ''.join([
+        yes(ss) if i % 2 == 1 else no(ss)
+        for (i, ss) in enumerate(re.split('(?<!\\\\)' + delim, s))
+    ])
+
+
 ##########################
 # Document-level parsing #
 ##########################
@@ -107,13 +115,6 @@ def parseHeader(header):
             error('Missing required key \"{}\" in header metadata.'.format(k))
             return None
     return hDict
-
-
-def splitParse(s, delim, yes, no):
-    return ''.join([
-        yes(ss) if i % 2 == 1 else no(ss)
-        for (i, ss) in enumerate(re.split('(?<!\\\\)' + delim, s))
-    ])
 
 
 def parseBody(s):
@@ -251,7 +252,7 @@ def parseMathOrSpan(s):
     return splitParse(s, r'\$', parseMath, parseImageOrSpan)
 
 
-def parseMath(s, height="1.5em"):
+def parseMath(s):
     return '$'+s+'$'
 
 
