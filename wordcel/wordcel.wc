@@ -8,13 +8,13 @@ template: post.html
 
 # Philosophy
 
-Have you ever seen a thousand dollar coffee table in the store and thought: "_I could build that so much better and cheaper_".
+Have you ever seen a thousand dollar coffee table in the store and thought: "_I could build that so much better and cheaper_."?
 Two months later, you've spent three thousand dollars on new tools, you're on prototype seventeen, and the house is full of sawdust.
 
 If you're like me, you know the best excuses to use with your wife, including the classic:
 "Honey, now that we own all these tools, think how much we'll save next time!".
 
-She doesn't buy it, but she tolerates the mess because it's who you are.
+She doesn't buy it, but she tolerates the mess because she gets it.
 If you get it, welcome to prototype seventeen! If you don't, please ignore the sawdust.
 
 ???
@@ -24,20 +24,22 @@ If you get it, welcome to prototype seventeen! If you don't, please ignore the s
 # Wordcel
 
 [Wordcel](https://knowyourmeme.com/memes/cultures/wordcel-shape-rotator-mathcel) is the slightly embarassing name I've given to the Markdown variant I designed for this website.
-First, I write blog posts in .wc files. Then, I run a python script that parses the wordcel files and emits the HTML for this site.
-There are hundreds of similar tools for generating static sites, but wordcel has one killer feature: It's mine.
+Using wordcel, I can write blog posts in .wc files, using a convenient syntax I designed myself.
+The wordcel build script parses those .wc files and emits the HTML for this site.
 
+There are hundreds of similar tools for generating static sites, but wordcel has one killer feature: *It's mine.*
 I built it. I own it. I understand it. If I want to add a convenient syntax for obnoxious sarcasm, \sI just build it myself!\s
 
 The rest of this post explains the inner workings of the wordcel parser and documents the wordcel syntax.
 
 # Recursive Decent [_sic_] Parsing
 
-The wordcel parser uses an algorithm I invented known as Recursive Decent Parsing and should not be confused with [other similarly named algorithms](https://en.wikipedia.org/wiki/Recursive_descent_parser). The wordcel parser recursively subdivides a wordcel document and does a decent job parsing each piece, ergo it is a recursive decent parser.
+The wordcel parser uses Recursive Decent Parsing, an algorithm I invented that should not be confused with [other similarly named algorithms](https://en.wikipedia.org/wiki/Recursive_descent_parser).
+The wordcel parser recursively subdivides a wordcel document into pieces. 
+Since it does a decent job parsing each piece, I call it a recursive decent parser.
 
-The parser begins at the highest level of the recursive parse tree, with a single node representing a wordcel document.
-The document is split into two nodes, a header and a body. The header is a yaml document containing information about the document, like its title, author, and abstract.
-The body of the document contains the wordcel formatted text of the blog post. A single line containing three or more hyphens `"---"` must be present to delimit the split between the document header and body.
+The wordcel grammar can be represented in ENBF (Extended Nota Bene Flowchart) form.
+This is a standard notation I invented to represent complex free grammars (CFG) like wordcel.
 
 # Wordcel Syntax
 
