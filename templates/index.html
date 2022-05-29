@@ -14,53 +14,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   </head>
+
   <body>
-
     <!-- Navigation Bar -->
-    <div class="nav" style="background: #2b313c; padding: 0px; padding-bottom: 10px; margin: 0px; height: 50px; position: fixed; top: 0; width: 100%; z-index: 1000;">
-      <div class="nav-content" style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin: 0px auto;">
-        <a href="index.html"
-          style="flex: 20 1 auto; text-align: left;">
-          <span class="nav-name" style="font: 1.8em CrimsonPro, Georgia, serif; font-weight: light;">jordan ford.</span>
-        </a>
+    <div class="nav">
+      <div class="nav-content">
+        <a class="nav-name" href="index.html">jordan ford.</a>
       </div>
-    </div>
+    </div> <!-- Navigation Bar -->
 
-    <div class="post-content" style="padding-top: 95px; padding-bottom: 50px;">
+    <div class="post-content">
+      <div id="BigQuote" style="padding-top: 80px; padding-bottom: 45px;">
+        <div style="font-size: 75px; line-height: 75px; font-weight: 200; text-align: left;">
+          <a href="#">"What can man and machine do together?"</a>
+        </div>
+        <div style="text-align: right; font-weight: 100; font-size: 1.3em; margin-top:15px;">&mdash;RICHARD HAMMING</div>
+      </div>
         <section>
-          <div id='me-and-my-bio'>
-            <img id='my-face' src="me.jpg" alt="A portrait of Jordan Ford"/>
-            <div id='about-me'>
-              <p>
-                This blog is my public engineering notebook.
-                It's where I keep a log of the things I build, the problems I solve, and the ideas I have.
-                I'm interested in robots, puzzles, programming, industrial design, math, art, and engineering.
-                <span style="display: block; text-align: center; padding-top: 0.75em;">
-                  <a href="mailto:jsford94@gmail.com" title="jsford94@gmail.com">Email</a>&nbsp;/&nbsp;<a href="resume.html">Resume</a>&nbsp;/&nbsp;<a href="https://www.linkedin.com/in/jordan-ford/">LinkedIn</a>&nbsp;/ <a href="https://github.com/jsford">GitHub</a>&nbsp;/&nbsp;<a href="https://scholar.google.com/citations?user=kSkzg5IAAAAJ&hl=en&oi=ao">Google&nbsp;Scholar</a>
-                </span>
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section style="clear: both; padding-top: 0px;">
             {% for title, date, path, abstract in posts %}
             <div class="blog-listing" style="margin-top: 1.25em;">
-              <a href="{{path}}" style="text-decoration: none; color: #222222;">
+              <a href="{{path}}" style="">
               <div style="color: #a8a8a8; font-size: 0.9em;">{{date}}</div>
-              <h2 style="display: inline; color: #1481b8;">{{title}}</h2>
+              <h2 style="display: inline;">{{title}}</h2>
               <p style="margin-top: 0px;">{{abstract}}</p>
               </a>
             </div>
             {% endfor %}
         </section>
-
-
-        <hr style="margin-top: 5%; padding-bottom: 0px; clear: both;"/>
-        <div style="text-align: center; font-size: 80%; color: #5a5e67; padding-top: 0px; padding-bottom: 5%;">
-          Handcrafted by Jordan Ford &mdash; <span style="position: relative; top: 1px;">&copy;</span> 2022
-        </div>
     </div>
+
+    <footer>
+      <div>Handcrafted by Jordan Ford &mdash; <span style="position: relative; top: 1px;">&copy;</span> 2022</div>
+    </footer>
 
   </body>
 </html>

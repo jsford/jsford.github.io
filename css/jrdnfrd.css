@@ -98,17 +98,75 @@
        url(Source_Sans_Pro/SourceSansPro-Bold.ttf) format('truetype') font-weight-bold;
 }
 
-html {
+html, body {
+  margin: 0;
+  padding: 0;
   height: 100vh;
   overflow-x: hidden;
-  color: #222222;
+
+  color: #2B313C;
+  background: #F3F0F4;
+  font: normal 20px/30px "CrimsonPro", Georgia, serif;
 }
 body {
-  margin: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+a:visited {
+  color: inherit;
+}
+a:hover {
+  color: #758ECD;
+}
+
+.nav {
+  background: #2B313C;
   padding: 0px;
-  min-height: 100vh;
-  font: normal 20px/30px "CrimsonPro", Georgia, serif;
-  overflow-x: hidden;
+  padding-bottom: 10px;
+  margin: 0px;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  margin: 0px auto;
+  color: #F3F0F4;
+}
+.nav-name {
+  flex: 20 1 auto;
+  text-align: left;
+  font: 1.8em CrimsonPro, Georgia, serif;
+  text-decoration: none;
+}
+.nav-name:visited {
+  color: inherit;
+}
+.nav-name:hover {
+  color: #758ECD;
+}
+
+footer {
+  width: 100%;
+  margin-top: auto;
+  padding: 10px;
+  margin-top: auto;
+
+  color: #F3F0F4;
+  background: #2B313C;
+  text-align: center;
+}
+footer div {
+  font-size: 80%;
 }
 
 .post-img {
@@ -199,19 +257,11 @@ p {
   text-align: justify;
 }
 
-a {
-  text-decoration: none;
-  color: #1481b8;
-}
-
-.breadcrumb a {
-  color: #aaaaaa;
+.breadcrumb {
+  color: #838383;
 }
 .breadcrumb a:hover {
-  color: #1481b8;
-}
-.breadcrumb span {
-  color: #aaaaaa;
+  color: #758ECD;
 }
 
 .highlight {
@@ -223,9 +273,9 @@ a {
 }
 
 .post-content {
-  display: block;
+  padding-top: 60px;
+  padding-bottom: 50px;
   margin: 0px auto;
-  min-height: 100vh;
 }
 
 blockquote {
@@ -254,25 +304,6 @@ aside p {
 aside p img {
   max-width: 300px;
   width: 100%:
-}
-
-.nav-link {
-  flex: 1 1 auto;
-  margin-left:  0.25em;
-  margin-right: 0.25em;
-  color: white;
-}
-.nav-link:link {
-  color: white;
-}
-.nav-link:hover {
-  color: #1481b8;
-}
-.nav-name {
-  color: white;
-}
-.nav-name:hover {
-  color: #1481b8;
 }
 
 #me-and-my-bio {
