@@ -222,7 +222,7 @@ def parseTextBlock(s):
         if s[:h] == '#'*h:
             text = parseLinkOrSpan(s[h:])
             hstr = hManager.getHeadingString(h-1)
-            return f'<h{h}><span id=h{h}-label>{hstr}</span>&nbsp;{text}</h{h}>'
+            return f'<h{h}><span class="h{h}-label">{hstr}</span>&nbsp;{text}</h{h}>'
 
     return parseParagraph(s)
 
@@ -273,7 +273,7 @@ def parseImage(s):
 
     extension = os.path.splitext(filename)[1].lower()
     if extension in ['.jpg', '.png', '.svg', '.bmp', '.gif', '.tif']:
-        html = '<img class="post-img" src={} alt="{}" style="width:{}; height:auto;">'.format(
+        html = '<img class="post-img" src="{}" alt="{}" style="width:{}; height:auto;">'.format(
             filename.strip(), alt.strip(), width.strip())
         if alt.strip() != '':
             html += '\n<span class="caption" style="width:{};">{}</span>'.format(
@@ -296,7 +296,7 @@ def parseLink(s):
     if match:
         alt = match.group(1)
         href = match.group(2)
-        return f'<a href="{href}" alt="{alt}">{alt}</a>'
+        return f'<a href="{href}">{alt}</a>'
     else:
         warn('Failed to parse link: {}' % s)
         return s

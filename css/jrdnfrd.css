@@ -258,6 +258,9 @@ p {
 }
 
 .breadcrumb {
+  text-align: left;
+  padding-top: 20px;
+  padding-bottom: 20px;
   color: #838383;
 }
 .breadcrumb a:hover {
