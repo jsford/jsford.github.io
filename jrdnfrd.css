@@ -102,7 +102,6 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  overflow-x: hidden;
 
   color: #2B313C;
   background: #F3F0F4;
@@ -111,6 +110,7 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 a {
