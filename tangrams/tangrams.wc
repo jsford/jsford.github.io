@@ -4,6 +4,7 @@ author: Jordan Ford
 date: 2022-02-13
 abstract: Boring people solve tangram puzzles for fun. <i>Extremely</i> boring people invent a new way to represent numbers, build a library of exact geometric predicates, and write a program to brute force tangram solutions instead!
 template: post.html
+image: tangrams/tangram-icon.svg
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi non arcu risus quis varius quam quisque id diam. 
