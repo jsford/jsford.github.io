@@ -124,6 +124,17 @@ a:hover {
   color: #758ECD;
 }
 
+#BigQuote {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+#BigQuoteBorder {
+  border: solid;
+  border-color: #2B313C;
+  border-width: 8px;
+  padding: 25px;
+}
+
 .nav {
   background: #2B313C;
   padding: 0px;
