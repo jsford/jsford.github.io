@@ -107,7 +107,7 @@ def splitHeader(doc):
 
 def parseHeader(header):
     required_keys = ['title', 'subtitle',
-                     'abstract', 'author', 'date', 'template']
+                     'abstract', 'author', 'date', 'template', 'image']
 
     hDict = yaml.safe_load(header)
     for k in required_keys:

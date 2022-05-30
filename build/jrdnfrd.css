@@ -135,6 +135,26 @@ a:hover {
   padding: 25px;
 }
 
+.blog-listing {
+  margin-top: 2.5em;
+  display: flex;
+  flex-flow: column;
+}
+.blog-image {
+  text-align: center;
+  order: 2;
+  width: 100%;
+  margin: 0px auto;
+}
+.blog-image img {
+  width: 100%;
+  padding-top: 25px;
+}
+.blog-description {
+  flex: 3;
+  order: 1;
+}
+
 .nav {
   background: #2B313C;
   padding: 0px;
@@ -360,6 +380,27 @@ aside p img {
   aside {
     display: block;
     position: relative;
+  }
+  .blog-listing {
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+    display: flex;
+    flex-flow: unset;
+    align-items: top;
+  }
+  .blog-image {
+    flex: 1;
+    order: 1;
+  }
+  .blog-image img {
+    width: 100%;
+    height: auto;
+    padding-top: 7px;
+  }
+  .blog-description {
+    flex: 3;
+    margin-left: 20px;
+    order: 2;
   }
 }
 

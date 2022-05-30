@@ -4,6 +4,7 @@ abstract: discolor.py is a command line utility I made to convert RGB colors bet
 author: Jordan Ford
 date: 2022-03-29
 template: post.html
+image: discolor/discolor-square.png
 ---
 
 Lately I've been writing code to generate nice looking, colorful diagrams for my presentations and papers, and I've noticed I'm developing a new pet peeve. Online color pickers can be really helpful for picking nice color combinations, but they frequently don't list the RGB color code in the format I need for my program.

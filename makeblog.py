@@ -63,7 +63,7 @@ def main():
 
         print(' done.')
 
-        post_info = [postDict['title'], postDict['date'], name, postDict['abstract']]
+        post_info = [postDict['title'], postDict['date'], name, postDict['abstract'], postDict['image']]
         posts.append(post_info)
     posts.sort(key=lambda p: p[1], reverse=True)
 

@@ -41,13 +41,18 @@
         </div>
       </div>
         <section>
-            {% for title, date, path, abstract in posts %}
-            <div class="blog-listing" style="margin-top: 1.25em;">
-              <a href="{{path}}" style="">
-              <div style="color: #a8a8a8; font-size: 0.9em;">{{date}}</div>
-              <h2 style="display: inline;">{{title}}</h2>
-              <p style="margin-top: 0px;">{{abstract}}</p>
-              </a>
+            {% for title, date, path, abstract, image in posts %}
+            <div class="blog-listing">
+              <div class="blog-image">
+                <img src="{{image}}"/>
+              </div>
+              <div class="blog-description">
+                <a href="{{path}}">
+                <h2 style="display: inline;">{{title}}</h2>
+                <div style="color: #a8a8a8; font-size: 0.9em;">{{date}}</div>
+                <p style="margin: 0px;">{{abstract}}</p>
+                </a>
+              </div>
             </div>
             {% endfor %}
         </section>
