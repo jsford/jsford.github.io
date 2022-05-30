@@ -147,23 +147,26 @@ a:hover {
 }
 .nav-content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: bottom;
   padding-top: 10px;
   margin: 0px auto;
   color: #F3F0F4;
+  height: 100%;
 }
 .nav-name {
   flex: 20 1 auto;
   text-align: left;
   font: 1.8em CrimsonPro, Georgia, serif;
-  text-decoration: none;
 }
-.nav-name:visited {
-  color: inherit;
-}
-.nav-name:hover {
-  color: #758ECD;
+.nav-link {
+  display: inline-block;
+  align-self: flex-end;
+  text-align: right;
+  font: 1.8em CrimsonPro, Georgia, serif;
+  font-weight: 500;
+  font-size: 22px;
+  padding-left: 15px;
+  padding-bottom: 13px;
 }
 
 footer {
