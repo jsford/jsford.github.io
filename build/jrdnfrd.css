@@ -382,10 +382,10 @@ a.anchor {
   .post-content { width: 90%; }
   .nav-content { width: 90%; }
   .nav-link {
-    font: 20px CrimsonPro, Georgia, serif;
+    font: 17px CrimsonPro, Georgia, serif;
     font-weight: 300;
     margin-left: 5px;
-    padding-bottom: 13px;
+    padding-bottom: 14px;
   }
   aside {
     display: block;
