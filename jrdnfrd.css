@@ -129,6 +129,7 @@ a:hover {
 p a {
   border-bottom: solid;
   border-width: 2px;
+  border-color: #758ECD;
 }
 
 #BigQuote {
@@ -318,7 +319,7 @@ p {
 
 .post-content {
   padding-top: 60px;
-  padding-bottom: 50px;
+  padding-bottom: 10px;
   margin: 0px auto;
 }
 
