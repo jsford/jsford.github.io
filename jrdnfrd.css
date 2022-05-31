@@ -102,6 +102,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100vh;
+  overflow-x: hidden;
 
   color: #2B313C;
   background: #F3F0F4;
@@ -393,6 +394,9 @@ aside p img {
   aside {
     display: block;
     position: relative;
+  }
+  html {
+    overflow-x: unset;
   }
 }
 
