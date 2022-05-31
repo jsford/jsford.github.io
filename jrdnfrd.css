@@ -126,6 +126,11 @@ a:hover {
   color: #758ECD;
 }
 
+p a {
+  border-bottom: solid;
+  border-width: 2px;
+}
+
 #BigQuote {
   padding-top: 45px;
   padding-bottom: 35px;
