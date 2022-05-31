@@ -127,8 +127,8 @@ a:hover {
 }
 
 #BigQuote {
-  padding-top: 50px;
-  padding-bottom: 20px;
+  padding-top: 45px;
+  padding-bottom: 35px;
 }
 #BigQuoteBorder {
   border: solid;
@@ -138,7 +138,7 @@ a:hover {
 }
 
 .blog-listing {
-  margin-top: 2.5em;
+  margin-bottom: 1em;
   display: flex;
   flex-flow: column;
 }
@@ -185,8 +185,8 @@ a:hover {
   align-self: flex-end;
   text-align: right;
   font: 26px CrimsonPro, Georgia, serif;
-  font-weight: 500;
-  margin-left: 10px;
+  font-weight: 300;
+  margin-left: 15px;
   padding-bottom: 12px;
 }
 
@@ -366,8 +366,7 @@ aside p img {
     position: relative;
   }
   .blog-listing {
-    margin-top: 2.5em;
-    margin-bottom: 2.5em;
+    margin-bottom: 2em;
     display: flex;
     flex-flow: unset;
     align-items: top;
@@ -383,7 +382,7 @@ aside p img {
   }
   .blog-description {
     flex: 3;
-    margin-left: 20px;
+    /*margin-left: 20px;*/
     order: 2;
   }
 }
