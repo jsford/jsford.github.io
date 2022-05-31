@@ -182,12 +182,11 @@ a:hover {
   display: inline-block;
   align-self: flex-end;
   text-align: right;
-  font: 1.8em CrimsonPro, Georgia, serif;
+  font: 26px CrimsonPro, Georgia, serif;
   font-weight: 500;
-  font-size: 22px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 13px;
+  margin-left: 10px;
+  margin-right: 20px;
+  padding-bottom: 12px;
 }
 
 footer {
@@ -344,24 +343,6 @@ aside p img {
   width: 100%:
 }
 
-#me-and-my-bio {
-  display: block;
-}
-#my-face {
-  display: block;
-  width: 80%;
-  height: auto;
-  border-radius: 50%;
-  padding: 0px;
-  margin: 20px auto;
-}
-#about-me {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin: 0% auto;
-}
-
 .katex { font-size: 1em !important; }
 
 /* Extra small devices (phones, 600px and down) */
@@ -413,30 +394,12 @@ aside p img {
     display: block;
     position: relative;
   }
-  #me-and-my-bio {
-    display: flex;
-    align-items: center;
-  }
-  #my-face {
-    display: flex;
-    width: 30%;
-    max-width: 300px;
-    margin: 2% 2% 2% 0%;
-    height: auto;
-    border-radius: 50%;
-  }
-  #about-me {
-    display: flex;
-    height: auto;
-    width: 70%;
-    margin: 0% 0% 0px 2%;
-  }
 }
 
 /* Large devices (laptops/desktops, 1050px and up) */
 @media only screen and (min-width: 1050px) {
-  .post-content { width: 700px; }
-  .nav-content { width: 700px; }
+  .post-content { width: 65%; }
+  .nav-content { width: 65%; }
   aside { position: absolute; width: 150px; left: calc(50vw + 380px); border-bottom: none; }
 }
 
