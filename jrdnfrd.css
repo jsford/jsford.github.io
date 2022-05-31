@@ -107,6 +107,7 @@ html, body {
   color: #2B313C;
   background: #F3F0F4;
   font: normal 20px/30px "CrimsonPro", Georgia, serif;
+  overflow-y: scroll;
 }
 body {
   width: 100%;
