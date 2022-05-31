@@ -4,7 +4,7 @@ author: Jordan Ford
 date: 2022-05-05
 abstract: This site is generated using a markdown variant I built myself. Why borrow someone else's Swiss Army Knife&trade; when you can use a rusty scalpel you built yourself?
 template: post.html
-image: me.jpg
+image: wordcel/parse-tree2.png
 ---
 
 # Philosophy
