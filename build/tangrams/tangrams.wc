@@ -431,11 +431,12 @@ PieceVector solve(puzzle, in_pieces, out_pieces)
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi non arcu risus quis varius quam quisque id diam. 
 
-![This is the result! My algorithm searches for valid piece placements until it solves the puzzle.](tangrams/classic_square.mp4:40%)
+![This is the result! My algorithm searches for valid piece placements until it solves the puzzle.](tangrams/square.webm:40%)
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Morbi non arcu risus quis varius quam quisque id diam. 
 
-![](tangrams/sitting_fox.mp4:30%)
+
+![](tangrams/fox.webm:30%)
 
 # Optimization
 
