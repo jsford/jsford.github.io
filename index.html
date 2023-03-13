@@ -1,94 +1,171 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+    <meta http-equiv="Content-Type" content="text/html"; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="jrdnfrd.css">
-    <title>Home | Jordan Ford</title>
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
 
-    <link rel="stylesheet" href="syntax.css">
+    <title>Jordan Ford</title>
+    <link rel="stylesheet" href="fonts/Tanker_Complete/Fonts/WEB/css/tanker.css">
+    <link rel="stylesheet" href="fonts/BebasNeue_Complete/Fonts/WEB/css/bebas-neue.css">
+    <link rel="stylesheet" href="fonts/Author_Complete/Fonts/WEB/css/author.css">
 
-    <!-- Katex -->
-    <link rel="stylesheet" href="katex/katex.min.css">
-    <script src="katex/katex.min.js"></script>
-    <script src="katex/contrib/auto-render.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'PermanentMarker';
+            src: url('fonts/PermanentMarker-Regular.ttf') format('truetype');
+        }
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        a {
+            color: black;
+        }
+        a:visited {
+            color: black;
+            text-decoration: none;
+        }
+        a:hover {
+            color: red;
+            font-style: italic;
+        }
+    
+        #top-links {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0px auto;
+            text-align: center;
+        }
+        .top-link {
+            font-family: BebasNeue-Regular;
+            font-weight: 400;
+            font-size: 3em;
+            width: 20%;
+            margin: 0 auto;
+            display: inline-block;
+            text-align: center;
+        }
+        .top-link a:link, .top-link a:visited {
+            color: black;
+            text-decoration: none;
+        }
+        .top-link a:hover {
+            color: red;
+            font-style: italic;
+            text-decoration: underline;
+        }
+        #headline {
+            font-family: Tanker-Regular;
+            font-size: 8em;
+            line-height: 1em;
+            text-align: center;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0rem auto;
+        }
+        #my-name {
+            font-family: PermanentMarker;
+            font-size: 5em;
+            color: red;
+            -webkit-transform: translate(0%, -0.4em) rotate(-1deg);
+            text-align: center;
+            width: 100%;
+            margin: 0 auto;
+            display: inline-block;
+        }
+        #main-column {
+            margin: 0 auto;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            width: 100%;
+        }
 
-  </head>
+        #text-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-family: Author-Semibold;
+            font-size: 1.6rem;
+            text-align: left;
+            margin: 1rem 0;
+        }
+        p {
+            font-family: Author-Regular;
+            font-size: 1.4rem;
+            line-height: 2.25rem;
+            text-align: justify;
+            margin: 1rem 0;
+        }
 
-  <body>
-    <div class="background-pattern"></div>
-    <!-- Navigation Bar -->
-    <div class="nav">
-      <div class="nav-content">
-        <a class="nav-name" href="index.html">jordan ford.</a>
-        <a class="nav-link" href="bio.html">about.</a>
-        <a class="nav-link" href="bio.html#contact">contact.</a>
-        <a class="nav-link" href="resume.html">resume.</a>
-      </div>
-    </div> <!-- Navigation Bar -->
+        /* Extra small devices (phones, 600px and down) */
+        @media only screen and (max-width: 600px) {
+            #main-column { width: 100%; }
+        }
 
-    <div class="post-content">
-      <div id="BigQuote">
-        <div id="BigQuoteBorder">
-          <div style="font-size: 70px; line-height: 75px; font-weight: 200; text-align: center;">
-            "What can man and machine do together?"
-          </div>
-          <div style="text-align: center; font-weight: 100; font-size: 1.3em; margin-top:15px;">&mdash;RICHARD HAMMING&mdash;</div>
+        /* Small devices (portrait tablets and large phones, 600px and up) */
+        @media only screen and (min-width: 600px) {
+            #main-column { width: 80%; }
+            .top-link { font-size: 2em; }
+            #headline { font-size: 4em; }
+            #my-name { font-size: 2em; }
+        }
+
+        /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and (min-width: 768px) {
+            .top-link { font-size: 3em; }
+            #headline { font-size: 6em; }
+            #my-name { font-size: 3.4em; }
+        }
+
+        /* Large devices (laptops/desktops, 992px and up) */
+        @media only screen and (min-width: 992px) {
+            .top-link { font-size: 3em; }
+            #headline { font-size: 6em; }
+            #my-name { font-size: 3.8em; }
+        }
+
+        /* Extra large devices (large laptops and desktops, 1200px and up) */
+        @media only screen and (min-width: 1200px) {
+            .top-link { font-size: 3em; }
+            #headline { font-size: 8em; }
+            #my-name { font-size: 5em; }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-column">
+        <div id="top-links">
+            <div class="top-link"><a href="#">BLOG</a></div>
+            <div class="top-link"><a href="#">RESEARCH</a></div>
+            <div class="top-link"><a href="#">ABOUT</a></div>
         </div>
-      </div>
-        <section>
-            
-            <div class="blog-listing">
-              <!--div class="blog-image">
-                <img src="tangrams/tangram-icon.svg"/>
-              </div-->
-              <div class="blog-description">
-                <a href="tangrams.html">
-                <div style="color: #a8a8a8; font-size: 0.9em;">2022-05-30</div>
-                <h2 style="display: inline; border-bottom:solid;border-width:2px;border-color:#758ECD;">I wrote a tangram solver.</h2>
-                <p style="margin: 0px;">Boring people solve tangram puzzles for fun. <i>Extremely</i> boring people invent a new way to represent numbers, build a library of exact geometric predicates, and write a program to brute force tangram solutions instead!</p>
-                </a>
-              </div>
-            </div>
-            
-            <div class="blog-listing">
-              <!--div class="blog-image">
-                <img src="wordcel/knife.png"/>
-              </div-->
-              <div class="blog-description">
-                <a href="wordcel.html">
-                <div style="color: #a8a8a8; font-size: 0.9em;">2022-05-05</div>
-                <h2 style="display: inline; border-bottom:solid;border-width:2px;border-color:#758ECD;">Don't just write Markdown, <strong>write a Markdown</strong>.</h2>
-                <p style="margin: 0px;">This site is written in a custom markup language using a parser and build tools I created. Why borrow someone else's Swiss Army Knife&trade; when you can use a knife you made yourself?</p>
-                </a>
-              </div>
-            </div>
-            
-            <div class="blog-listing">
-              <!--div class="blog-image">
-                <img src="discolor/discolor-square.png"/>
-              </div-->
-              <div class="blog-description">
-                <a href="discolor.html">
-                <div style="color: #a8a8a8; font-size: 0.9em;">2022-03-29</div>
-                <h2 style="display: inline; border-bottom:solid;border-width:2px;border-color:#758ECD;">discolor.py</h2>
-                <p style="margin: 0px;">discolor.py is a command line utility I made to convert RGB colors between hex, float, and integer representations. It's nice to have when you're generating plots, editing images, and drawing diagrams.</p>
-                </a>
-              </div>
-            </div>
-            
-        </section>
+        <div id="headline">robots, fast code, art, &amp;&nbsp;engineering</div>
+        <div id="my-name">Jordan Ford, PhD</div>
+
+        <div id="text-container">
+            <h1>Life Update&mdash;I'm graduating and looking for work!</h1>
+            <p>I'm graduating with my PhD from Carnegie Mellon this semester (Spring 2023). I've spent the last six years developing fast perception and planning algorithms for autonomous cars, nuclear inspection robots, and lunar microrovers. If you're interested in working together, send me an email at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a>.</p>
+
+            <h1>Research Highlights</h1>
+            <ul>
+                <li><p>I invented a blazing-fast lossless compression algorithm for high bit-depth LiDAR video streams, and I'll be presenting it at ICRA 2023 in London! (<a href="#">blog</a>, <a href="#">arxiv</a>)</p></li>
+                <li><p>I led the CMU/NASA NIACIII team that designed and built an autonomous microrover for exploring lunar pits. I wrote <i>a ton of code</i> to autonomously explore massive pits, capture panoramic HDR mosaics from the pit rim, and automatically process the imagery into photogrammetric 3D models of the pit interior. (<a href="#">blog</a>, <a href="#">IEEE AeroConf 2022</a>, <a href="#">media</a>)</p></li>
+                <li><p>I invented a fast exploration planning algorithm that combines raytracing, oriented A* search, and TSP heuristics to find reachable viewpoints around a lunar pit rim and plan a safe navigation route for a microrover to visit them (<a href="#">blog</a>).</p></li>
+                <li><p>I rewrote the LiDAR Mapping and Odometry (LOAM) algorithm from scratch to improve its performance for use on small, compute-limited drones. I replaced a few key data structures, vectorized the optimization cost functions, and parallelized as much as possible. The result was a scan processing latency of ~16ms (compared to ~1000ms orig.) and ~4x lower CPU usage. (<a href="#">blog 0</a>, <a href="#">blog 1</a>, <a href="#">blog 2</a>).</p></li>
+                <li><p>I implemented a motion planning algorithm for General Motors' autonomous vehicles. The new algorithm ran at 400 Hz and produced smooth, dynamics-constrained trajectories for their autonomous Chevy Volt (<a href="#">blog</a>).</p></li>
+                <li><p>I wrote post-processing, GUI, and sensor interface software for the PipeDream and RadPiper nuclear inspection robots. These robots are helping clean up U<span style="position:relative;top:-0.5rem;">235</span> deposits leftover from WWII at the Portsmouth, Ohio enrichment facility (<a href="#">blog</a>, <a href="#">media</a>).</p></li>
+            </ul>
+
+            <h1>Contact Me</h1>
+            <p>Email me at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a> or message me on <a href="#">Twitter</a> or <a href="#">LinkedIn</a>.
+        </div>
     </div>
 
-    <footer>
-      <div>Handcrafted by Jordan Ford &mdash; <span style="position: relative; top: 1px;">&copy;</span> 2022</div>
-    </footer>
-
-  </body>
-</html>
+</body>
