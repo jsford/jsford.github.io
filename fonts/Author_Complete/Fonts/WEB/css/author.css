@@ -42,7 +42,7 @@
        url('../fonts/Author-Variable.woff') format('woff'),
        url('../fonts/Author-Variable.ttf') format('truetype');
        font-weight: 200 700;
-       font-display: swap;
+       font-display: block;
        font-style: normal;
 }
 
@@ -64,7 +64,7 @@
        url('../fonts/Author-VariableItalic.woff') format('woff'),
        url('../fonts/Author-VariableItalic.ttf') format('truetype');
        font-weight: 200 700;
-       font-display: swap;
+       font-display: block;
        font-style: italic;
 }
 
@@ -75,7 +75,7 @@
        url('../fonts/Author-Extralight.woff') format('woff'),
        url('../fonts/Author-Extralight.ttf') format('truetype');
        font-weight: 200;
-       font-display: swap;
+       font-display: block;
        font-style: normal;
 }
 
@@ -86,7 +86,7 @@
        url('../fonts/Author-ExtralightItalic.woff') format('woff'),
        url('../fonts/Author-ExtralightItalic.ttf') format('truetype');
        font-weight: 200;
-       font-display: swap;
+       font-display: block;
        font-style: italic;
 }
 
@@ -97,7 +97,7 @@
        url('../fonts/Author-Light.woff') format('woff'),
        url('../fonts/Author-Light.ttf') format('truetype');
        font-weight: 300;
-       font-display: swap;
+       font-display: block;
        font-style: normal;
 }
 
@@ -108,7 +108,7 @@
        url('../fonts/Author-LightItalic.woff') format('woff'),
        url('../fonts/Author-LightItalic.ttf') format('truetype');
        font-weight: 300;
-       font-display: swap;
+       font-display: block;
        font-style: italic;
 }
 
@@ -119,7 +119,7 @@
        url('../fonts/Author-Regular.woff') format('woff'),
        url('../fonts/Author-Regular.ttf') format('truetype');
        font-weight: 400;
-       font-display: swap;
+       font-display: block;
        font-style: normal;
 }
 
@@ -130,7 +130,7 @@
        url('../fonts/Author-Italic.woff') format('woff'),
        url('../fonts/Author-Italic.ttf') format('truetype');
        font-weight: 400;
-       font-display: swap;
+       font-display: block;
        font-style: italic;
 }
 
@@ -141,7 +141,7 @@
        url('../fonts/Author-Medium.woff') format('woff'),
        url('../fonts/Author-Medium.ttf') format('truetype');
        font-weight: 500;
-       font-display: swap;
+       font-display: block;
        font-style: normal;
 }
 
@@ -152,7 +152,7 @@
        url('../fonts/Author-MediumItalic.woff') format('woff'),
        url('../fonts/Author-MediumItalic.ttf') format('truetype');
        font-weight: 500;
-       font-display: swap;
+       font-display: block;
        font-style: italic;
 }
 
@@ -163,7 +163,7 @@
        url('../fonts/Author-Semibold.woff') format('woff'),
        url('../fonts/Author-Semibold.ttf') format('truetype');
        font-weight: 600;
-       font-display: swap;
+       font-display: block;
        font-style: normal;
 }
 
@@ -174,7 +174,7 @@
        url('../fonts/Author-SemiboldItalic.woff') format('woff'),
        url('../fonts/Author-SemiboldItalic.ttf') format('truetype');
        font-weight: 600;
-       font-display: swap;
+       font-display: block;
        font-style: italic;
 }
 
@@ -185,7 +185,7 @@
        url('../fonts/Author-Bold.woff') format('woff'),
        url('../fonts/Author-Bold.ttf') format('truetype');
        font-weight: 700;
-       font-display: swap;
+       font-display: block;
        font-style: normal;
 }
 
@@ -196,7 +196,7 @@
        url('../fonts/Author-BoldItalic.woff') format('woff'),
        url('../fonts/Author-BoldItalic.ttf') format('truetype');
        font-weight: 700;
-       font-display: swap;
+       font-display: block;
        font-style: italic;
 }
 

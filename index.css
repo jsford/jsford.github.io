@@ -1,0 +1,134 @@
+@import "fonts/Tanker_Complete/Fonts/WEB/css/tanker.css";
+@import "fonts/BebasNeue_Complete/Fonts/WEB/css/bebas-neue.css";
+@import "fonts/Author_Complete/Fonts/WEB/css/author.css";
+
+@font-face {
+    font-family: 'PermanentMarker';
+    src: url('fonts/PermanentMarker-Regular.ttf') format('truetype');
+    font-display: block;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+a {
+    color: black;
+}
+a:visited {
+    color: black;
+    text-decoration: none;
+}
+a:hover {
+    color: red;
+    font-style: italic;
+}
+
+#top-links {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0px auto;
+    text-align: center;
+}
+.top-link {
+    font-family: BebasNeue-Regular;
+    font-weight: 400;
+    font-size: 3em;
+    width: 20%;
+    margin: 0 auto;
+    display: inline-block;
+    text-align: center;
+}
+.top-link a:link, .top-link a:visited {
+    color: black;
+    text-decoration: none;
+}
+.top-link a:hover {
+    color: red;
+    font-style: italic;
+    text-decoration: underline;
+}
+#headline {
+    font-family: Tanker-Regular;
+    font-size: 8em;
+    line-height: 1em;
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0rem auto;
+}
+#my-name {
+    font-family: PermanentMarker;
+    font-size: 5em;
+    color: red;
+    -webkit-transform: translate(0%, -0.4em) rotate(-1deg);
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    display: inline-block;
+}
+#main-column {
+    margin: 0 auto;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 100%;
+}
+
+#text-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+h1 {
+    font-family: Author-Semibold;
+    font-size: 1.6rem;
+    text-align: left;
+    margin: 1em 0 0.35em 0;
+}
+p {
+    font-family: Author-Regular;
+    font-size: 1.4rem;
+    line-height: 2.25rem;
+    text-align: justify;
+    margin: 0.5em 0;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    #main-column { width: 90%; }
+    .top-link { font-size: 1.4em; }
+    #headline { font-size: 3em; }
+    #my-name { font-size: 2em; }
+    h1 { font-size: 1.4em; }
+    p { font-size: 1.3em; line-height: 1.4em; }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    #main-column { width: 80%; }
+    .top-link { font-size: 2em; }
+    #headline { font-size: 4em; }
+    #my-name { font-size: 2em; }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .top-link { font-size: 3em; }
+    #headline { font-size: 6em; }
+    #my-name { font-size: 3.4em; }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .top-link { font-size: 3em; }
+    #headline { font-size: 6em; }
+    #my-name { font-size: 3.8em; }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .top-link { font-size: 3em; }
+    #headline { font-size: 8em; }
+    #my-name { font-size: 5em; }
+}
