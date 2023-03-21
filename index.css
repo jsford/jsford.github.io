@@ -53,8 +53,6 @@ a:hover {
     font-size: 3.4em;
     line-height: 1em;
     text-align: center;
-    width: 100%;
-    max-width: 1000px;
     margin: 0rem auto;
 }
 #my-name {
@@ -63,7 +61,6 @@ a:hover {
     color: red;
     -webkit-transform: translate(0%, -0.4em) rotate(-1deg);
     text-align: center;
-    width: 100%;
     margin: 0 auto -1em auto;
     display: inline-block;
 }
@@ -135,6 +132,6 @@ ul {
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
     .top-link { font-size: 3em; }
-    #headline { font-size: 8em; }
-    #my-name { font-size: 4em; }
+    #headline { font-size: 6em; }
+    #my-name  { font-size: 3em; }
 }
