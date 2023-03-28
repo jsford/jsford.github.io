@@ -33,7 +33,7 @@ a:hover {
 }
 #headline {
     font-family: Tanker-Regular;
-    font-size: 2.7em;
+    font-size: 2.85em;
     line-height: 1em;
     text-align: center;
     margin: 0rem auto;
@@ -52,12 +52,12 @@ a:hover {
 #subtitle {
     font-size: 1em;
     font-family: 'Architects Daughter';
-    font-size: 0.75em;
+    font-size: 0.7em;
     text-align: center;
     margin: -0.3em 0 -0.35em 0;
 }
 #subsubtitle {
-    font-size: 1.3em;
+    font-size: 1.5em;
     text-align: center;
     font-family: Tanker-Regular, sans-serif;
     font-style: normal;
@@ -106,7 +106,9 @@ ul {
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
     #headline { font-size: 4em; }
-    #my-name { font-size: 3em; }
+    #my-name { font-size: 2.8em; }
+    #subtitle { font-size: 0.9em; }
+    #subsubtitle { font-size: 2em; }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -115,7 +117,7 @@ ul {
     p { font-size: 1.3rem; }
     h1 { font-size: 1.5rem; }
     #subtitle { font-size: 1.2em; }
-    #subsubtitle { font-size: 1.7em; }
+    #subsubtitle { font-size: 2.6em; }
     #title-image { width: 300px; }
 
     #main-column { padding-top: 120px; }    

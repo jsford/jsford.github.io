@@ -31,17 +31,25 @@
             background-color: white;
             padding: 2.5px 0px 0px 0px;
             border-bottom: dashed;
-            border-color: black;
+            border-color: #aaaaaa;
             border-width: 2.5px;
             z-index: 10;
         }
-        #nav-logo { width: 30px; border-radius:50%; padding: 0px 5px 0px 5px; margin-left: 10px; }
-        .nav-link { font-family:BebasNeue-Regular; font-size: 1.8em; color: black; text-align: center; padding: 0 15px; }
+        #nav-logo { width: 30px; border-radius:50%; padding: 1px 5px 0px 5px; margin-left: 0px; }
+        .nav-link { font-family:BebasNeue-Regular; font-size: 1.8em; color: black; text-align: center; padding: 1px 10px 0 10px; }
         .nav-link:hover { color: red; font-style: italic; }
 
+        #title-block {
+            margin: 0 auto;
+            padding-bottom: 1em;
+            width: 100%;
+            text-align: center;
+        }
+
         @media only screen and (min-width: 768px) {
-            #nav-logo { width: 40px; }
+            #nav-logo { width: 40px; margin-left: 10px; padding: 1px 15px 0px 15px;}
             .nav-link { font-size: 2.4em; }
+            #title-block { padding-bottom: 2.5em; }
         }
     </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Architects+Daughter">
@@ -56,7 +64,7 @@
     </div>
 
     <div id="main-column">
-        <div id="title-block" style="margin: 0 auto; padding-bottom: 2rem; width: 100%; text-align: center;">
+        <div id="title-block">
             <img id="title-image" src="mannequin-small.jpg"/>
             <div id="title-billboard" style="margin: 0 -2%; max-width:805px; display:inline-block; vertical-align:middle;";>
                 <div id="my-name">Jordan Ford, PhD</div>
