@@ -58,9 +58,9 @@ a:hover {
 }
 #subsubtitle {
     font-size: 1.3em;
-    font-family: Author-Bold, sans-serif;
-    font-style: italic;
     text-align: center;
+    font-family: Tanker, sans-serif;
+    font-style: normal;
 }
 #main-column {
     margin: 0 auto;
