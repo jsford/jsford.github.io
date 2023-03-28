@@ -50,23 +50,37 @@ a:hover {
 }
 #headline {
     font-family: Tanker-Regular;
-    font-size: 3.4em;
+    font-size: 2.6em;
     line-height: 1em;
     text-align: center;
     margin: 0rem auto;
+    z-index: 1;
 }
 #my-name {
     font-family: PermanentMarker;
-    font-size: 2.2em;
+    font-size: 1.8em;
     color: red;
-    -webkit-transform: translate(0%, -0.4em) rotate(-1deg);
+    -webkit-transform: translate(0%, 0.3em) rotate(-2deg);
     text-align: center;
-    margin: 0 auto -1em auto;
+    margin: -0.3em auto 0 auto;
     display: inline-block;
+    z-index: 2;
+}
+#subtitle {
+    font-size: 1em;
+    font-family: 'Architects Daughter';
+    font-size: 0.8em;
+    text-align: center;
+    margin: -0.3em 0;
+}
+#subsubtitle {
+    font-size: 1.5em;
+    font-family: Author-BoldItalic;
+    text-align: center;
 }
 #main-column {
     margin: 0 auto;
-    padding-top: 2rem;
+    padding-top: 100px;
     padding-bottom: 50px;
     width: 90%;
 }
@@ -91,7 +105,7 @@ h1 {
 }
 p {
     font-family: Author-Regular;
-    color: #333333;
+    color: black;
     text-align: justify;
     margin: 0.5em 0;
     font-size: 1.1rem;
@@ -108,30 +122,34 @@ ul {
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
     .top-link { font-size: 2em; }
-    #headline { font-size: 5em; }
+    #headline { font-size: 4em; }
     #my-name { font-size: 3em; }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
     .top-link { font-size: 3em; }
-    #headline { font-size: 6em; }
+    #headline { font-size: 5em; }
     p { font-size: 1.3rem; }
     h1 { font-size: 1.5rem; }
+    #subtitle { font-size: 1.2em; }
+    #subsubtitle { font-size: 1.7em; }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
     .top-link { font-size: 3em; }
-    #headline { font-size: 8em; }
+    #headline { font-size: 5em; }
     #my-name { font-size: 3.8em; }
     p { font-size: 1.3em; line-height: 1.4em;}
     h1 { font-size: 1.7rem; }
+    #subtitle { font-size: 1.2em; }
+    #subsubtitle { font-size: 2.2em; }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-    .top-link { font-size: 3em; }
-    #headline { font-size: 6em; }
-    #my-name  { font-size: 3em; }
+    .top-link { font-size: 2.5em; }
+    #headline { font-size: 5.5em; }
+    #my-name  { font-size: 3.7em; }
 }

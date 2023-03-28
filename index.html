@@ -19,26 +19,50 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
 
     <title>Jordan Ford</title>
+
+    <style>
+        #nav-bar {
+            position: fixed;
+            top: 0;
+            display: grid;
+            grid-template-columns: 12fr 1fr 1fr 1fr;
+            align-items: center;
+            width: 100%;
+            background-color: white;
+            padding: 7.5px 0px 5px 0px;
+            border-bottom: dashed;
+            border-color: black;
+            border-width: 2.5px;
+            z-index: 10;
+        }
+        #nav-logo { width: 50px; border-radius:50%; padding: 0px 15px; }
+        .nav-link { font-family:BebasNeue-Regular; font-size: 2.4em; color: black; text-align: center; padding: 0 15px; }
+        .nav-link:hover { color: red; font-style: italic; }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Architects+Daughter">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <div id="nav-bar">
+        <a href="index.html"><img id="nav-logo" src="mannequin-small.jpg"/></a>
+        <a class="nav-link" src="#">HOME</a>
+        <a class="nav-link" src="#">BLOG</a>
+        <a class="nav-link" src="#">ABOUT</a>
+    </div>
+
     <div id="main-column">
         <div id="title-block" style="margin: 0 auto; width: 100%; text-align: center;">
             <img id="title-image" src="mannequin-small.jpg" style="margin: 30px auto; max-width:300px; border-radius:50%; display: inline-block; vertical-align: middle;"/>
-
             <div id="title-billboard" style="margin: 0 -2%; max-width:805px; display:inline-block; vertical-align:middle;";>
-                <div id="top-links">
-                    <div class="top-link"><a href="#">BLOG</a></div>
-                    <div class="top-link"><a href="#">RESEARCH</a></div>
-                    <div class="top-link"><a href="#">ABOUT</a></div>
-                </div>
-                    <div id="headline" style="width: 80%; display:inline-block; vertical-align:middle;">robots, fast code, art, &amp;&nbsp;engineering</div>
                 <div id="my-name">Jordan Ford, PhD</div>
+                <div id="headline" style="width: 80%; display:inline-block; vertical-align:middle;">problems created &amp; creatively solved.</div>
+                <div id="subtitle">If you build robots, write fast code, or run a business...</div>
+                <div id="subsubtitle">I WOULD LOVE TO WORK WITH YOU.</div>
             </div>
         </div>
 
         <div id="text-container">
-            <h1>Life Update&mdash;I'm graduating and looking for work!</h1>
+            <h1>Life Update&mdash;I'm graduating!</h1>
             <p>I'm graduating with my PhD from Carnegie Mellon this semester (Spring 2023). I've spent the last six years developing fast perception and planning algorithms for autonomous cars, nuclear inspection robots, and lunar microrovers. If you're interested in working together, send me an email at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a>.</p>
 
             <h1>Research Highlights</h1>
