@@ -75,7 +75,8 @@ a:hover {
 }
 #subsubtitle {
     font-size: 1.5em;
-    font-family: Author-BoldItalic;
+    font-family: Author-Bold, sans-serif;
+    font-style: italic;
     text-align: center;
 }
 #main-column {
