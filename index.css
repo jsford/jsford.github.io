@@ -128,7 +128,7 @@ ul {
     p { font-size: 1.3em; line-height: 1.4em;}
     h1 { font-size: 1.7rem; }
     #subtitle { font-size: 1.2em; }
-    #subsubtitle { font-size: 2.2em; }
+    #subsubtitle { font-size: 3em; }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
