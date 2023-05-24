@@ -1,0 +1,43 @@
+<h1>Sort LiDAR points into raster scan order 80x faster.</h1>
+<p>Lately I've been having a lot of fun working on LiDAR mapping algorithms and developing new compression codecs for LiDAR sensor data.
+In both applications, I find myself needing to quickly verify that points given to my code are in scan order.
+If they aren't in scan order, I need to quickly sort them into scan order before I continue working with them.</p>
+<h2>The Straightforward Approach</h2>
+<p>The straightforward way to sort points within a scanline is to compute their azimuth angle using <code>atan2()</code>.</p>
+<pre><code>bool CompareAtan2(const Vector2f&amp; v0, const Vector2f&amp; v1) {
+    return std::atan2(v0.y, v0.x) &lt; std::atan2(v1.y, v1.x);
+}
+</code></pre>
+<p>Then we can use <code>std::sort()</code> with the <code>CompareAtan2()</code> lambda to compare points.
+Sadly, for large LiDAR point clouds, this approach can be pretty slow.</p>
+<p>Editor's note:
+This isn't really <em>that</em> slow. If you run into this problem, start with this solution.
+If you profile your code and decide it matters to you, read on!</p>
+<h2>Faster Comparison</h2>
+<p>My first instinct for speeding up this code was to find a way to avoid calls to <code>std::atan2()</code>.
+This ended up being kinda fun!</p>
+<p>If you've been programming anything math-y for a while, you've probably written something like this:</p>
+<pre><code>if( std::sqrt(x*x+y*y) &lt; R ) {
+    // (x, y) is inside a circle of radius R.
+}
+</code></pre>
+<p>And hopefully you've noticed (or been taught) that you can avoid computing the call to <code>sqrt()</code> by squaring both sides of the comparison.</p>
+<pre><code>if( (x*x+y*y) &lt; R*R ) {
+    // (x, y) is inside a circle of radius R.
+}
+</code></pre>
+<p>The <code>std::atan2()</code> function is fairly expensive --- it takes more than 100 ns to compute on my desktop.
+Let's try speeding up the <code>CompareAtan2()</code> function by transforming the <code>atan2()</code>'s on both sides of the comparison into something cheaper to compute.</p>
+<h2>Better Sorting Algorithm</h2>
+<p>Another, arguably more important, avenue for speeding up the point sorting process is to use a better sorting algorithm.
+I dropped in <code>pdqsort()</code> as a replacement for <code>std::sort()</code>, and <em>wow</em> is it better!</p>
+<h2>Benchmarks</h2>
+<p><code>std::sort()</code> with <code>CompareAtan2()</code> takes 200ms.</p>
+<p><code>std::sort() with</code>FastCompareAtan2()` takes 40ms.</p>
+<p><code>pdqsort()</code> with <code>CompareAtan2()</code> takes 120ms.</p>
+<p><code>pdqsort()</code> with <code>FastCompareAtan2()</code> takes only 3ms!</p>
+<h2>Conclusions</h2>
+<ul>
+<li>Use a good sorting algorithm like <code>pdqsort()</code>.</li>
+<li>Consider using a fast comparison predicate instead of <code>atan2()</code>.</li>
+</ul>
