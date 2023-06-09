@@ -124,7 +124,7 @@ def build_site(site_root, site_dirname):
         post_template_string = read_file(osp.join(site_root, 'templates/post.html'))
         post_template = environment.from_string( post_template_string )
 
-        post_page = post_template.render(title=post.title, contents=post.html)
+        post_page = post_template.render(title=post.title, date=post.date, contents=post.html)
         postpath = osp.join('posts', post.directory.split('/')[-1], post.htmlfilename)
         write_file(osp.join(site_dir, postpath), post_page)
 
