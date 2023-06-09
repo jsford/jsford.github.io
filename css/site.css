@@ -94,6 +94,9 @@
     font-style: normal;
 }
 
+html {
+    overflow-y: scroll;
+}
 
 body {
     width: 100%;
