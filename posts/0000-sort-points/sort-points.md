@@ -19,15 +19,10 @@ The straightforward way to sort points within a scanline is to compute their azi
 Then we can use `std::sort()` with the `CompareAtan2()` lambda to compare points.
 Sadly, for large LiDAR point clouds, this approach can be pretty slow.
 
-Editor's note:
-This isn't really *that* slow. If you run into this problem, start with this solution.
-If you profile your code and decide it matters to you, read on!
-
 ## Faster Comparison
 
 My first instinct for speeding up this code was to find a way to avoid calls to `std::atan2()`.
 This ended up being kinda fun!
-
 If you've been programming anything math-y for a while, you've probably written something like this:
 
     if( std::sqrt(x*x+y*y) < R ) {
@@ -49,13 +44,10 @@ I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it bet
 
 ## Benchmarks
 
-`std::sort()` with `CompareAtan2()` takes 200ms.
-
-`std::sort() with `FastCompareAtan2()` takes 40ms.
-
-`pdqsort()` with `CompareAtan2()` takes 120ms.
-
-`pdqsort()` with `FastCompareAtan2()` takes only 3ms!
+* `std::sort()` with `CompareAtan2()` takes 200ms.
+* `std::sort() with `FastCompareAtan2()` takes 40ms.
+* `pdqsort()` with `CompareAtan2()` takes 120ms.
+* `pdqsort()` with `FastCompareAtan2()` takes only 3ms!
 
 ## Conclusions
 

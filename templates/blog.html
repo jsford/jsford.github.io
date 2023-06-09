@@ -30,15 +30,13 @@
         <a class="nav-link" href="/index.html">HOME</a>
     </div>
 
-    <div id="main-column">
-        <div id="text-container">
-            <h1>BLOG</h1>
+    <div id="text-container">
+        <h1>BLOG</h1>
 
-            {% for path, title, date, description in posts %}
-                <p>{{date}}<br>
-                <a href="{{path}}"><em>{{title}}</em>&mdash;{{description}}</a>
-                </p>
-            {% endfor %}
-        </div>
+        {% for path, title, date, description in posts %}
+            <p>{{date}}<br>
+            <a href="{{path}}"><em>{{title}}</em>&mdash;{{description}}</a>
+            </p>
+        {% endfor %}
     </div>
 </body>
