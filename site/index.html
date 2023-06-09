@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBR9W21HN1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-NBR9W21HN1');
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html"; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon.ico">
+
+    <title>Jordan Ford</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Architects+Daughter">
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+    <div id="nav-bar">
+        <a href="index.html"><img id="nav-logo" src="/assets/favicon/favicon.svg"/></a>
+        <a class="nav-link" href="/blog.html">BLOG</a>
+        <a class="nav-link" href="/index.html">HOME</a>
+    </div>
+
+    <div id="main-column">
+        <div id="title-block">
+            <img id="title-image" src="/assets/images/me2-small.jpg"/>
+            <div id="title-billboard" style="margin: 0 -4%; max-width:805px; display:inline-block; vertical-align:middle;";>
+                <div id="my-name">Jordan Ford, PhD</div>
+                <div id="headline" style="width: 80%; display:inline-block; vertical-align:middle;">robots,&nbsp;fast code, art&nbsp;&amp;&nbsp;engineering</div>
+                <div id="subtitle">If you're building robots to make the world more awesome...</div>
+                <div id="subsubtitle">I want to work with you.</div>
+            </div>
+        </div>
+
+        <div id="text-container">
+            <h1>Life Update&mdash;I'm graduating!</h1>
+            <p>I'm graduating with my PhD from Carnegie Mellon this semester (Spring 2023). I've spent the last six years developing fast perception and planning algorithms for autonomous cars, nuclear inspection robots, and lunar microrovers. If you're interested in working together, send me an email at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a>.</p>
+
+            <h1>Research Highlights</h1>
+            <ul>
+                <li><p><em>SIMD LiDAR Compression</em> &mdash; I invented a blazing-fast lossless compression algorithm for high bit-depth LiDAR video streams, and I'll be presenting it at <a href="https://www.icra2023.org/" target="_blank" rel="noopener noreferrer">ICRA 2023</a> in London! (<a href="https://arxiv.org/abs/2209.08196" target="_blank" rel="noopener noreferrer">arxiv</a>)</p></li>
+                <li><p><em>Autonomous Lunar Rovers</em> &mdash; I led a CMU/NASA team that designed and built an autonomous microrover for exploring lunar pits. I wrote <i>a ton of code</i> to autonomously explore massive pits, capture panoramic HDR mosaics from the pit rim, and automatically process the imagery into photogrammetric 3D models of the pit interior. (<a href="assets/ford-aeroconf-2022.pdf" target="_blank" rel="noopener noreferrer">pdf</a>, <a href="https://www.space.com/tiny-moon-rover-pitranger-explore-lunar-underworld" target="_blank" rel="noopener noreferrer">space.com</a>)</p></li>
+                <li><p><em>Search-Based Planning</em> &mdash; I invented a fast exploration planning algorithm that combines raytracing, oriented A* search, and TSP heuristics to find reachable viewpoints around a lunar pit rim and plan a safe navigation route for a microrover to visit them.</p></li>
+                <li><p><em>Ultra-Fast LiDAR Mapping</em> &mdash; I rewrote the LiDAR Odometry and Mapping (LOAM) algorithm from scratch to improve its performance for use on small, compute-limited drones. I replaced a few key data structures, vectorized the optimization cost functions, and parallelized as much as possible. The result was a scan processing latency of ~16ms (compared to ~1000ms orig.) and ~4x lower CPU usage.</p></li>
+                <li><p><em>Autonomous Vehicle Motion Planning</em> &mdash; I implemented a motion planning algorithm for General Motors' autonomous vehicles. The new algorithm ran at 400 Hz and produced smooth, dynamics-constrained trajectories for their autonomous Chevy Volt.</p></li>
+                <li><p><em>Nuclear Robotics</em> &mdash; I wrote post-processing, GUI, and sensor interface software for the PipeDream and RadPiper nuclear inspection robots. These robots are helping clean up U<span style="position:relative;top:-0.5rem;">235</span> deposits leftover from WWII at the Portsmouth, Ohio enrichment facility (<a href="https://www.world-nuclear-news.org/Articles/Pipe-robot-aids-enrichment-plant-decommissioning" target="_blank" rel="noopener noreferrer">World Nuclear News</a>, <a href="https://www.therobotreport.com/radpiper-decommission-nuclear-facility/" target="_blank" rel="noopener noreferrer">The Robot Report</a>, <a href="https://www.geekwire.com/2018/autonomous-robots-will-crawl-inside-pipes-former-u-s-nuclear-sites-detect-radiation-speed-process-dismantling/" target="_blank" rel="noopener noreferrer">GeekWire</a>, <a href="https://www.wesa.fm/science-health-tech/2018-04-02/nuke-bot-to-the-rescue-cmu-robot-to-detect-nuclear-waste-at-government-facility" target="_blank" rel="noopener noreferrer">WESA</a>).</p></li>
+            </ul>
+
+            <h1>Contact Me</h1>
+            <p>Email me at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a> or message me on <a href="https://twitter.com/jrdnfrd" target="_blank" rel="noopener noreferrer">Twitter</a> or <a href="https://www.linkedin.com/in/jordan-ford/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+        </div>
+    </div>
+</body>
