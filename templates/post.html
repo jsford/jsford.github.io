@@ -18,27 +18,22 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon.ico">
 
-    <title>Jordan Ford</title>
+    <title>Jordan Ford | {{ title }}</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Architects+Daughter">
     <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
     <div id="nav-bar">
-        <a href="index.html"><img id="nav-logo" src="/assets/favicon/favicon.svg"/></a>
+        <a href="/index.html"><img id="nav-logo" src="/assets/favicon/favicon.svg"/></a>
         <a class="nav-link" href="/blog.html">BLOG</a>
         <a class="nav-link" href="/index.html">HOME</a>
     </div>
 
     <div id="main-column">
         <div id="text-container">
-            <h1>BLOG</h1>
-
-            
-                <a href="#"><p><em>b</em> &mdash;<br>c</p></a>
-            
-                <a href="#"><p><em>e</em> &mdash;<br>f</p></a>
-            
+            <h1>{{ title }}</h1>
+            {{ contents }}
         </div>
     </div>
 </body>

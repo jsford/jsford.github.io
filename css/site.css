@@ -24,7 +24,7 @@
 }
 #nav-logo {
     width: 30px;
-    border-radius:50%;
+    border-radius:0%;
     margin: 5px 5px 5px 7.5px;
 }
 .nav-link {

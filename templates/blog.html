@@ -25,7 +25,7 @@
 </head>
 <body>
     <div id="nav-bar">
-        <a href="index.html"><img id="nav-logo" src="/assets/favicon/favicon.svg"/></a>
+        <a href="/index.html"><img id="nav-logo" src="/assets/favicon/favicon.svg"/></a>
         <a class="nav-link" href="/blog.html">BLOG</a>
         <a class="nav-link" href="/index.html">HOME</a>
     </div>
@@ -34,8 +34,10 @@
         <div id="text-container">
             <h1>BLOG</h1>
 
-            {% for path, title, date in posts %}
-                <a href="{{path}}"><p><em>{{title}}</em> &mdash;<br>{{date}}</p></a>
+            {% for path, title, date, description in posts %}
+                <p>{{date}}<br>
+                <a href="{{path}}"><em>{{title}}</em>&mdash;{{description}}</a>
+                </p>
             {% endfor %}
         </div>
     </div>
