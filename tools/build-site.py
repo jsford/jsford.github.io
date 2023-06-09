@@ -100,6 +100,9 @@ def build_site(site_root, site_dirname):
         mdcontent = splitcontent[2]
         htmlcontent = markdown.markdown(mdcontent)
 
+        # Replace '---' with '&mdash;'
+        htmlcontent = htmlcontent.replace('---', '&mdash;')
+
         header = yaml.load(yamlcontent, Loader=yaml.FullLoader)
         post = BlogPost(directory, mdfile, header['title'], header['description'], header['date'], htmlcontent)
         posts.append(post)
