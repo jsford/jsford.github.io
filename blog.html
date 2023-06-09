@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBR9W21HN1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-NBR9W21HN1');
+    </script>
+
+    <meta http-equiv="Content-Type" content="text/html"; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+
+    <title>Jordan Ford</title>
+
+    <style>
+        #nav-bar {
+            position: fixed;
+            top: 0;
+            display: grid;
+            grid-template-columns: 12fr 1fr 1fr 1fr;
+            align-items: center;
+            width: 100%;
+            background-color: white;
+            padding: 2.5px 0px 0px 0px;
+            border-bottom: dashed;
+            border-color: #aaaaaa;
+            border-width: 2.5px;
+            z-index: 10;
+        }
+        #nav-logo { width: 30px; border-radius:50%; margin: 5px 5px 5px 7.5px; }
+        .nav-link { font-family:BebasNeue-Regular; font-size: 1.8em; color: black; text-align: center; padding: 1px 10px 0 10px; text-decoration: none; }
+        .nav-link:hover { color: red; font-style: italic; }
+
+        #title-block {
+            margin: 0 auto;
+            padding-bottom: 1em;
+            width: 100%;
+            text-align: center;
+        }
+
+        @media only screen and (min-width: 768px) {
+            #nav-logo { width: 40px; margin: 5px 5px 5px 7.5px; }
+            .nav-link { font-size: 2.4em; }
+            #title-block { padding-bottom: 2.5em; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Architects+Daughter">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="nav-bar">
+        <a href="index.html"><img id="nav-logo" src="/images/me2-smaller.jpg"/></a>
+        <a class="nav-link" href="/index.html">HOME</a>
+        <a class="nav-link" href="/blog.html">BLOG</a>
+        <a class="nav-link" href="/about.html">ABOUT</a>
+    </div>
+
+    <div id="main-column">
+        <div id="text-container">
+            <h1>BLOG</h1>
+            <a href="/posts/002-loam-fine/loam-fine.html"><p><em>Lidar Odometry and Mapping</em> &mdash;<br> Part 3: Fine ICP</p></a>
+            <a href="/posts/001-loam-coarse/loam-coarse.html"><p><em>Lidar Odometry and Mapping</em> &mdash;<br> Part 2: Coarse ICP</p></a>
+            <a href="/posts/000-loam-features/loam-features.html"><p><em>Lidar Odometry and Mapping</em> &mdash;<br> Part 1: Feature Extraction</p></a>
+        </div>
+    </div>
+</body>

@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 ---
 title: Sort LiDAR points into raster scan order 80x faster.
 description: do something cool!
 date: May 19, 2023
 ---
+=======
+# Sort LiDAR points into raster scan order 80x faster.
+>>>>>>> 7c1a9a36e7ed3ea76e998217b7c92ccd7f2ba589
 
 Lately I've been having a lot of fun working on LiDAR mapping algorithms and developing new compression codecs for LiDAR sensor data.
 In both applications, I find myself needing to quickly verify that points given to my code are in scan order.

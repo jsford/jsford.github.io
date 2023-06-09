@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+<<<<<<< HEAD
 import glob
 import shutil
 import os.path as osp
@@ -74,3 +75,23 @@ def build_site(site_root, site_dirname):
 
 if __name__=='__main__':
     build_site('.', 'site')
+=======
+import os.path as osp
+import markdown
+
+def build_post(post_root):
+    print(post_root)
+
+def build_site(site_root):
+    # Create build directory.
+
+    # Build blog posts.
+    posts = os.listdir(osp.join(site_root, 'posts'))
+    for post in posts:
+        build_post(post)
+
+    # Copy everything into the build directory.
+
+if __name__=='__main__':
+    build_site('.')
+>>>>>>> 7c1a9a36e7ed3ea76e998217b7c92ccd7f2ba589
