@@ -11,9 +11,6 @@
 #nav-bar {
     position: fixed;
     top: 0;
-    display: grid;
-    grid-template-columns: 12fr 1fr 1fr;
-    align-items: center;
     width: 100%;
     background-color: white;
     padding: 2.5px 0px 0px 0px;
@@ -22,9 +19,25 @@
     border-width: 2.5px;
     z-index: 10;
 }
+#nav-contents {
+    display: grid;
+    grid-template-columns: 1fr 12fr 1fr 1fr;
+    align-items: center;
+    max-width: 800px;
+    margin: auto;
+    width: 100%;
+}
 #nav-logo {
     width: 35px;
-    margin: 8px 5px 3px 15px;
+    margin-left: 0.2rem;
+}
+.nav-name {
+    font-family:BebasNeue-Regular;
+    font-size: 1.5rem;
+    color: red;
+    text-align: left;
+    padding: 0px 5px 0px 10px;
+    text-decoration: none;
 }
 .nav-link {
     font-family:BebasNeue-Regular;
@@ -33,9 +46,6 @@
     text-align: center;
     padding: 1px 20px 0px 20px;
     text-decoration: none;
-}
-.nav-link:last-of-type {
-    padding: 1px 30px 0 20px;
 }
 .nav-link:hover {
     color: red;
