@@ -37,18 +37,18 @@
         <h1 style="text-align: center;">Blog Archives</h1>
 
         {% for path, title, date, description in posts %}
-            <p style="margin-top: 1rem;">
+            <div style="margin-top: 1rem;">
                 <a href="{{path}}">
                     <span style="text-decoration:none; display: inline-block;">
                     {{date}}
                     </span>
                     <br>
                     <strong>{{title}}</strong>
-                    <span style="text-decoration:none; display: inline-block;">
+                    <span style="text-decoration:none; display: inline-block; text-align:justify;">
                         {{description}}
                     </span>
                 </a>
-            </p>
+            </div>
         {% endfor %}
     </div>
 </body>
