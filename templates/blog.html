@@ -38,13 +38,13 @@
 
         {% for path, title, date, description in posts %}
             <div style="margin-top: 1rem;">
-                <a href="{{path}}">
-                    <span style="text-decoration:none; display: inline-block;">
-                    {{date}}
-                    </span>
-                    <br>
-                    <strong>{{title}}</strong>
-                    <span style="text-decoration:none; display: inline-block; text-align:justify;">
+                <a href="{{path}}" style="text-decoration:none;">
+                    <h3 style="display: inline-block; color: #aaa; margin: 0px;">
+                        {{date}}
+                    </h3>
+                    &nbsp;
+                    <h3 style="margin: 0; display: inline-block;">{{title}}</h3>
+                    <span style="display: inline-block; text-align:justify;">
                         {{description}}
                     </span>
                 </a>
