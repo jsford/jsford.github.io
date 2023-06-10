@@ -1,6 +1,6 @@
 ---
-title: Sort LiDAR points into raster scan order 80x faster.
-description: do something cool!
+title: Sort LiDAR point clouds 80x faster.
+description: Avoid calling `atan2()` in your comparison function, and use a recent sorting algorithm like `pdqsort()`.
 date: May 19, 2023
 ---
 

@@ -174,8 +174,10 @@ a:hover {
     margin: auto;
     display: block;
 }
-
-strong, em {
+strong {
+    font-family: Author-Semibold;
+}
+em {
     font-family: Author-Semibold;
     font-style: italic;
 }

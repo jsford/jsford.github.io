@@ -104,7 +104,9 @@ def build_site(site_root, site_dirname):
         htmlcontent = htmlcontent.replace('---', '&mdash;')
 
         header = yaml.load(yamlcontent, Loader=yaml.FullLoader)
-        post = BlogPost(directory, mdfile, header['title'], header['description'], header['date'], htmlcontent)
+        htmldescription = markdown.markdown(header['description']).lstrip('<p>').rstrip('</p>')
+
+        post = BlogPost(directory, mdfile, header['title'], htmldescription, header['date'], htmlcontent)
         posts.append(post)
     posts.sort(key=lambda p : datetime.strptime(p.date, '%B %d, %Y'), reverse=True)
 

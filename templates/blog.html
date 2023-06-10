@@ -34,11 +34,20 @@
     </div>
 
     <div id="text-container">
-        <h1 style="text-align: center;">Jordan Ford's Blog</h1>
+        <h1 style="text-align: center;">Blog Archives</h1>
 
         {% for path, title, date, description in posts %}
-            <p style="margin-top: 1rem;">{{date}}<br>
-            <a href="{{path}}"><em>{{title}}</em>&mdash;{{description}}</a>
+            <p style="margin-top: 1rem;">
+                <a href="{{path}}">
+                    <span style="text-decoration:none; display: inline-block;">
+                    {{date}}
+                    </span>
+                    <br>
+                    <strong>{{title}}</strong>
+                    <span style="text-decoration:none; display: inline-block;">
+                        {{description}}
+                    </span>
+                </a>
             </p>
         {% endfor %}
     </div>
