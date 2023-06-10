@@ -44,7 +44,7 @@
     font-size: 1.5rem;
     color: black;
     text-align: center;
-    padding: 0px 0px 0px 40px;
+    padding: 0px 0px 0px 0.8em;
     text-decoration: none;
 }
 .nav-link:hover {
