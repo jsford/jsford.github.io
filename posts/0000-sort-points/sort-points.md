@@ -133,4 +133,4 @@ I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it bet
 * Use a good sorting algorithm like `pdqsort()`.
 * Consider using a fast comparison predicate instead of `atan2()`.
 
-The code for this experiment is available [here](/posts/0000-sort-points/code).
+All code for this experiment is available [here](/posts/0000-sort-points/code).
