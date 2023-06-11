@@ -179,8 +179,7 @@ strong {
     font-family: Author-Semibold;
 }
 em {
-    font-family: Author-Semibold;
-    font-style: italic;
+    font-family: Author-Italic;
 }
 /* Code Blocks */
 code {

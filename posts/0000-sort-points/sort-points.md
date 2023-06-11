@@ -4,29 +4,38 @@ description: Avoid calling `atan2()` in your comparison function, and use a rece
 date: May 19, 2023
 ---
 
-Lately I've been having a lot of fun working on LiDAR mapping algorithms and developing new compression codecs for LiDAR sensor data.
-In both applications, I find myself needing to quickly verify that points given to my code are in scan order.
-If they aren't in scan order, I need to quickly sort them into scan order before I continue working with them.
+When working with LiDAR point clouds, I sometimes need to sort a scan full of points into counter-clockwise (or clockwise) scanlines.
+I first encountered this problem while working on LiDAR mapping, and I recently re-encountered it in our work on LiDAR data compression.
+In this article, I'll show you how I sped up the na&#239;ve sort by avoiding inverse trig functions in the sorting comparison function.
+Even if you don't work with LiDAR, I think this is a fun problem that illustrates a general pattern you might find useful in other applications.
+
+## Straightforward Sorting
+
+The straightforward solution to this problem is to use `std::sort()` with a comparison function that compares points first by altitude angle and then by azimuth angle.
+The altitude of a point is its angle above the sensor's X-Y plane. The azimuth of a point is its angle *around* the sensor---its yaw.
 
 ![A diagram showing the altitude and azimuth coordinates that define a LiDAR point in spherical coordinates](/posts/0000-sort-points/lidar-coordinates.svg)
 
-## The Straightforward Approach
+Here is a comparison function that solves this problem using `std::atan()` and `std::atan2()`.
 
-The straightforward way to sort points within a scanline is to compute their azimuth angle using `atan2()`.
+    bool SlowCompare(const Vector3f& v0, const Vector3f& v1) {
+        float altitude0 = std::atan(v0.z / std::sqrt(v0.x*v0.x+v0.y*v0.y));
+        float altitude1 = std::atan(v1.z / std::sqrt(v1.x*v1.x+v1.y*v1.y));
 
-    bool CompareAtan2(const Vector2f& v0, const Vector2f& v1) {
-        return std::atan2(v0.y, v0.x) < std::atan2(v1.y, v1.x);
+        // If points are not from the same scanline, compare their altitude angles.
+        if( std::abs(altitude0 - altitude1) > 1e-8 ) {
+            return altitude0 > altitude1; // Sort from top scanline to bottom.
+        }
+
+        // If points are from the same scanline, compare their azimuth angles.
+        float azimuth0 = std::atan2(v0.y, v0.x);
+        float azimuth1 = std::atan2(v1.y, v1.x);
+
+        return azimuth0 < azimuth1; // Sort counterclockwise around the +Z axis.
     }
 
 Then we can use `std::sort()` with the `CompareAtan2()` lambda to compare points.
 Sadly, for large LiDAR point clouds, this approach can be pretty slow.
-
-| Method                              | Time [ms] | Std Dev [us] | Speedup |
-|-------------------------------------|:---------:|:------------:|:-------:|
-| std::sort() with SlowCompareAtan2() |   121.22  |      476     |   1.0x  |
-| std::sort() with FastCompareAtan2() |    20.96  |      155     |   5.8x  |
-| pdqsort()   with SlowCompareAtan2() |     8.88  |       53     |  13.7x  |
-| pdqsort()   with FastCompareAtan2() |     1.58  |        8     |  76.7x  |
 
 ## Faster Comparison
 
@@ -53,10 +62,12 @@ I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it bet
 
 ## Benchmarks
 
-* `std::sort()` with `CompareAtan2()` takes 200ms.
-* `std::sort()` with `FastCompareAtan2()` takes 40ms.
-* `pdqsort()` with `CompareAtan2()` takes 120ms.
-* `pdqsort()` with `FastCompareAtan2()` takes only 3ms!
+| Method                              | Time [ms] | Std Dev [us] | Speedup |
+|-------------------------------------|:---------:|:------------:|:-------:|
+| std::sort() with SlowCompareAtan2() |   121.22  |      476     |   1.0x  |
+| std::sort() with FastCompareAtan2() |    20.96  |      155     |   5.8x  |
+| pdqsort()   with SlowCompareAtan2() |     8.88  |       53     |  13.7x  |
+| pdqsort()   with FastCompareAtan2() |     1.58  |        8     |  76.7x  |
 
 ## Conclusions
 
