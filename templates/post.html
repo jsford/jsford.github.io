@@ -39,12 +39,15 @@
         </div>
     </div>
 
-    <div id="main-column">
-        <div id="text-container">
-            <h3 style="color: #aaa; margin: 0px;">{{ date }}</h3>
-            <h1 style="margin-top: 0;">{{ title }}</h1>
-            <hr style="border:none; border-bottom:dashed; border-color:#aaaaaa; border-width: 2.5px;">
-            {{ contents }}
-        </div>
+    <div id="text-container">
+        <h3 style="color: #aaa; margin: 0px;">{{ date }}</h3>
+        <h1 style="margin-top: 0;">{{ title }}</h1>
+        <hr style="border:none; border-bottom:dashed; border-color:#aaaaaa; border-width: 2.5px;">
+        {{ contents }}
+
+        <script defer src="https://cdn.commento.io/js/commento.js"></script>
+        <div id="commento"></div>
+
     </div>
+
 </body>

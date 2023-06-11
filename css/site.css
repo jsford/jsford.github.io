@@ -119,19 +119,19 @@ body {
 h1 {
     font-family: Author-Semibold;
     font-weight: 300;
-    margin-bottom: 0;
+    margin-bottom: 0.2em;
     line-height: 1.1;   
 }
 h2 {
     font-family: Author-Regular;
     margin-top: 1.5rem;
-    margin-bottom: 0;
+    margin-bottom: 0.2em;
     line-height: 1.2;   
 }
 h3 {
     font-family: Author-Semibold;
     text-align: left;
-    margin-bottom: 0;
+    margin-bottom: 0.2em;
 }
 p {
     font-size: 1rem;

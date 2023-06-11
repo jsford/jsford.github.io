@@ -12,7 +12,7 @@ Even if you don't work with LiDAR, I think this is a fun problem that illustrate
 ## Straightforward Sorting
 
 The straightforward solution to this problem is to use `std::sort()` with a comparison function that compares points first by altitude angle and then by azimuth angle.
-The altitude of a point is its angle above the sensor's X-Y plane. The azimuth of a point is its angle *around* the sensor---its yaw.
+The altitude of a point is its angle above the sensor's X-Y plane. The azimuth of a point is its angle around the sensor---its yaw.
 
 ![A diagram showing the altitude and azimuth coordinates that define a LiDAR point in spherical coordinates](/posts/0000-sort-points/lidar-coordinates.svg)
 
@@ -33,10 +33,11 @@ Here's a C++ implementation of the straightforward solution that uses `std::atan
 
         return azimuth0 < azimuth1; // Sort counterclockwise around the +Z axis.
     }
-    ...
-        // Sort points into counterclockwise-ordered scanlines.
-        std::sort( std::begin(points), std::end(points), CompareAltitudeAzimuth );
-    ...
+
+With this comparison function, we can then sort a point cloud using `std::sort()`.
+
+    // Sort points into counterclockwise-ordered scanlines.
+    std::sort( std::begin(points), std::end(points), CompareAltitudeAzimuth );
 
 If you aren't super worried about runtime speed, this is definitely the solution you should use.
 It's clear and maintainable, but unfortunately it's pretty slow.
