@@ -98,7 +98,7 @@ def build_site(site_root, site_dirname):
         splitcontent = postcontent.split('---', maxsplit=2)
         yamlcontent = splitcontent[1]
         mdcontent = splitcontent[2]
-        htmlcontent = markdown.markdown(mdcontent)
+        htmlcontent = markdown.markdown(mdcontent, extensions=['markdown.extensions.tables'])
 
         # Replace '---' with '&mdash;'
         htmlcontent = htmlcontent.replace('---', '&mdash;')

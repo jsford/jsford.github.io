@@ -12,7 +12,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: white;
+    background: white;
     padding: 2.5px 0px 0px 0px;
     border-bottom: dashed;
     border-color: #aaaaaa;
@@ -168,8 +168,7 @@ a:hover {
     padding-bottom: 3vh;
 }
 #text-container p img {
-    max-width: 100%;
-    max-height: 25vh;
+    width: 100%;
     margin: auto;
     display: block;
 }
@@ -183,15 +182,32 @@ em {
     font-family: Author-Semibold;
     font-style: italic;
 }
-/* Inline Code */
-p code, a code {
-    font-family: monospace;
-    font-weight: 600;
-}
 /* Code Blocks */
 code {
     font-size: 85%;
     border-radius: 5px;
+    border: 2px solid black;
+}
+/* Inline Code */
+p code, a code, li code {
+    font-family: monospace;
+    font-size: 75%;
+    font-weight: 600;
+    border: none;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin: auto;
+    background: #EAEEF3;
+    font-size: 85%;
+    border-radius: 5px;
+    padding: 10px 12px 10px 12px;
+    border: 2px solid black;
+}
+th {
+    font-family: Author-SemiBold;
 }
 
 @media screen and (min-width: 768px) {

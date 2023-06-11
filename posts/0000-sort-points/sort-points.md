@@ -8,6 +8,8 @@ Lately I've been having a lot of fun working on LiDAR mapping algorithms and dev
 In both applications, I find myself needing to quickly verify that points given to my code are in scan order.
 If they aren't in scan order, I need to quickly sort them into scan order before I continue working with them.
 
+![A diagram showing the altitude and azimuth coordinates that define a LiDAR point in spherical coordinates](/posts/0000-sort-points/lidar-coordinates.svg)
+
 ## The Straightforward Approach
 
 The straightforward way to sort points within a scanline is to compute their azimuth angle using `atan2()`.
@@ -18,6 +20,13 @@ The straightforward way to sort points within a scanline is to compute their azi
 
 Then we can use `std::sort()` with the `CompareAtan2()` lambda to compare points.
 Sadly, for large LiDAR point clouds, this approach can be pretty slow.
+
+| Method                              | Time [ms] | Std Dev [us] | Speedup |
+|-------------------------------------|:---------:|:------------:|:-------:|
+| std::sort() with SlowCompareAtan2() |   121.22  |      476     |   1.0x  |
+| std::sort() with FastCompareAtan2() |    20.96  |      155     |   5.8x  |
+| pdqsort()   with SlowCompareAtan2() |     8.88  |       53     |  13.7x  |
+| pdqsort()   with FastCompareAtan2() |     1.58  |        8     |  76.7x  |
 
 ## Faster Comparison
 
