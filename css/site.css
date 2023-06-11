@@ -189,9 +189,14 @@ code {
     border: 2px solid black;
 }
 /* Inline Code */
-p code, a code, li code {
+p code, a code {
     font-family: monospace;
     font-size: 75%;
+    font-weight: 600;
+    border: none;
+}
+li code {
+    font-family: monospace;
     font-weight: 600;
     border: none;
 }

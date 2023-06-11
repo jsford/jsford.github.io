@@ -54,7 +54,7 @@ I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it bet
 ## Benchmarks
 
 * `std::sort()` with `CompareAtan2()` takes 200ms.
-* `std::sort() with `FastCompareAtan2()` takes 40ms.
+* `std::sort()` with `FastCompareAtan2()` takes 40ms.
 * `pdqsort()` with `CompareAtan2()` takes 120ms.
 * `pdqsort()` with `FastCompareAtan2()` takes only 3ms!
 
