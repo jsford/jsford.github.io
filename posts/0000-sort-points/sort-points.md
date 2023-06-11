@@ -16,9 +16,9 @@ The altitude of a point is its angle above the sensor's X-Y plane. The azimuth o
 
 ![A diagram showing the altitude and azimuth coordinates that define a LiDAR point in spherical coordinates](/posts/0000-sort-points/lidar-coordinates.svg)
 
-Here is a comparison function that solves this problem using `std::atan()` and `std::atan2()`.
+Here's a C++ implementation of the straightforward solution that uses `std::atan()` and `std::atan2()` to compute the altitude and azimuth angles for every point.
 
-    bool SlowCompare(const Vector3f& v0, const Vector3f& v1) {
+    bool CompareAltitudeAzimuth(const Vector3f& v0, const Vector3f& v1) {
         float altitude0 = std::atan(v0.z / std::sqrt(v0.x*v0.x+v0.y*v0.y));
         float altitude1 = std::atan(v1.z / std::sqrt(v1.x*v1.x+v1.y*v1.y));
 
@@ -33,14 +33,17 @@ Here is a comparison function that solves this problem using `std::atan()` and `
 
         return azimuth0 < azimuth1; // Sort counterclockwise around the +Z axis.
     }
+    ...
+        // Sort points into counterclockwise-ordered scanlines.
+        std::sort( std::begin(points), std::end(points), CompareAltitudeAzimuth );
+    ...
 
-Then we can use `std::sort()` with the `CompareAtan2()` lambda to compare points.
-Sadly, for large LiDAR point clouds, this approach can be pretty slow.
+If you aren't super worried about runtime speed, this is definitely the solution you should use.
+It's clear and maintainable, but unfortunately it's pretty slow.
 
-## Faster Comparison
-
-My first instinct for speeding up this code was to find a way to avoid calls to `std::atan2()`.
-This ended up being kinda fun!
+## Avoid `sqrt()`, `atan()`, and `atan2()`
+For the compression code I've been working on, I've been paying a lot of attention to speed.
+My first instinct for speeding up this code was to find ways to avoid calls to `std::sqrt()`, `std::atan()`, and `std::atan2()`.
 If you've been programming anything math-y for a while, you've probably written something like this:
 
     if( std::sqrt(x*x+y*y) < R ) {
@@ -56,7 +59,7 @@ And hopefully you've noticed (or been taught) that you can avoid computing the c
 The `std::atan2()` function is fairly expensive --- it takes more than 100 ns to compute on my desktop.
 Let's try speeding up the `CompareAtan2()` function by transforming the `atan2()`'s on both sides of the comparison into something cheaper to compute.
 
-## Better Sorting Algorithm
+## Switch to `pdqsort()`
 Another, arguably more important, avenue for speeding up the point sorting process is to use a better sorting algorithm.
 I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it better!
 

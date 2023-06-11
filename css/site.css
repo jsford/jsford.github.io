@@ -131,6 +131,7 @@ h2 {
 h3 {
     font-family: Author-Semibold;
     text-align: left;
+    margin-bottom: 0;
 }
 p {
     font-size: 1rem;
@@ -182,24 +183,21 @@ em {
     font-family: Author-Italic;
 }
 /* Code Blocks */
-code {
+*:not(p, a, li, span) code {
     font-size: 85%;
     border-radius: 5px;
-    border: 2px solid black;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 /* Inline Code */
-p code, a code {
+p code, a code, span code {
     font-family: monospace;
     font-size: 75%;
     font-weight: 600;
-    border: none;
 }
 li code {
     font-family: monospace;
     font-weight: 600;
-    border: none;
 }
 
 /* Tables */
