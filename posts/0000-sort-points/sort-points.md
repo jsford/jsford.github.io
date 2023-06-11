@@ -9,12 +9,10 @@ I first encountered this problem while working on LiDAR mapping, and I recently 
 In this article, I'll show you how I sped up the na&#239;ve sort by avoiding inverse trig functions in the sorting comparison function.
 Even if you don't work with LiDAR, I think this is a fun problem that illustrates a general pattern you might find useful in other applications.
 
-## Straightforward Sorting
-
 The straightforward solution to this problem is to use `std::sort()` with a comparison function that compares points first by altitude angle and then by azimuth angle.
 The altitude of a point is its angle above the sensor's X-Y plane. The azimuth of a point is its angle around the sensor---its yaw.
 
-![A diagram showing the altitude and azimuth coordinates that define a LiDAR point in spherical coordinates](/posts/0000-sort-points/lidar-coordinates.svg)
+![A diagram showing the altitude and azimuth coordinates that define a LiDAR point in spherical coordinates](/posts/0000-sort-points/figures/lidar-coordinates.svg)
 
 Here's a C++ implementation of the straightforward solution that uses `std::atan()` and `std::atan2()` to compute the altitude and azimuth angles for every point.
 
@@ -42,38 +40,97 @@ With this comparison function, we can then sort a point cloud using `std::sort()
 If you aren't super worried about runtime speed, this is definitely the solution you should use.
 It's clear and maintainable, but unfortunately it's pretty slow.
 
-## Avoid `sqrt()`, `atan()`, and `atan2()`
-For the compression code I've been working on, I've been paying a lot of attention to speed.
-My first instinct for speeding up this code was to find ways to avoid calls to `std::sqrt()`, `std::atan()`, and `std::atan2()`.
-If you've been programming anything math-y for a while, you've probably written something like this:
+## Compare Altitudes Without `atan()`
 
-    if( std::sqrt(x*x+y*y) < R ) {
-        // (x, y) is inside a circle of radius R.
+Here is the before...
+
+    float altitude0 = std::atan(v0.z / std::sqrt(v0.x*v0.x+v0.y*v0.y));
+    float altitude1 = std::atan(v1.z / std::sqrt(v1.x*v1.x+v1.y*v1.y));
+
+    // If points are not from the same scanline, compare their altitude angles.
+    if( std::abs(altitude0 - altitude1) > 1e-8 ) {
+        return altitude0 > altitude1; // Sort from top scanline to bottom.
     }
 
-And hopefully you've noticed (or been taught) that you can avoid computing the call to `sqrt()` by squaring both sides of the comparison.
+Here is the after...
 
-    if( (x*x+y*y) < R*R ) {
-        // (x, y) is inside a circle of radius R.
+    // Instead of computing altitudes, normalize the vectors and compare their z heights.
+    float fakeAltitude0 = v0.z / std::sqrt(v0.x * v0.x + v0.y * v0.y + v0.z * v0.z);
+    float fakeAltitude1 = v1.z / std::sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+
+    // For this example, points are in the same scanline
+    // if their altitudes match within 0.05 degrees.
+    constexpr float dAltitude = 0.05f * M_PI / 180.0f;
+    constexpr float dZ_at_1m = std::sin(dAltitude);
+
+    // If points are not from the same scanline, compare their altitude angles.
+    if (std::abs(fakeAltitude0 - fakeAltitude1) > dZ_at_1m) {
+        return fakeAltitude0 > fakeAltitude1; // Sort from top scanline to bottom.
     }
 
-The `std::atan2()` function is fairly expensive --- it takes more than 100 ns to compute on my desktop.
-Let's try speeding up the `CompareAtan2()` function by transforming the `atan2()`'s on both sides of the comparison into something cheaper to compute.
+## Compare Azimuths Without `atan2()`
+
+Here is the before...
+
+        // If points are from the same scanline, compare their azimuth angles.
+        float azimuth0 = std::atan2(v0.y, v0.x);
+        float azimuth1 = std::atan2(v1.y, v1.x);
+
+        return azimuth0 < azimuth1; // Sort counterclockwise around the +Z axis.
+
+Here is the after...
+
+    auto Atan2Quadrant = [](float x, float y) -> uint8_t {
+        if (x >= 0.0f) {
+            return (y >= 0.0f) ? 2 : 1;
+        } else {
+            return (y >= 0.0f) ? 3 : 0;
+        }
+    };
+
+    uint8_t q0 = Atan2Quadrant(v0.x, v0.y);
+    uint8_t q1 = Atan2Quadrant(v1.x, v1.y);
+
+    // Different quadrant!
+    if (q0 != q1) {
+        return q0 < q1;
+    }
+
+    // Same quadrant! Which octant?
+    bool oct0 = (std::fabs(v0.x) < std::fabs(v0.y));
+    bool oct1 = (std::fabs(v1.x) < std::fabs(v1.y));
+
+    // Different octant!
+    // if( (q0 == 0 or q0 == 2) and oct0 != oct1 ) { return oct1; }
+    // if( (q0 == 1 or q0 == 3) and oct0 != oct1 ) { return !oct1; }
+    if (oct0 != oct1) {
+        return (q0 & 0b1) ^ oct1;
+    }
+
+    // Same octant!
+    return v0.y * v1.x < v1.y * v0.x;
 
 ## Switch to `pdqsort()`
-Another, arguably more important, avenue for speeding up the point sorting process is to use a better sorting algorithm.
+Another avenue for speeding up the point sorting process is to use a better sorting algorithm.
 I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it better!
 
-## Benchmarks
+## Benchmark Results
 
-| Method                              | Time [ms] | Std Dev [us] | Speedup |
-|-------------------------------------|:---------:|:------------:|:-------:|
-| std::sort() with SlowCompareAtan2() |   121.22  |      476     |   1.0x  |
-| std::sort() with FastCompareAtan2() |    20.96  |      155     |   5.8x  |
-| pdqsort()   with SlowCompareAtan2() |     8.88  |       53     |  13.7x  |
-| pdqsort()   with FastCompareAtan2() |     1.58  |        8     |  76.7x  |
+| Task: Sort shuffled points.         | Time [ms] | Speedup |
+|-------------------------------------|:---------:|:-------:|
+| std::sort() with SlowCompareAtan2() |    69.57  |   1.0x  |
+| std::sort() with FastCompareAtan2() |    20.42  |   3.4x  |
+| pdqsort()   with SlowCompareAtan2() |    61.77  |   1.1x  |
+| pdqsort()   with FastCompareAtan2() |    18.54  |   3.8x  |
+
+| Task: Check if points are sorted.        | Time [ms] | Speedup |
+|------------------------------------------|:---------:|:-------:|
+| std::is_sorted() with SlowCompareAtan2() |    2.85   |   1.0x  |
+| std::is_sorted() with FastCompareAtan2() |    0.44   |   6.4x  |
 
 ## Conclusions
 
 * Use a good sorting algorithm like `pdqsort()`.
 * Consider using a fast comparison predicate instead of `atan2()`.
+
+The code for this experiment is available [here](/posts/0000-sort-points/code).
