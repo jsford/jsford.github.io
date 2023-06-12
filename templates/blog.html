@@ -38,12 +38,11 @@
 
         {% for path, title, date in posts %}
             <div style="margin-top: 0.5rem; width: 100%;">
-                <a href="{{path}}" style="text-decoration:none;">
-                    <h3 style="text-align: right; width: 30%; display: inline-block; color: #aaa; margin: 0px;">
+                <a href="{{path}}" style="text-decoration:none; line-height:1.25;">
+                    <h3 style="text-align: right; width: 30%; display: inline-block; color: #aaa; margin: 0px; vertical-align: middle;">
                         {{date}}
                     </h3>
-                    &nbsp;
-                    <h3 style="text-align: left; width: 60%; margin: 0; display: inline-block;">{{title}}</h3>
+                    <h3 style="text-align: left; width: 60%; padding-left: 10px; margin: 0; display: inline-block; vertical-align:middle;">{{title}}</h3>
                 </a>
             </div>
         {% endfor %}
