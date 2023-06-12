@@ -1,6 +1,5 @@
 ---
-title: Sort LiDAR point clouds 80x faster.
-description: Avoid calling `atan2()` in your comparison function, and use a recent sorting algorithm like `pdqsort()`.
+title: Fast methods for sorting LiDAR point clouds.
 date: May 19, 2023
 ---
 
@@ -116,8 +115,8 @@ I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it bet
 
 ## Benchmark Results
 
-| Sort shuffled points.               | Time [ms] | Speedup |
-|-------------------------------------|:---------:|:-------:|
+| Sort shuffled points.                         | Time [ms] | Speedup |
+|-----------------------------------------------|:---------:|:-------:|
 | std::sort() with CompareAltitudeAzimuthSlow() |    69.57  |   1.0x  |
 | std::sort() with CompareAltitudeAzimuthFast() |    20.42  |   3.4x  |
 | pdqsort()   with CompareAltitudeAzimuthSlow() |    61.77  |   1.1x  |

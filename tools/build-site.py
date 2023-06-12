@@ -48,12 +48,11 @@ def list_post_dirs(site_root, posts_root='posts'):
 
 
 class BlogPost:
-    def __init__(self, directory, mdfilename, title, description, date, html):
+    def __init__(self, directory, mdfilename, title, date, html):
         self.directory = directory
         self.mdfilename = mdfilename
         self.htmlfilename = change_extension(mdfilename, 'html')
         self.title = title
-        self.description = description
         self.date = date
         self.html = html
 
@@ -104,11 +103,11 @@ def build_site(site_root, site_dirname):
         htmlcontent = htmlcontent.replace('---', '&mdash;')
 
         header = yaml.load(yamlcontent, Loader=yaml.FullLoader)
-        htmldescription = markdown.markdown(header['description']).lstrip('<p>').rstrip('</p>')
 
-        post = BlogPost(directory, mdfile, header['title'], htmldescription, header['date'], htmlcontent)
+        date = datetime.strptime(header['date'], '%B %d, %Y')
+        post = BlogPost(directory, mdfile, header['title'], date, htmlcontent)
         posts.append(post)
-    posts.sort(key=lambda p : datetime.strptime(p.date, '%B %d, %Y'), reverse=True)
+    posts.sort(key=lambda p : p.date, reverse=True)
 
     # Construct the blog.html page and add it to the build tree.
     environment = jinja2.Environment()
@@ -118,7 +117,9 @@ def build_site(site_root, site_dirname):
     posts_list = []
     for post in posts:
         postpath = osp.join('posts', post.directory.split('/')[-1], post.htmlfilename)
-        posts_list.append([postpath, post.title, post.date, post.description])
+        post_date = post.date.strftime("%d.%m.%Y")
+
+        posts_list.append([postpath, post.title, post_date])
     
     blog_page = blog_template.render(posts=posts_list)
     write_file(osp.join(site_dir, 'blog.html'), blog_page)
@@ -129,7 +130,9 @@ def build_site(site_root, site_dirname):
         post_template_string = read_file(osp.join(site_root, 'templates/post.html'))
         post_template = environment.from_string( post_template_string )
 
-        post_page = post_template.render(title=post.title, date=post.date, contents=post.html)
+        post_date = post.date.strftime("%d.%m.%Y")
+
+        post_page = post_template.render(title=post.title, date=post_date, contents=post.html)
         postpath = osp.join('posts', post.directory.split('/')[-1], post.htmlfilename)
         write_file(osp.join(site_dir, postpath), post_page)
 
