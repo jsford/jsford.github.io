@@ -116,14 +116,16 @@ I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it bet
 
 ## Benchmark Results
 
-| Task: Sort shuffled points.         | Time [ms] | Speedup |
+| Sort shuffled points.               | Time [ms] | Speedup |
 |-------------------------------------|:---------:|:-------:|
-| std::sort() with SlowCompareAtan2() |    69.57  |   1.0x  |
-| std::sort() with FastCompareAtan2() |    20.42  |   3.4x  |
-| pdqsort()   with SlowCompareAtan2() |    61.77  |   1.1x  |
-| pdqsort()   with FastCompareAtan2() |    18.54  |   3.8x  |
+| std::sort() with CompareAltitudeAzimuthSlow() |    69.57  |   1.0x  |
+| std::sort() with CompareAltitudeAzimuthFast() |    20.42  |   3.4x  |
+| pdqsort()   with CompareAltitudeAzimuthSlow() |    61.77  |   1.1x  |
+| pdqsort()   with CompareAltitudeAzimuthFast() |    18.54  |   3.8x  |
 
-| Task: Check if points are sorted.        | Time [ms] | Speedup |
+
+
+| Check if points are sorted.              | Time [ms] | Speedup |
 |------------------------------------------|:---------:|:-------:|
 | std::is_sorted() with SlowCompareAtan2() |    2.85   |   1.0x  |
 | std::is_sorted() with FastCompareAtan2() |    0.44   |   6.4x  |
