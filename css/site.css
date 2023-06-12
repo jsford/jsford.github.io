@@ -182,6 +182,13 @@ strong {
 em {
     font-family: Author-Italic;
 }
+i {
+    font-style: italic;
+}
+b {
+    font-weight: bold;
+    font-size: 96%;
+}
 /* Code Blocks */
 *:not(p, a, li, span) code {
     font-size: 85%;
