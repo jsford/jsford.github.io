@@ -1,5 +1,5 @@
 ---
-title: Fast methods for sorting LiDAR point clouds.
+title: A faster method to sort LiDAR point clouds.
 date: May 19, 2023
 ---
 
