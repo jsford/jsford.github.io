@@ -58,7 +58,7 @@
     text-align: center;
 }
 #title-billboard {
-    margin: 0 -15%;
+    margin: 0 -13%;
     width: 85%;
     max-width: 805px;
     display: inline-block;
@@ -74,7 +74,7 @@
 }
 #headline {
     font-family: Tanker-Regular;
-    font-size: 2.85em;
+    font-size: 3.3em;
     line-height: 1em;
     text-align: center;
     margin: 0rem auto;
@@ -82,9 +82,9 @@
 }
 #my-name {
     font-family: PermanentMarker;
-    font-size: 1.8em;
+    font-size: 1.9em;
     color: red;
-    -webkit-transform: translate(0%, 0.3em) rotate(-2deg);
+    -webkit-transform: translate(0%, 0.4em) rotate(-1deg);
     text-align: center;
     margin: -0.3em auto 0 auto;
     display: inline-block;
@@ -93,12 +93,12 @@
 #subtitle {
     font-size: 1em;
     font-family: 'Architects Daughter';
-    font-size: 0.7em;
+    font-size: 0.75em;
     text-align: center;
-    margin: -0.3em 0 -0.35em 0;
+    margin: -0.3em 0 -0.85em 0;
 }
 #subsubtitle {
-    font-size: 1.5em;
+    font-size: 1.8em;
     text-align: center;
     font-family: Tanker-Regular, sans-serif;
     font-style: normal;
