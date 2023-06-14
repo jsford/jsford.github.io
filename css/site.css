@@ -228,7 +228,7 @@ table td {
     padding: 8px 20px 8px 20px;
 }
 table thead {
-    border-bottom: 2px solid #aaa;
+    border-bottom: 2px dashed #aaa;
 }
 table tr:first-child td {
     padding-top: 12px;
