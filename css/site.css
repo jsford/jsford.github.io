@@ -243,19 +243,19 @@ table tr:last-child td {
 
 @media screen and (min-width: 768px) {
   html {
-    font-size: 110%;
+    font-size: 105%;
   }
 }
 
 @media screen and (min-width: 1024px) {
   html {
-    font-size: 120%;
+    font-size: 110%;
   }
 }
 
 @media screen and (min-width: 1200px) {
   html {
-    font-size: 130%;
+    font-size: 120%;
   }
 }
 
