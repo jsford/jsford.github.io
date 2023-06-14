@@ -20,14 +20,16 @@
 
     <title>Jordan Ford | {{ title }}</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Architects+Daughter">
-    <link rel="stylesheet" href="/css/site.css">
-
     <!-- Syntax Highlighting -->
     <link rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/mono-blue.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+    <script>
+        hljs.configure({languages:['cpp', 'python']});
+        hljs.highlightAll();
+    </script>
+
+    <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
     <div id="nav-bar">

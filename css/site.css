@@ -189,21 +189,23 @@ b {
     font-size: 96%;
 }
 /* Code Blocks */
-*:not(p, a, li, span) code {
+code.hljs.language-cpp {
     font-size: 85%;
+    padding: 80px;
     border-radius: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 15px 20px;
 }
+code.hljs.language-python {
+    font-size: 85%;
+    padding: 80px;
+    border-radius: 5px;
+    padding: 15px 20px;
+}
+
 /* Inline Code */
-p code, a code, span code {
+:not(pre) > code {
     font-family: monospace;
     font-size: 75%;
-    font-weight: 600;
-}
-li code {
-    font-family: monospace;
-    font-weight: 600;
 }
 
 /* Tables */
@@ -216,15 +218,14 @@ table {
     margin-top: 10px;
     margin-bottom: 10px;
     border-collapse: collapse;
+    font-family: monospace;
 }
 table th {
-    font-family: Author-SemiBold;
-    font-size: 85%;
+    font-family: Author-Regular;
+    font-size: 95%;
     padding: 8px 20px 5px 20px;
 }
 table td {
-    font-family: monospace;
-    font-size: 80%;
     padding: 8px 20px 8px 20px;
 }
 table thead {

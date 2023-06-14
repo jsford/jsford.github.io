@@ -71,11 +71,11 @@ Here is the after...
 
 Here is the before...
 
-        // If points are from the same scanline, compare their azimuth angles.
-        float azimuth0 = std::atan2(v0.y, v0.x);
-        float azimuth1 = std::atan2(v1.y, v1.x);
+    // If points are from the same scanline, compare their azimuth angles.
+    float azimuth0 = std::atan2(v0.y, v0.x);
+    float azimuth1 = std::atan2(v1.y, v1.x);
 
-        return azimuth0 < azimuth1; // Sort counterclockwise around the +Z axis.
+    return azimuth0 < azimuth1; // Sort counterclockwise around the +Z axis.
 
 Here is the after...
 
@@ -115,19 +115,19 @@ I dropped in `pdqsort()` as a replacement for `std::sort()`, and *wow* is it bet
 
 ## Benchmark Results
 
-| Sort shuffled points.                         | Time [ms] | Speedup |
-|-----------------------------------------------|:---------:|:-------:|
-| std::sort() with CompareAltitudeAzimuthSlow() |    69.57  |   1.0x  |
-| std::sort() with CompareAltitudeAzimuthFast() |    20.42  |   3.4x  |
-| pdqsort()   with CompareAltitudeAzimuthSlow() |    61.77  |   1.1x  |
-| pdqsort()   with CompareAltitudeAzimuthFast() |    18.54  |   3.8x  |
+| Sort shuffled points.                          | Time [ms] | Speedup |
+|------------------------------------------------|:---------:|:-------:|
+| `std::sort()` with `CompareAltitudeAzimuthSlow()` |    69.57  |   1.0x  |
+| `std::sort()` with `CompareAltitudeAzimuthFast()` |    20.42  |   3.4x  |
+| `pdqsort()`   with `CompareAltitudeAzimuthSlow()` |    61.77  |   1.1x  |
+| `pdqsort()`   with `CompareAltitudeAzimuthFast()` |    18.54  |   3.8x  |
 
 
 
-| Check if points are sorted.              | Time [ms] | Speedup |
-|------------------------------------------|:---------:|:-------:|
-| std::is_sorted() with SlowCompareAtan2() |    2.85   |   1.0x  |
-| std::is_sorted() with FastCompareAtan2() |    0.44   |   6.4x  |
+| Check if points are sorted.                  | Time [ms] | Speedup |
+|----------------------------------------------|:---------:|:-------:|
+| `std::is_sorted()` with `SlowCompareAtan2()` |    2.85   |   1.0x  |
+| `std::is_sorted()` with `FastCompareAtan2()` |    0.44   |   6.4x  |
 
 ## Conclusions
 
