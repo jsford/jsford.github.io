@@ -83,6 +83,9 @@ def build_site(site_root, site_dirname):
     # Copy the index.html page into the build tree.
     copyfile(osp.join(site_root, 'templates/index.html'), site_dir)
 
+    # Copy the about.html page into the build tree.
+    copyfile(osp.join(site_root, 'templates/about.html'), site_dir)
+
     # Find all of the blog posts.
     post_dirs = list_post_dirs(site_root, posts_dirname)
     posts = []
