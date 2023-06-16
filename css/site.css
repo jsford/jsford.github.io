@@ -7,6 +7,11 @@
     src: url('/assets/fonts/PermanentMarker-Regular.ttf') format('truetype');
     font-display: block;
 }
+@font-face {
+    font-family: 'ArchitectsDaughter';
+    src: url('/assets/fonts/ArchitectsDaughter-Regular.ttf') format('truetype');
+    font-display: block;
+}
 
 #nav-bar {
     position: fixed;
@@ -92,7 +97,7 @@
 }
 #subtitle {
     font-size: 1em;
-    font-family: 'Architects Daughter';
+    font-family: 'ArchitectsDaughter';
     font-size: 0.75em;
     text-align: center;
     margin: -0.3em 0 -0.85em 0;

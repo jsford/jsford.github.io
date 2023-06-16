@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-import glob
 import shutil
 import os.path as osp
 import markdown
@@ -88,7 +87,9 @@ def build_site(site_root, site_dirname):
     post_dirs = list_post_dirs(site_root, posts_dirname)
     posts = []
     for directory in post_dirs:
-        mdfiles = glob.glob('*.md', root_dir=directory)
+
+        mdfiles = [f for f in os.listdir(directory) if '.md' in f]
+
         if len(mdfiles) != 1:
             print("Error: Blog post directory '{directory}' must contain exactly one markdown file.")
         mdfile = mdfiles[0]
