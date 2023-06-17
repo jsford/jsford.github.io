@@ -91,7 +91,7 @@ def build_site(site_root, site_dirname):
     posts = []
     for directory in post_dirs:
 
-        mdfiles = [f for f in os.listdir(directory) if '.md' in f]
+        mdfiles = [f for f in os.listdir(directory) if osp.splitext(f)[1] == '.md']
 
         if len(mdfiles) != 1:
             print("Error: Blog post directory '{directory}' must contain exactly one markdown file.")

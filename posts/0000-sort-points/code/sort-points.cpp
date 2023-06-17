@@ -2,12 +2,14 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <random>
 #include <vector>
 
+
 struct Vector3f {
     float x, y, z;
+    bool operator==(const Vector3f& r) const { return r.x==x && r.y==y && r.z==z; }
 };
 
 std::vector<Vector3f> fakeLidarPoints(int linesPerScan, int pointsPerLine) {
@@ -17,6 +19,7 @@ std::vector<Vector3f> fakeLidarPoints(int linesPerScan, int pointsPerLine) {
     float maxAlt = +15.0f * M_PI / 180.0f;
     float minAzi = -179.9f * M_PI / 180.0f; // Avoid wraparound annoyance at -180 degrees.
     float maxAzi = +179.9f * M_PI / 180.0f; // Avoid wraparound annoyance at +180 degrees.
+    float minRange =   3.0f;
     float maxRange = 100.0f;
 
     for (int i = 0; i < linesPerScan; ++i) {
@@ -24,7 +27,7 @@ std::vector<Vector3f> fakeLidarPoints(int linesPerScan, int pointsPerLine) {
             (linesPerScan - i) / ((float)linesPerScan - 1) * (maxAlt - minAlt) + minAlt;
         for (int j = 0; j < pointsPerLine; ++j) {
             float azimuth = j / ((float)pointsPerLine + 1) * (maxAzi - minAzi) + minAzi;
-            float range = rand() / (float)RAND_MAX * maxRange;
+            float range = (rand() / (float)RAND_MAX) * (maxRange-minRange) + minRange;
             points[i * pointsPerLine + j].x = range * std::sin(M_PI_2 - altitude) * std::cos(azimuth);
             points[i * pointsPerLine + j].y = range * std::sin(M_PI_2 - altitude) * std::sin(azimuth);
             points[i * pointsPerLine + j].z = range * std::cos(M_PI_2 - altitude);
@@ -41,41 +44,46 @@ std::vector<Vector3f> shufflePoints(const std::vector<Vector3f> points) {
     return shuffledPoints;
 }
 
-inline bool CompareAltitudeAzimuthSlow(const Vector3f &v0, const Vector3f &v1) {
+inline int CompareAltitudeSlow(const Vector3f& v0, const Vector3f& v1) {
     float altitude0 = std::atan(v0.z / std::sqrt(v0.x * v0.x + v0.y * v0.y));
     float altitude1 = std::atan(v1.z / std::sqrt(v1.x * v1.x + v1.y * v1.y));
 
-    // For this example, points are in the same scanline
-    // if their altitudes match within 0.05 degrees.
-    constexpr float dAltitude = 0.05f * M_PI / 180.0f;
+    const float dAltitude = 0.05f * M_PI/180.0f;
 
     // If points are not from the same scanline, compare their altitude angles.
-    if (std::abs(altitude0 - altitude1) > dAltitude) {
-        return altitude0 > altitude1; // Sort from top scanline to bottom.
+    if (std::abs(altitude0 - altitude1) < dAltitude) {
+        return 0;
     }
+    return (altitude0 < altitude1) ? 1 : -1;
+}
 
-    // If points are from the same scanline, compare their azimuth angles.
+inline bool CompareAzimuthSlow(const Vector3f& v0, const Vector3f& v1) {
     float azimuth0 = std::atan2(v0.y, v0.x);
     float azimuth1 = std::atan2(v1.y, v1.x);
 
-    return azimuth0 < azimuth1; // Sort counterclockwise around the +Z axis.
+    return (azimuth0 < azimuth1); // Sort counterclockwise around the +Z axis.
 }
 
-inline bool CompareAltitudeAzimuthFast(const Vector3f &v0, const Vector3f &v1) {
-    // Instead of computing altitudes, normalize the vectors and compare their z heights.
-    float fakeAltitude0 = v0.z / std::sqrt(v0.x * v0.x + v0.y * v0.y + v0.z * v0.z);
-    float fakeAltitude1 = v1.z / std::sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+inline int CompareAltitudeFast(const Vector3f& v0, const Vector3f& v1) {
+    int sign0 = (v0.z >= 0) ? 1 : -1;
+    int sign1 = (v1.z >= 0) ? 1 : -1;
 
-    // For this example, points are in the same scanline
-    // if their altitudes match within 0.05 degrees.
+    if( sign0 != sign1 ) { return (sign0 < sign1) ? 1 : -1; }
+
+    float fakeAltitude0 = (v0.z*v0.z / (v0.x*v0.x+v0.y*v0.y));
+    float fakeAltitude1 = (v1.z*v1.z / (v1.x*v1.x+v1.y*v1.y));
+
     constexpr float dAltitude = 0.05f * M_PI / 180.0f;
-    constexpr float dZ_at_1m = std::sin(dAltitude);
+    constexpr float epsilon = std::sin(dAltitude);
+    constexpr float fakeEpsilon = epsilon*epsilon;
 
-    // If points are not from the same scanline, compare their altitude angles.
-    if (std::abs(fakeAltitude0 - fakeAltitude1) > dZ_at_1m) {
-        return fakeAltitude0 > fakeAltitude1; // Sort from top scanline to bottom.
+    if( std::abs(fakeAltitude1 - fakeAltitude0) < fakeEpsilon ) {
+        return 0;
     }
+    return (sign0 * fakeAltitude0 < sign1 * fakeAltitude1) ? 1 : -1;
+}
 
+inline bool CompareAzimuthFast(const Vector3f& v0, const Vector3f& v1) {
     // We number the quadrants in the order of least to greatest atan2 value.
     // This ordering simplifies later conditionals.
     //
@@ -115,23 +123,42 @@ inline bool CompareAltitudeAzimuthFast(const Vector3f &v0, const Vector3f &v1) {
     return v0.y * v1.x < v1.y * v0.x;
 }
 
+#define MAKE_COMPARISON(name, CompareAlt, CompareAzi)   \
+    bool name(const Vector3f& v0, const Vector3f& v1) { \
+        int res = CompareAlt(v0, v1);                   \
+        if(  res != 0 ) { return (res < 0); }           \
+        return CompareAzi(v0, v1);                      \
+    }
+
+MAKE_COMPARISON(CompareSlowSlow, CompareAltitudeSlow, CompareAzimuthSlow);
+MAKE_COMPARISON(CompareSlowFast, CompareAltitudeSlow, CompareAzimuthFast);
+MAKE_COMPARISON(CompareFastSlow, CompareAltitudeFast, CompareAzimuthSlow);
+MAKE_COMPARISON(CompareFastFast, CompareAltitudeFast, CompareAzimuthFast);
+
 #define MAKE_POINT_SORTER(name, compare, sort)                                             \
     void name(std::vector<Vector3f> &points) {                                             \
         sort(std::begin(points), std::end(points), compare);                               \
     }
 
-MAKE_POINT_SORTER(SortPointsA, CompareAltitudeAzimuthSlow, std::sort);
-MAKE_POINT_SORTER(SortPointsB, CompareAltitudeAzimuthFast, std::sort);
-MAKE_POINT_SORTER(SortPointsC, CompareAltitudeAzimuthSlow, pdqsort);
-MAKE_POINT_SORTER(SortPointsD, CompareAltitudeAzimuthFast, pdqsort);
+MAKE_POINT_SORTER(SortPointsStdSlowSlow, CompareSlowSlow, std::sort);
+MAKE_POINT_SORTER(SortPointsStdSlowFast, CompareSlowFast, std::sort);
+MAKE_POINT_SORTER(SortPointsStdFastSlow, CompareFastSlow, std::sort);
+MAKE_POINT_SORTER(SortPointsStdFastFast, CompareFastFast, std::sort);
+
+MAKE_POINT_SORTER(SortPointsPdqSlowSlow, CompareSlowSlow, pdqsort);
+MAKE_POINT_SORTER(SortPointsPdqSlowFast, CompareSlowFast, pdqsort);
+MAKE_POINT_SORTER(SortPointsPdqFastSlow, CompareFastSlow, pdqsort);
+MAKE_POINT_SORTER(SortPointsPdqFastFast, CompareFastFast, pdqsort);
 
 #define MAKE_POINT_SORT_CHECKER(name, compare)                                             \
     bool name(std::vector<Vector3f> &points) {                                             \
         return std::is_sorted(std::begin(points), std::end(points), compare);              \
     }
 
-MAKE_POINT_SORT_CHECKER(ArePointsSortedA, CompareAltitudeAzimuthSlow);
-MAKE_POINT_SORT_CHECKER(ArePointsSortedB, CompareAltitudeAzimuthFast);
+MAKE_POINT_SORT_CHECKER(IsSortedSlowSlow, CompareSlowSlow);
+MAKE_POINT_SORT_CHECKER(IsSortedSlowFast, CompareSlowFast);
+MAKE_POINT_SORT_CHECKER(IsSortedFastSlow, CompareFastSlow);
+MAKE_POINT_SORT_CHECKER(IsSortedFastFast, CompareFastFast);
 
 int64_t now() {
     using namespace std::chrono;
@@ -159,75 +186,232 @@ bool AllClose(const std::vector<Vector3f> &v0, const std::vector<Vector3f> &v1,
 
 int main(int argc, char *argv[]) {
 
-    std::vector<Vector3f> points = fakeLidarPoints(128, 1024);
+    std::vector<Vector3f> points = fakeLidarPoints(128, 2048);
     std::vector<Vector3f> shuffledPoints = shufflePoints(points);
 
-    // Benchmark sorting method A.
+    // Benchmark sorting with std::sort, CompareAltitudeSlow, CompareAzimuthSlow.
     {
         std::vector<Vector3f> tmp = shuffledPoints;
         auto t0 = now();
-        SortPointsA(tmp);
+        SortPointsStdSlowSlow(tmp);
         auto t1 = now();
-        printf("Sort A %f ms\n", (t1 - t0) / 1e6);
+        printf("[Sort Shuffled]  std slow slow %f ms\n", (t1 - t0) / 1e6);
         if (!AllClose(tmp, points)) {
-            printf("A Failed!\n");
+            printf("Failed!\n");
         }
     }
-
-    // Benchmark sorting method B.
+    // Benchmark sorting with std::sort, CompareAltitudeSlow, CompareAzimuthFast.
     {
         std::vector<Vector3f> tmp = shuffledPoints;
         auto t0 = now();
-        SortPointsB(tmp);
+        SortPointsStdSlowFast(tmp);
         auto t1 = now();
-        printf("Sort B %f ms\n", (t1 - t0) / 1e6);
+        printf("[Sort Shuffled]  std slow fast %f ms\n", (t1 - t0) / 1e6);
         if (!AllClose(tmp, points)) {
-            printf("B Failed!\n");
+            printf("Failed!\n");
         }
     }
-
-    // Benchmark sorting method C.
+    // Benchmark sorting with std::sort, CompareAltitudeFast, CompareAzimuthSlow.
     {
         std::vector<Vector3f> tmp = shuffledPoints;
         auto t0 = now();
-        SortPointsC(tmp);
+        SortPointsStdFastSlow(tmp);
         auto t1 = now();
-        printf("Sort C %f ms\n", (t1 - t0) / 1e6);
+        printf("[Sort Shuffled]  std fast slow %f ms\n", (t1 - t0) / 1e6);
         if (!AllClose(tmp, points)) {
-            printf("C Failed!\n");
+            printf("Failed!\n");
         }
     }
-
-    // Benchmark sorting method D.
+    // Benchmark sorting with std::sort, CompareAltitudeFast, CompareAzimuthFast.
     {
         std::vector<Vector3f> tmp = shuffledPoints;
         auto t0 = now();
-        SortPointsD(tmp);
+        SortPointsStdFastFast(tmp);
         auto t1 = now();
-        printf("Sort D %f ms\n", (t1 - t0) / 1e6);
+        printf("[Sort Shuffled]  std fast fast %f ms\n", (t1 - t0) / 1e6);
         if (!AllClose(tmp, points)) {
-            printf("D Failed!\n");
+            printf("Failed!\n");
         }
     }
 
-    // Benchmark sortedness checking method A.
+    printf("\n");
+
+    // Benchmark sorting with pdqsort, CompareAltitudeSlow, CompareAzimuthSlow.
+    {
+        std::vector<Vector3f> tmp = shuffledPoints;
+        auto t0 = now();
+        SortPointsPdqSlowSlow(tmp);
+        auto t1 = now();
+        printf("[Sort Shuffled]  pdq slow slow %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting with pdqsort, CompareAltitudeSlow, CompareAzimuthFast.
+    {
+        std::vector<Vector3f> tmp = shuffledPoints;
+        auto t0 = now();
+        SortPointsPdqSlowFast(tmp);
+        auto t1 = now();
+        printf("[Sort Shuffled]  pdq slow fast %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting with pdqsort, CompareAltitudeFast, CompareAzimuthSlow.
+    {
+        std::vector<Vector3f> tmp = shuffledPoints;
+        auto t0 = now();
+        SortPointsPdqFastSlow(tmp);
+        auto t1 = now();
+        printf("[Sort Shuffled]  pdq fast slow %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting with pdqsort, CompareAltitudeFast, CompareAzimuthFast.
+    {
+        std::vector<Vector3f> tmp = shuffledPoints;
+        auto t0 = now();
+        SortPointsPdqFastFast(tmp);
+        auto t1 = now();
+        printf("[Sort Shuffled]  pdq fast fast %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+
+    printf("\n");
+
+    // Benchmark sorting sorted data with std::sort, CompareAltitudeSlow, CompareAzimuthSlow.
     {
         std::vector<Vector3f> tmp = points;
         auto t0 = now();
-        bool result = ArePointsSortedA(tmp);
+        SortPointsStdSlowSlow(tmp);
         auto t1 = now();
-        printf("IsSorted A %f ms\n", (t1 - t0) / 1e6);
-        if( !result ) { printf("A Failed!\n"); }
+        printf("[Sort Sorted]    std slow slow %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
     }
-
-    // Benchmark sortedness checking method B.
+    // Benchmark sorting sorted data with std::sort, CompareAltitudeSlow, CompareAzimuthFast.
     {
         std::vector<Vector3f> tmp = points;
         auto t0 = now();
-        bool result = ArePointsSortedB(tmp);
+        SortPointsStdSlowFast(tmp);
         auto t1 = now();
-        printf("IsSorted B %f ms\n", (t1 - t0) / 1e6);
-        if( !result ) { printf("A Failed!\n"); }
+        printf("[Sort Sorted]    std slow fast %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting sorted data with std::sort, CompareAltitudeFast, CompareAzimuthSlow.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        SortPointsStdFastSlow(tmp);
+        auto t1 = now();
+        printf("[Sort Sorted]    std fast slow %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting sorted data with std::sort, CompareAltitudeFast, CompareAzimuthFast.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        SortPointsStdFastFast(tmp);
+        auto t1 = now();
+        printf("[Sort Sorted]    std fast fast %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+
+    printf("\n");
+
+    // Benchmark sorting sorted data with pdqsort, CompareAltitudeSlow, CompareAzimuthSlow.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        SortPointsPdqSlowSlow(tmp);
+        auto t1 = now();
+        printf("[Sort Sorted]    pdq slow slow %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting sorted data with pdqsort, CompareAltitudeSlow, CompareAzimuthFast.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        SortPointsPdqSlowFast(tmp);
+        auto t1 = now();
+        printf("[Sort Sorted]    pdq slow fast %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting sorted data with pdqsort, CompareAltitudeFast, CompareAzimuthSlow.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        SortPointsPdqFastSlow(tmp);
+        auto t1 = now();
+        printf("[Sort Sorted]    pdq fast slow %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+    // Benchmark sorting sorted data with pdqsort, CompareAltitudeFast, CompareAzimuthFast.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        SortPointsPdqFastFast(tmp);
+        auto t1 = now();
+        printf("[Sort Sorted]    pdq fast fast %f ms\n", (t1 - t0) / 1e6);
+        if (!AllClose(tmp, points)) {
+            printf("Failed!\n");
+        }
+    }
+
+    printf("\n");
+
+    // Benchmark sortedness checking with is_sorted, CompareAltitudeSlow, CompareAzimuthSlow.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        bool result = IsSortedSlowSlow(tmp);
+        auto t1 = now();
+        printf("[Check]          is_sorted slow slow %f ms\n", (t1 - t0) / 1e6);
+        if( !result ) { printf("Failed!\n"); }
+    }
+    // Benchmark sortedness checking with is_sorted, CompareAltitudeSlow, CompareAzimuthFast.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        bool result = IsSortedSlowFast(tmp);
+        auto t1 = now();
+        printf("[Check]          is_sorted slow fast %f ms\n", (t1 - t0) / 1e6);
+        if( !result ) { printf("Failed!\n"); }
+    }
+    // Benchmark sortedness checking with is_sorted, CompareAltitudeFast, CompareAzimuthSlow.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        bool result = IsSortedFastSlow(tmp);
+        auto t1 = now();
+        printf("[Check]          is_sorted fast slow %f ms\n", (t1 - t0) / 1e6);
+        if( !result ) { printf("Failed!\n"); }
+    }
+    // Benchmark sortedness checking with is_sorted, CompareAltitudeFast, CompareAzimuthFast.
+    {
+        std::vector<Vector3f> tmp = points;
+        auto t0 = now();
+        bool result = IsSortedFastFast(tmp);
+        auto t1 = now();
+        printf("[Check]          is_sorted fast fast %f ms\n", (t1 - t0) / 1e6);
+        if( !result ) { printf("Failed!\n"); }
     }
 
     return 0;
