@@ -222,19 +222,19 @@ table {
     margin-bottom: 10px;
     border-collapse: collapse;
     font-family: monospace;
-    font-size: 80%;
+    font-size: 100%;
 }
 table th {
     font-family: Author-Regular;
-    font-size: 100%;
+    font-size: 85%;
     padding: 8px 20px 5px 20px;
 }
 table td {
-    font-size: 80%;
+    font-size: 75%;
     padding: 8px 20px 8px 20px;
 }
 table td code {
-    font-size: 100%;
+    font-size: 95%;
 }
 table thead {
     border-bottom: 2px dashed #aaa;

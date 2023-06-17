@@ -238,38 +238,38 @@ The test points are generated in scan order, so I use `std::shuffle()` to random
 Then for every combination of sorting method and comparison functions,
 I sorted the shuffled points back into scan order and recorded the time elapsed.
 
-| Sort shuffled points. | Compare Altitudes | Compare Azimuths | Time [ms] | Speedup |
-|-----------------------|:-----------------:|:----------------:|:---------:|:--------:|
-| `std::sort()`         |       Slow        |       Slow       |   143.38  |  1.00x  |
-| `std::sort()`         |       Slow        |       Fast       |    82.02  |  1.75x  |
-| `std::sort()`         |       Fast        |       Slow       |    92.11  |  1.55x  |
-| `std::sort()`         |       Fast        |       Fast       |    34.50  |  4.16x  |
-| `pdqsort()`           |       Slow        |       Slow       |   135.37  |  1.06x  |
-| `pdqsort()`           |       Slow        |       Fast       |    77.64  |  1.85x  |
-| `pdqsort()`           |       Fast        |       Slow       |    87.05  |  1.65x  |
-| `pdqsort()`           |       Fast        |       Fast       |    32.87  |  4.36x  |
+| Sort shuffled points. | Compare Altitudes | Compare Azimuths | Time [ms]  |   Speedup  |
+|-----------------------|:-----------------:|:----------------:|:----------:|:----------:|
+| `std::sort()`         |       Slow        |       Slow       |   143.38   |    1.00x   |
+| `std::sort()`         |       Slow        |       Fast       |    82.02   |    1.75x   |
+| `std::sort()`         |       Fast        |       Slow       |    92.11   |    1.55x   |
+| `std::sort()`         |       Fast        |       Fast       |    34.50   |    4.16x   |
+| `pdqsort()`           |       Slow        |       Slow       |   135.37   |    1.06x   |
+| `pdqsort()`           |       Slow        |       Fast       |    77.64   |    1.85x   |
+| `pdqsort()`           |       Fast        |       Slow       |    87.05   |    1.65x   |
+|<b>`pdqsort()`</b>     |    <b>Fast</b>    |    <b>Fast</b>   |<b>32.87</b>|<b>4.36x</b>|
 
-To evaluate performance on pre-sorted points, I repeated the same tests but without shuffling the points.
+To evaluate performance on pre-sorted points, I repeated the same tests without shuffling the points.
 
-| Sort sorted points.   | Compare Altitudes | Compare Azimuths | Time [ms] | Speedup |
-|-----------------------|:-----------------:|:----------------:|:---------:|:-------:|
-| `std::sort()`         |       Slow        |       Slow       |   100.45  |  1.00x  |
-| `std::sort()`         |       Slow        |       Fast       |    53.08  |  1.89x  |
-| `std::sort()`         |       Fast        |       Slow       |    54.85  |  1.83x  |
-| `std::sort()`         |       Fast        |       Fast       |    13.75  |  7.31x  |
-| `pdqsort()`           |       Slow        |       Slow       |     8.07  | 12.44x  |
-| `pdqsort()`           |       Slow        |       Fast       |     4.96  | 20.25x  |
-| `pdqsort()`           |       Fast        |       Slow       |     4.07  | 24.68x  |
-| `pdqsort()`           |       Fast        |       Fast       |     1.14  | 88.11x  |
+| Sort sorted points.   | Compare Altitudes | Compare Azimuths | Time [ms] |   Speedup   |
+|-----------------------|:-----------------:|:----------------:|:---------:|:-----------:|
+| `std::sort()`         |       Slow        |       Slow       |   100.45  |    1.00x    |
+| `std::sort()`         |       Slow        |       Fast       |    53.08  |    1.89x    |
+| `std::sort()`         |       Fast        |       Slow       |    54.85  |    1.83x    |
+| `std::sort()`         |       Fast        |       Fast       |    13.75  |    7.31x    |
+| `pdqsort()`           |       Slow        |       Slow       |     8.07  |   12.44x    |
+| `pdqsort()`           |       Slow        |       Fast       |     4.96  |   20.25x    |
+| `pdqsort()`           |       Fast        |       Slow       |     4.07  |   24.68x    |
+|<b>`pdqsort()`</b>     |    <b>Fast</b>    |    <b>Fast</b>   |<b>1.14</b>|<b>88.11x</b>|
 
 Finally, I benchmarked a few variations of `std::is_sorted()` to see how fast we can check if a point cloud is already sorted.
 
-| Check if points are sorted.  | Compare Altitudes | Compare Azimuths | Time [ms] | Speedup |
-|------------------------------|:-----------------:|:----------------:|:---------:|:-------:|
-| `std::is_sorted()`           |       Slow        |       Slow       |    5.72   |   1.0x  |
-| `std::is_sorted()`           |       Slow        |       Fast       |    2.63   |   2.2x  |
-| `std::is_sorted()`           |       Fast        |       Slow       |    3.69   |   1.6x  |
-| `std::is_sorted()`           |       Fast        |       Fast       |    0.86   |   6.7x  |
+| Check if points are sorted.  | Compare Altitudes | Compare Azimuths | Time [ms] |  Speedup  |
+|------------------------------|:-----------------:|:----------------:|:---------:|:---------:|
+| `std::is_sorted()`           |       Slow        |       Slow       |    5.72   |    1.0x   |
+| `std::is_sorted()`           |       Slow        |       Fast       |    2.63   |    2.2x   |
+| `std::is_sorted()`           |       Fast        |       Slow       |    3.69   |    1.6x   |
+|<b>`std::is_sorted()`</b>     |    <b>Fast</b>    |    <b>Fast</b>   |<b>0.86</b>|<b>6.7x</b>|
 
 Checking if points are sorted is already a fast operation, but using our fast comparison functions, we can still achieve a pretty decent 6.7x speedup!
 
