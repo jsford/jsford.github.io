@@ -124,15 +124,14 @@ body {
 }
 h1 {
     font-family: Author-Semibold;
-    font-weight: 300;
     margin-bottom: 0.2em;
     line-height: 1.1;   
 }
 h2 {
-    font-family: Author-Regular;
+    font-family: Author-Semibold;
     margin-top: 1.5rem;
     margin-bottom: 0.2em;
-    line-height: 1.2;   
+    line-height: 1.2;
 }
 h3 {
     font-family: Author-Semibold;
@@ -143,7 +142,7 @@ h1 {
     font-size: 1.8rem;
 }
 h2 {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 h3 {
     font-size: 1.1rem;

@@ -6,6 +6,7 @@
 #include <random>
 #include <vector>
 
+#include <fstream>
 
 struct Vector3f {
     float x, y, z;
@@ -22,15 +23,23 @@ std::vector<Vector3f> fakeLidarPoints(int linesPerScan, int pointsPerLine) {
     float minRange =   3.0f;
     float maxRange = 100.0f;
 
+    std::vector<float> ranges(128);
+    for(int i=0; i < linesPerScan; ++i) {
+        ranges[i] = (rand() / (float)RAND_MAX) * (maxRange-minRange) + minRange;
+    }
+
     for (int i = 0; i < linesPerScan; ++i) {
         float altitude =
             (linesPerScan - i) / ((float)linesPerScan - 1) * (maxAlt - minAlt) + minAlt;
         for (int j = 0; j < pointsPerLine; ++j) {
             float azimuth = j / ((float)pointsPerLine + 1) * (maxAzi - minAzi) + minAzi;
-            float range = (rand() / (float)RAND_MAX) * (maxRange-minRange) + minRange;
-            points[i * pointsPerLine + j].x = range * std::sin(M_PI_2 - altitude) * std::cos(azimuth);
-            points[i * pointsPerLine + j].y = range * std::sin(M_PI_2 - altitude) * std::sin(azimuth);
-            points[i * pointsPerLine + j].z = range * std::cos(M_PI_2 - altitude);
+
+            float drange = 0.5 * (rand() / (float)RAND_MAX) - 0.25;
+            ranges[i] = std::clamp(ranges[i]+drange, minRange, maxRange);
+
+            points[i * pointsPerLine + j].x = ranges[i] * std::sin(M_PI_2 - altitude) * std::cos(azimuth);
+            points[i * pointsPerLine + j].y = ranges[i] * std::sin(M_PI_2 - altitude) * std::sin(azimuth);
+            points[i * pointsPerLine + j].z = ranges[i] * std::cos(M_PI_2 - altitude);
         }
     }
     return points;
@@ -413,6 +422,12 @@ int main(int argc, char *argv[]) {
         printf("[Check]          is_sorted fast fast %f ms\n", (t1 - t0) / 1e6);
         if( !result ) { printf("Failed!\n"); }
     }
+
+    std::ofstream f("points.xyz");
+    for(const auto& pt : points) {
+        f << pt.x << "," << pt.y << "," << pt.z << "\n";
+    }
+    f.close();
 
     return 0;
 }

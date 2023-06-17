@@ -3,24 +3,53 @@ title: Fast methods for sorting LiDAR point clouds.
 date: May 19, 2023
 ---
 
-1. Lately I've been working on LiDAR compression algorithms.
-2. My compression algorithms rely on sorted point clouds, but sensor manufacturer's are not consistent with their ordering.
-3. So, my compression algorithm needs to (1) check if points are in the right order and (2) sort them into the right order if they aren't.
+Lately I've been working on fast algorithms for LiDAR compression and LiDAR mapping.
+In both applications, I've run across a fun subproblem: *what is the fastest way to sort LiDAR point clouds into a canonical scan order?*
 
-
-## Baseline Sorting
-
-The straightforward solution to this problem is to use `std::sort()` with a comparison function that compares points first by altitude angle and then by azimuth angle.
-The altitude of a point is its angle above the sensor's X-Y plane. The azimuth of a point is its angle around the sensor---its yaw.
+For the most part, LiDAR sensors emit points in a consistent top-down, counterclockwise order.
+However LiDAR processing code usually can't assume scans are pre-sorted since sensor manufacturers are free to sort in whatever order is convenient,
+and intermediate storage and filtering steps might accidentally reorder the data.
 
 ![A diagram showing the altitude and azimuth coordinates that define a LiDAR point in spherical coordinates](/posts/0000-sort-points/figures/lidar-coordinates.svg)
 
-Here's a C++ function that compares the altitude angles of two points.
-This function returns `+1` if the first point is at a lower elevation than the second,
-`0` if the two points are at approximately the same elevation, and
-`-1` if the first point is at a higher elevation than the second.
+Since my LiDAR processing algorithms rely on consistently-ordered scans, I need fast methods to (1) check if a scan is already sorted and (2) sort scans that aren't already in scan order.
 
-    int CompareAltitudeSlow(const Vector3f& v0, const Vector3f& v1) {
+## How to sort LiDAR points (when you don't need to go fast).
+
+At a high level, the goal is to take a pile of (x, y, z) points in any order and quickly sort them into counterclockwise-ordered scanlines.
+In C++, the straightforward way to accomplish this is to use `std::sort()` with a custom point-comparison function.
+
+The point-comparison function should accept two (x, y, z) points and decide which point goes first in the desired scan order.
+If the first point should preceed the second point, the function should return `true`. Otherwise, it should return `false`.
+With an appropriate point-comparison function, we can use `std::sort()` to sort an array of points into scan order.
+
+    // Sort points into scan order using the CompareAltitudeAzimuth comparison function.
+    // Points should be sorted into scanlines from highest altitude to lowest.
+    // Points within each scanline should be sorted from least azimuth to greatest. 
+    std::sort( std::begin(points), std::end(points), CompareAltitudeAzimuth );
+
+The `CompareAltitudeAzimuth()` function is the custom comparison routine that defines the scan order.
+In its most straightforward implementation, `CompareAltitudeAzimuth()` computes and compares the altitude and azimuth angles for both points.
+If the two points have differing altitudes, they belong to separate scanlines, and the point with the higher elevation should be sorted first.
+If both points have similar altitudes, they belong to the same scanline, so the point with the smaller azimuth should be sorted first.
+
+    bool CompareAltitudeAzimuth(const Vector3f &v0, const Vector3f &v1) {
+        // First, compare the altitudes of the two points.
+        int compareAlt = CompareAltitude(v0, v1);
+
+        // If the altitudes do not match, sort from highest altitude to lowest.
+        if( compareAlt != 0 ) { return (compareAlt < 0); }
+
+        // If the altitudes do match, sort by azimuth from least to greatest.
+        return CompareAzimuth(v0, v1);
+    }
+
+`CompareAltitude()` is a function that computes and compares the altitude of both points.
+It returns `+1` if the first point is at a lower elevation than the second,
+`0` if the two points are at approximately the same elevation, and
+`-1` if the first point is at a higher elevation than the second point.
+
+    int CompareAltitude(const Vector3f& v0, const Vector3f& v1) {
         // Compute the altitude angle for each point.
         float altitude0 = std::atan(v0.z / std::sqrt(v0.x * v0.x + v0.y * v0.y));
         float altitude1 = std::atan(v1.z / std::sqrt(v1.x * v1.x + v1.y * v1.y));
@@ -39,8 +68,8 @@ This function returns `+1` if the first point is at a lower elevation than the s
         return (altitude0 < altitude1) ? 1 : -1;
     }
 
-This function is fairly slow because it calls `std::atan()` and `std::sqrt()` to compute the altitude for each point.
-Later, we'll look for ways to remove these, but for now let's look at the baseline comparison for azimuth angles.
+When two points' altitudes are within 0.05&deg;, they are considered part of the same LiDAR scanline.
+In that case, the `CompareAzimuth()` function is used to decide which point comes first within the counterclockwise-ordered scanline.
 
     bool CompareAzimuthSlow(const Vector3f& v0, const Vector3f& v1) {
         // Compute the azimuth angle for each point.
@@ -51,57 +80,83 @@ Later, we'll look for ways to remove these, but for now let's look at the baseli
         return (azimuth0 < azimuth1);
     }
 
-This function is even more straightforward.
-We use `std::atan2()` to compute the azimuth for each point, and we return a boolean to indicate which point has the smaller azimuth angle.
+Using `std::sort()` with `CompareAltitudeAzimuth()`, we can reliably sort LiDAR scans into our preferred scan order.
+This method is great because it's straightforward and easy to explain, but for high-speed LiDAR processing, there are two problems with this approach:
 
-In order to sort points by altitude and then by azimuth, we need to combine our functions into a single comparison function.
-This function first compares two points by their altitude angles.
-If the altitude angles are the same, it breaks the tie by comparing the azimuth angles.
+1. This method calls `std::atan()`, `std::atan2()`, and `std::sqrt()` multiple times for every comparison.
+   Since these functions take a long time to compute, the overall sorting method is fairly slow.
+2. This method does not check whether points are already sorted.
+   When the points are already in scan order, it will waste a significant amount of time re-sorting the sorted points.
 
-    bool CompareAltitudeAzimuthSlow(const Vector3f &v0, const Vector3f &v1) {
-        // First, compare the altitudes of the two points.
-        int compareAlt = CompareAltitudeSlow(v0, v1);
+## A faster method to compare altitudes.
+The straightforward method for comparing altitude angles is slow because it uses `sqrt()` and `atan()` to compute the altitude angle for both points.
+Instead of comparing the angles, what if we normalize both vectors and compare their z components?
 
-        // If the altitudes do not match, sort from highest altitude to lowest.
-        if( compareAlt != 0 ) { return (compareAlt < 0); }
+Instead of this...
 
-        // If the altitudes do match, sort by azimuth from least to greatest.
-        return CompareAzimuthSlow(v0, v1);
-    }
+    // Compute the altitude angle for each point.
+    float altitude0 = std::atan(v0.z / std::sqrt(v0.x * v0.x + v0.y * v0.y));
+    float altitude1 = std::atan(v1.z / std::sqrt(v1.x * v1.x + v1.y * v1.y));
 
-With this comparison function, we can now sort point clouds using `std::sort()`.
+We can do this...
 
-    // Sort points into scan order.
-    // Scanlines will be sorted from highest altitude to lowest.
-    // Points within each scanline will be sorted ccw from least to greatest azimuth.
-    std::sort( std::begin(points), std::end(points), CompareAltitudeAzimuthSlow );
+    float height0 = v0.z / std::sqrt(v0.x * v0.x + v0.y * v0.y);
+    float height1 = v1.z / std::sqrt(v1.x * v1.x + v1.y * v1.y);
 
-This code will reliably sort disorganized point clouds into scan order, but since it makes a lot of calls to `sqrt()`, `atan()`, and `atan2()`, it is fairly slow.
-Let's see what we can do to make it go faster!
+That avoids the calls to `atan()`, but what about the calls to `sqrt()`?
+We can avoid calling `sqrt()` by comparing the squared heights instead.
 
-## Comparing Altitudes Faster
-The baseline method for comparing altitude angles is slow because it uses `sqrt()` and `atan()` to compute the altitude angles for both points.
+    float squaredHeight0 = (v0.z*v0.z) / (v0.x * v0.x + v0.y * v0.y);
+    float squaredHeight1 = (v1.z*v1.z) / (v1.x * v1.x + v1.y * v1.y);
+
+But squaring the heights doesn't work unless both `v0.z` and `v1.z` are non-negative.
+If the signs of the z coordinates are different, we can immediately decide which has a higher altitude.
+
+    int sign0 = (v0.z >= 0) ? 1 : -1;
+    int sign1 = (v1.z >= 0) ? 1 : -1;
+
+    if( sign0 != sign1 ) { return (sign0 < sign1) ? 1 : -1; }
+
+If the signs are the same, we can compare the squared heights safely, so long as we remember to swap the inequality when both signs are negative.
+If we incorporate these changes into the original comparison function, we get something like this:
 
     int CompareAltitudeFast(const Vector3f& v0, const Vector3f& v1) {
+        // Store the signs of the original Z coordinates.
         int sign0 = (v0.z >= 0) ? 1 : -1;
         int sign1 = (v1.z >= 0) ? 1 : -1;
 
+        // If the Z coordinate signs don't match, return +/-1
+        // to indicate which point has the higher altitude.
         if( sign0 != sign1 ) { return (sign0 < sign1) ? 1 : -1; }
 
-        float fakeAltitude0 = (v0.z*v0.z / (v0.x*v0.x+v0.y*v0.y));
-        float fakeAltitude1 = (v1.z*v1.z / (v1.x*v1.x+v1.y*v1.y));
+        // If the signs of the Z coordinates do match, normalize
+        // both points and compare the squared heights
+        // of the resulting normalized vectors.
+        float squaredHeight0 = (v0.z*v0.z / (v0.x*v0.x+v0.y*v0.y));
+        float squaredHeight1 = (v1.z*v1.z / (v1.x*v1.x+v1.y*v1.y));
 
+        // Since we aren't comparing angles any more, we have to convert
+        // our 0.05 degree tolerance from degrees to units of squared height.
         constexpr float dAltitude = 0.05f * M_PI / 180.0f;
-        constexpr float epsilon = std::sin(dAltitude);
-        constexpr float fakeEpsilon = epsilon*epsilon;
+        constexpr float dHeight = std::sin(dAltitude);
 
-        if( std::abs(fakeAltitude1 - fakeAltitude0) < fakeEpsilon ) {
+        // If the squared heights are sufficiently similar,
+        // return 0 to indicate they are from the same scanline.
+        if( std::abs(squaredHeight1 - squaredHeight0) < dHeight*dHeight ) {
             return 0;
         }
-        return (sign0 * fakeAltitude0 < sign1 * fakeAltitude1) ? 1 : -1;
+
+        // If the squared heights are different, fix up their signs,
+        // compare their squared heights, and return the result.
+        return (sign0 * squaredHeight0 < sign1 * squaredHeight1) ? 1 : -1;
     }
 
-## Comparing Azimuths Faster
+This method avoids `sqrt()` and `atan2()`, but I suspect it has problems for points at large altitudes (>80&deg;) that I haven't yet resolved.
+Basically, my current epsilon calculation is "good enough" for the LiDAR sensors I have been working with, but I expect it to fail at high altitudes.
+I suspect a more robust calculation will be needed for sensors that produce points at more extreme altitudes.
+
+
+## A faster method to compare azimuths.
 
     int Atan2Quadrant(float x, float y) {
         // This function identifies which quadrant an (x, y) coordinate falls within.
@@ -150,7 +205,7 @@ and...
     }
 
 
-## Sorting Faster
+## Don't sort if you don't need to.
 
 Now that we have faster methods to compare altitudes and azimuths, we can combine them into a single comparison function and use them to sort point clouds.
 
@@ -161,19 +216,27 @@ Now that we have faster methods to compare altitudes and azimuths, we can combin
         return CompareAzimuthFast(v0, v1);
     }
 
-While we're here, let's try using a sorting algorithm other than `std::sort()`.
-`pdqsort()` is a recent sorting algorithm that combines a ton of clever tricks to defeat patterns and make best use of your cache hierarchy.
-It's a drop-in replacement for `std::sort()`, so let's test it as well.
+Our fast comparison functions should help us sort disorganized point clouds significantly faster, but what happens if we give it an already-sorted point cloud?
+In testing, `std::sort()` spends almost as much time sorting pre-sorted points as it would spend sorting randomly-ordered points.
 
-    // Sort points into counterclockwise-ordered scanlines.
-    pdqsort( std::begin(points), std::end(points), CompareAltitudeAzimuthFast );
+For fun, let's try two methods to avoid wasting time sorting pre-sorted point clouds.
 
+1. The first method will be to use `std::is_sorted()` to check if points are already sorted. If `std::is_sorted()` returns `true`, we can safely skip sorting.
+2. The second method will be to replace `std::sort()` with [`pdqsort()`, a pattern-defeating quicksort](https://github.com/orlp/pdqsort).
+   `pdqsort()` is an impressive recent sorting algorithm that should detect pre-sorted data and avoid wasting time by re-sorting it.
 
 ## Benchmark Results
 
 To evaluate sorting performance, I generated a fake LiDAR scan containing 128 scanlines with 2048 points in each scanline.
-Then I used `std::shuffle()` to randomize the order of the points.
-For each sorting method, I sorted the shuffled points back into scan order and measured the elapsed time.
+For each scanline, I start at -180&deg; azimuth and sweep counterclockwise around the +Z axis.
+With each new point, I increment or decrement the LiDAR range by a few centimeters, producing a random walk.
+The resulting point cloud looks like a crayon doodle, but it's similar enough to real data for our benchmarks.
+
+![alt text](/posts/0000-sort-points/figures/fake-lidar.svg)
+
+The test points are generated in scan order, so I use `std::shuffle()` to randomize the order of the points.
+Then for every combination of sorting method and comparison functions,
+I sorted the shuffled points back into scan order and recorded the time elapsed.
 
 | Sort shuffled points. | Compare Altitudes | Compare Azimuths | Time [ms] | Speedup |
 |-----------------------|:-----------------:|:----------------:|:---------:|:--------:|
@@ -186,6 +249,8 @@ For each sorting method, I sorted the shuffled points back into scan order and m
 | `pdqsort()`           |       Fast        |       Slow       |    87.05  |  1.65x  |
 | `pdqsort()`           |       Fast        |       Fast       |    32.87  |  4.36x  |
 
+To evaluate performance on pre-sorted points, I repeated the same tests but without shuffling the points.
+
 | Sort sorted points.   | Compare Altitudes | Compare Azimuths | Time [ms] | Speedup |
 |-----------------------|:-----------------:|:----------------:|:---------:|:-------:|
 | `std::sort()`         |       Slow        |       Slow       |   100.45  |  1.00x  |
@@ -197,10 +262,7 @@ For each sorting method, I sorted the shuffled points back into scan order and m
 | `pdqsort()`           |       Fast        |       Slow       |     4.07  | 24.68x  |
 | `pdqsort()`           |       Fast        |       Fast       |     1.14  | 88.11x  |
 
-
-I also benchmarked the time required to check if a scan is sorted.
-Several LiDAR manufacturers produce points in sorted order, so it's not uncommon that the points will already be sorted.
-In my compression code, I use `std::is_sorted()` to check if the points are sorted. That way I can skip sorting when it's not needed.
+Finally, I benchmarked a few variations of `std::is_sorted()` to see how fast we can check if a point cloud is already sorted.
 
 | Check if points are sorted.  | Compare Altitudes | Compare Azimuths | Time [ms] | Speedup |
 |------------------------------|:-----------------:|:----------------:|:---------:|:-------:|
@@ -209,7 +271,7 @@ In my compression code, I use `std::is_sorted()` to check if the points are sort
 | `std::is_sorted()`           |       Fast        |       Slow       |    3.69   |   1.6x  |
 | `std::is_sorted()`           |       Fast        |       Fast       |    0.86   |   6.7x  |
 
-Checking if points are sorted is already a fast operation, but using our fast comparison functions, we can still achieve a pretty decent 6.5x speedup!
+Checking if points are sorted is already a fast operation, but using our fast comparison functions, we can still achieve a pretty decent 6.7x speedup!
 
 ## Conclusions
 
