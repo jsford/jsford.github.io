@@ -18,7 +18,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon.ico">
 
-    <title>Jordan Ford | Resume</title>
+    <title>Jordan Ford</title>
 
     <link rel="stylesheet" href="/css/site.css">
 </head>
@@ -33,52 +33,30 @@
     </div>
 
     <div id="text-container">
-
-        <h1 style="width: 100%; text-align: center;">Jordan Ford, PhD</h1>
-
-        <h2>Education</h2>
-
-        <div style="display: flex; width: 95%; margin: auto;">
-            <div style="width: 80%; display: inline; margin-top: 0.3em; font-size: 1.1rem;">PhD, Robotics &mdash; Carnegie Mellon University</div>
-            <div style="width: 20%; display: inline; margin-top: 0.3em; font-size: 1.1rem; text-align: right;">2023</div>
+        <div id="title-block">
+            <img id="title-image" src="/assets/images/me2-small.jpg"/>
+            <div id="title-billboard";>
+                <div id="my-name">Jordan Ford, PhD</div>
+                <div id="headline" style="width: 80%; display:inline-block; vertical-align:middle;">robots,&nbsp;fast code,<br>art &amp; engineering</div>
+                <div id="subtitle">If you're building robots to make the world more awesome...</div>
+                <div id="subsubtitle">I want to work with you.</div>
+            </div>
         </div>
 
-        <div style="display: flex; width: 95%; margin: auto;">
-            <div style="width: 80%; display: inline; margin-top: 0.3em; font-size: 1.1rem;">MS, Computer Engineering &mdash; Georgia Institute of Technology</div>
-            <div style="width: 20%; display: inline; margin-top: 0.3em; font-size: 1.1rem; text-align: right;">2016</div>
-        </div>
+        <h2>Life Update&mdash;I've graduated!</h2>
+        <p>I've just graduated with my PhD from Carnegie Mellon this semester (Spring 2023). I've spent the last six years developing fast perception and planning algorithms for autonomous cars, nuclear inspection robots, and lunar microrovers. If you're interested in working together, send me an email at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a>.</p>
 
-        <div style="display: flex; width: 95%; margin: auto;">
-            <div style="width: 80%; display: inline; margin-top: 0.3em; font-size: 1.1rem;">BS, Computer Engineering &mdash; Georgia Institute of Technology</div>
-            <div style="width: 20%; display: inline; margin-top: 0.3em; font-size: 1.1rem; text-align: right;">2015</div>
-        </div>
+        <h2>Research Highlights</h2>
+        <ul style="padding-left: 1.5rem;">
+            <li><p><b><i>SIMD LiDAR Compression</i></b> &mdash; I invented a blazing-fast lossless compression algorithm for high bit-depth LiDAR video streams, and I'll be presenting it at <a href="https://www.icra2023.org/" target="_blank" rel="noopener noreferrer">ICRA 2023</a> in London! (<a href="https://arxiv.org/abs/2209.08196" target="_blank" rel="noopener noreferrer">arxiv</a>)</p></li>
+            <li><p><b><i>Autonomous Lunar Rovers</i></b> &mdash; I led a CMU/NASA team that designed and built an autonomous microrover for exploring lunar pits. I wrote <i>a ton of code</i> to autonomously explore massive pits, capture panoramic HDR mosaics from the pit rim, and automatically process the imagery into photogrammetric 3D models of the pit interior. (<a href="assets/ford-aeroconf-2022.pdf" target="_blank" rel="noopener noreferrer">pdf</a>, <a href="https://www.space.com/tiny-moon-rover-pitranger-explore-lunar-underworld" target="_blank" rel="noopener noreferrer">space.com</a>)</p></li>
+            <li><p><b><i>Search-Based Planning</i></b> &mdash; I invented a fast exploration planning algorithm that combines raytracing, oriented A* search, and TSP heuristics to find reachable viewpoints around a lunar pit rim and plan a safe navigation route for a microrover to visit them.</p></li>
+            <li><p><b><i>Fast LiDAR Mapping</i></b> &mdash; I rewrote the LiDAR Odometry and Mapping (LOAM) algorithm from scratch to improve its performance for use on small, compute-limited drones. I replaced a few key data structures, vectorized the optimization cost functions, and parallelized as much as possible. The result was a scan processing latency of ~16ms (compared to ~1000ms orig.) and ~4x lower CPU usage.</p></li>
+            <li><p><b><i>Autonomous Vehicle Motion Planning</i></b> &mdash; I implemented a motion planning algorithm for General Motors' autonomous vehicles. The new algorithm ran at 400 Hz and produced smooth, dynamics-constrained trajectories for their autonomous Chevy Volt.</p></li>
+            <li><p><b><i>Nuclear Robotics</i></b> &mdash; I wrote post-processing, GUI, and sensor interface software for the PipeDream and RadPiper nuclear inspection robots. These robots are helping clean up U<span style="position:relative;top:-0.5rem;">235</span> deposits leftover from WWII at the Portsmouth, Ohio enrichment facility (<a href="https://www.world-nuclear-news.org/Articles/Pipe-robot-aids-enrichment-plant-decommissioning" target="_blank" rel="noopener noreferrer">World Nuclear News</a>, <a href="https://www.therobotreport.com/radpiper-decommission-nuclear-facility/" target="_blank" rel="noopener noreferrer">The Robot Report</a>, <a href="https://www.geekwire.com/2018/autonomous-robots-will-crawl-inside-pipes-former-u-s-nuclear-sites-detect-radiation-speed-process-dismantling/" target="_blank" rel="noopener noreferrer">GeekWire</a>, <a href="https://www.wesa.fm/science-health-tech/2018-04-02/nuke-bot-to-the-rescue-cmu-robot-to-detect-nuclear-waste-at-government-facility" target="_blank" rel="noopener noreferrer">WESA</a>).</p></li>
+        </ul>
 
-        <h2>Experience</h2>
-            <h3>Carnegie Mellon University</h3>
-                <ul style="padding-left: 1.5rem;">
-                    <li><p><b><i>SIMD LiDAR Compression</i></b> &mdash; I invented a blazing-fast lossless compression algorithm for high bit-depth LiDAR video streams, and I'll be presenting it at <a href="https://www.icra2023.org/" target="_blank" rel="noopener noreferrer">ICRA 2023</a> in London! (<a href="https://arxiv.org/abs/2209.08196" target="_blank" rel="noopener noreferrer">arxiv</a>)</p></li>
-                    <li><p><b><i>Autonomous Lunar Rovers</i></b> &mdash; I led a CMU/NASA team that designed and built an autonomous microrover for exploring lunar pits. I wrote <i>a ton of code</i> to autonomously explore massive pits, capture panoramic HDR mosaics from the pit rim, and automatically process the imagery into photogrammetric 3D models of the pit interior. (<a href="assets/ford-aeroconf-2022.pdf" target="_blank" rel="noopener noreferrer">pdf</a>, <a href="https://www.space.com/tiny-moon-rover-pitranger-explore-lunar-underworld" target="_blank" rel="noopener noreferrer">space.com</a>)</p></li>
-                    <li><p><b><i>Search-Based Planning</i></b> &mdash; I invented a fast exploration planning algorithm that combines raytracing, oriented A* search, and TSP heuristics to find reachable viewpoints around a lunar pit rim and plan a safe navigation route for a microrover to visit them.</p></li>
-                    <li><p><b><i>Fast LiDAR Mapping</i></b> &mdash; I rewrote the LiDAR Odometry and Mapping (LOAM) algorithm from scratch to improve its performance for use on small, compute-limited drones. I replaced a few key data structures, vectorized the optimization cost functions, and parallelized as much as possible. The result was a scan processing latency of ~16ms (compared to ~1000ms orig.) and ~4x lower CPU usage.</p></li>
-                    <li><p><b><i>Autonomous Vehicle Motion Planning</i></b> &mdash; I implemented a motion planning algorithm for General Motors' autonomous vehicles. The new algorithm ran at 400 Hz and produced smooth, dynamics-constrained trajectories for their autonomous Chevy Volt.</p></li>
-                    <li><p><b><i>Nuclear Robotics</i></b> &mdash; I wrote post-processing, GUI, and sensor interface software for the PipeDream and RadPiper nuclear inspection robots. These robots are helping clean up U<span style="position:relative;top:-0.5rem;">235</span> deposits leftover from WWII at the Portsmouth, Ohio enrichment facility (<a href="https://www.world-nuclear-news.org/Articles/Pipe-robot-aids-enrichment-plant-decommissioning" target="_blank" rel="noopener noreferrer">World Nuclear News</a>, <a href="https://www.therobotreport.com/radpiper-decommission-nuclear-facility/" target="_blank" rel="noopener noreferrer">The Robot Report</a>, <a href="https://www.geekwire.com/2018/autonomous-robots-will-crawl-inside-pipes-former-u-s-nuclear-sites-detect-radiation-speed-process-dismantling/" target="_blank" rel="noopener noreferrer">GeekWire</a>, <a href="https://www.wesa.fm/science-health-tech/2018-04-02/nuke-bot-to-the-rescue-cmu-robot-to-detect-nuclear-waste-at-government-facility" target="_blank" rel="noopener noreferrer">WESA</a>).</p></li>
-                </ul>
-
-            <h3>Broadcom</h3>
-                <ul>
-                    <li><p><b><i>SIMD LiDAR Compression</i></b> &mdash; I invented a blazing-fast lossless compression algorithm for high bit-depth LiDAR video streams, and I'll be presenting it at <a href="https://www.icra2023.org/" target="_blank" rel="noopener noreferrer">ICRA 2023</a> in London! (<a href="https://arxiv.org/abs/2209.08196" target="_blank" rel="noopener noreferrer">arxiv</a>)</p></li>
-                </ul>
-
-            <h3>NVidia</h3>
-                <ul>
-                    <li><p><b><i>Nuclear Robotics</i></b> &mdash; I wrote post-processing, GUI, and sensor interface software for the PipeDream and RadPiper nuclear inspection robots. These robots are helping clean up U<span style="position:relative;top:-0.5rem;">235</span> deposits leftover from WWII at the Portsmouth, Ohio enrichment facility (<a href="https://www.world-nuclear-news.org/Articles/Pipe-robot-aids-enrichment-plant-decommissioning" target="_blank" rel="noopener noreferrer">World Nuclear News</a>, <a href="https://www.therobotreport.com/radpiper-decommission-nuclear-facility/" target="_blank" rel="noopener noreferrer">The Robot Report</a>, <a href="https://www.geekwire.com/2018/autonomous-robots-will-crawl-inside-pipes-former-u-s-nuclear-sites-detect-radiation-speed-process-dismantling/" target="_blank" rel="noopener noreferrer">GeekWire</a>, <a href="https://www.wesa.fm/science-health-tech/2018-04-02/nuke-bot-to-the-rescue-cmu-robot-to-detect-nuclear-waste-at-government-facility" target="_blank" rel="noopener noreferrer">WESA</a>).</p></li>
-                </ul>
-
-        <h2>Contact</h2>
-        <div style="width: 95%; margin: auto; font-size: 1.1rem; margin-top: 0.3em;">
-            Email me at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a> or message me on <a href="https://twitter.com/jrdnfrd" target="_blank" rel="noopener noreferrer">Twitter</a> or <a href="https://www.linkedin.com/in/jordan-ford/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
-        </div>
-
+        <h2>Contact Me</h2>
+        <p>Email me at <a href="mailto:jsford94@gmail.com">jsford94@gmail.com</a> or message me on <a href="https://twitter.com/jrdnfrd" target="_blank" rel="noopener noreferrer">Twitter</a> or <a href="https://www.linkedin.com/in/jordan-ford/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
     </div>
-
 </body>
