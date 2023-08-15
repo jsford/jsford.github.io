@@ -40,15 +40,56 @@ In the following image, I have identified the runs of consecutive identical valu
 ![test image!](figures/runs.svg)
 
 As you can see, there are many long runs of identical values that we can exploit using run-length encoding.
-The longest runs occur when the lidar sensor scans empty sky (always out-of-range) or flat pavement (always in-range). In regions where the lidar passes through trees, the sensor alternates rapidly from in-range to out-of-range, creating thousands of very short runs in the image. A histogram of the run lengths illustrates their distribution.
+The longest runs occur when the lidar sensor scans empty sky (always out-of-range) or flat pavement (usually in-range). In regions where the lidar passes through trees, the sensor alternates rapidly from in-range to out-of-range, creating thousands of short runs in the image. A histogram of the run lengths illustrates their distribution.
 
 ![test image!](figures/histogram.svg)
 
-This distribution of run lengths is vaguely geometric. Small values are far more frequent than large values. Let's try encoding them using Golomb codes.
+This distribution of run lengths is vaguely geometric since small values are far more frequent than large values. Let's try encoding them using Golomb codes.
 
 ### Golomb Coding
 Simon Golomb developed his eponymous codes in 1966 and published their description in a spy-themed article whose content is much more entertaining than its title (*Run Length Encodings*). His Golomb codes are an optimal prefix code for alphabets that follow a geometric distribution like our run lengths. Better yet, implementing the Golomb code is straightforward, even if the math underlying them is fairly deep.
 
+To Golomb-encode a value, you need to do N things...
+
+Now all we have to do is compute the list of run lengths, Golomb encode each one, and append the results to our compressed bitstream.
+
 ## Implementation
+
+### Computing Run Lengths
+
+Computing run lengths is straightforward. Iterate over every pixel in the image and compare it to the next pixel. If the pixel values are the same, increment the current run length. If the pixel values differ, save the current run length and restart the count for a new run.
+
+    /* The runbuffer is a resizable array to contain the run lengths. */
+    struct rle__runbuffer* runbuf = rle__runbuffer_create();
+
+    /* If in_buf does not begin with 0, push a zero-length run. */
+    if( in_buf[0] != 0 ) {
+        rle__runbuffer_push(runbuf, 0);
+    }
+
+    /* Iterate over in_buf and count the run lengths. */
+    size_t runlength = 0;
+    for(size_t i=0; i<in_len; ++i) {
+        /* Add a run when you get to the end of the input. */
+        if( i+1 == in_len ) {
+            rle__runbuffer_push(runbuf, runlength+1);
+            runlength = 0;
+        }
+        /* Start a new run when you see a transition in the input. */
+        else if (in_buf[i] != in_buf[i+1] ) {
+            rle__runbuffer_push(runbuf, runlength+1);
+            runlength = 0;
+        }
+        /* If no change, continue to count up the length of the current run. */
+        else {
+            runlength++;
+        }
+    }
+
+### Computing the Golomb Parameter `k`
+If the first value in the input is not a zero, start the list of run lengths with a zero-length run. This will tell the decoder to flip its initial value from zero to one.
+
+Once we have computed the run lengths, we need to compute `k`, the Golomb parameter that will define our Golomb encoding.
+
 
 ## Perspective
