@@ -84,7 +84,7 @@ def build_site(site_root, site_dirname):
     copyfile(osp.join(site_root, 'templates/index.html'), site_dir)
 
     # Copy the about.html page into the build tree.
-    copyfile(osp.join(site_root, 'templates/about.html'), site_dir)
+    copyfile(osp.join(site_root, 'templates/resume.html'), site_dir)
 
     # Find all of the blog posts.
     post_dirs = list_post_dirs(site_root, posts_dirname)
@@ -101,7 +101,7 @@ def build_site(site_root, site_dirname):
         splitcontent = postcontent.split('---', maxsplit=2)
         yamlcontent = splitcontent[1]
         mdcontent = splitcontent[2]
-        htmlcontent = markdown.markdown(mdcontent, extensions=['markdown.extensions.tables'])
+        htmlcontent = markdown.markdown(mdcontent, extensions=['markdown.extensions.tables', 'mdx_math'], extension_configs = {'mdx_math':{'enable_dollar_delimiter':'True'}})
 
         # Replace '---' with '&mdash;'
         htmlcontent = htmlcontent.replace('---', '&mdash;')
