@@ -70,7 +70,7 @@ Computing run lengths is straightforward. Iterate over every pixel in the image 
     /* Iterate over in_buf and count the run lengths. */
     size_t runlength = 0;
     for(size_t i=0; i<in_len; ++i) {
-        /* Add a run when you get to the end of the input. */
+        /* Finish your run when you hit the end of the input. */
         if( i+1 == in_len ) {
             rle__runbuffer_push(runbuf, runlength+1);
             runlength = 0;
@@ -86,10 +86,21 @@ Computing run lengths is straightforward. Iterate over every pixel in the image 
         }
     }
 
-### Computing the Golomb Parameter `k`
-If the first value in the input is not a zero, start the list of run lengths with a zero-length run. This will tell the decoder to flip its initial value from zero to one.
+If the first value in the input is not a zero, start the list of run lengths with a zero-length run. This will tell the decoder to flip its initial value from zero to one before it starts writing out the decoded runs.
 
-Once we have computed the run lengths, we need to compute `k`, the Golomb parameter that will define our Golomb encoding.
+### Computing the Golomb Modulus
+Once we have computed the run lengths, we need to compute $M$, the Golomb parameter that will define our Golomb encoding.
+The optimal value of $M$ depends on the probability $p$ that a pixel in the image will differ from the previous pixel.
+We can estimate $p$ by counting the number of transitions in the image and dividing by the total number of pixels.
+Then we can calculate $M$ using the following equation.
 
+$$
+M = \lceil \frac{-1}{\log_2(1-p)} \rceil
+$$
+
+### Golomb Encoding the Run Lengths
+
+
+## Results
 
 ## Perspective
